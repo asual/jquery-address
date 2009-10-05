@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>jQuery Address Tabs</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <link type="text/css" href="jquery-ui-1.7.custom.css" rel="stylesheet" />
+        <link type="text/css" href="styles.css" rel="stylesheet" />
+        <script type="text/javascript" src="jquery-1.3.2.min.js"></script>
+        <script type="text/javascript" src="jquery-ui-1.7.custom.min.js"></script>
+        <script type="text/javascript" src="jquery.address-1.1.min.js"></script>
+        <script type="text/javascript">
+        /*<![CDATA[*/
+            
+            var tabs;
+            
+            // Address handler
+            $.address.init(function(event) {
+
+                // Tabs setup
+                tabs = $('#tabs').tabs({
+                    // Content filter
+                    load: function(event, ui) {
+                        $(ui.panel).html($('#tabs div:first', ui.panel).html());
+                    },
+                    selected: $('#tabs ul:first a').index($('a[rel=address:' + event.value + ']'))
+                }).css('display', 'block');
+        
+            }).change(function(event) {
+
+                var selection = $('a[rel=address:' + event.value + ']');
+                tabs.tabs('select', selection.attr('href'));
+                $.address.title($.address.title().split(' | ')[0] + ' | ' + selection.text());
+                
+            });
+
+            // Graceful FOUC
+            document.write('<style type="text/css"> #tabs { display: none; } </style>');
+            
+        /*]]>*/      
+        </script>
+    </head>
+    <body>
+        <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-corner-top ui-tabs-selected ui-state-active"><a href="#Overview" title="Overview" rel="address:/">Overview</a></li>
+                <li class="ui-corner-top ui-state-default"><a href="./features.html" title="Features" rel="address:/features.html">Features</a></li>
+                <li class="ui-corner-top ui-state-default"><a href="./extras.html" title="Extras" rel="address:/extras.html">Extras</a></li>
+            </ul>
+            <div id="Overview" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+                <p>
+                    This demo utilizes the jQuery UI tabs widget. 
+                    The content is loaded using Ajax and each tab has it's own unique link.
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

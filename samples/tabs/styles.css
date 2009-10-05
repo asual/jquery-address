@@ -1,0 +1,11 @@
+body {
+    background: #91989D;
+}
+
+#tabs {
+    width: 720px;
+    height: auto !important;
+    height: 320px;
+    min-height: 320px;
+    margin: 20px auto;
+}

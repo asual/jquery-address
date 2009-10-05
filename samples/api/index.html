@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>jQuery Address API</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <link type="text/css" href="styles.css" rel="stylesheet" />
+        <script type="text/javascript" src="jquery-1.3.2.min.js"></script>
+        <script type="text/javascript" src="jquery.address-1.1.min.js"></script>
+        <script type="text/javascript">
+        /*<![CDATA[*/
+              
+            // Document title
+            var title = document.title;
+
+            // Simple log
+            var log = function(msg) {
+                if (!$('.log').length) {
+                    $('<div class="log"></div>').appendTo('body');
+                }
+                $('.log').append(msg.replace(/^([^:]*):(.*)$/, '<p><b>$1:</b> <span class="$1">$2</span></p>'))
+                    .attr({scrollTop: $("div").attr('scrollHeight')})
+                    .find('p:nth-child(even)').addClass('even');
+            }
+            
+            // Default tracker mock
+            var pageTracker = {
+                _trackPageview: function() {
+                    log('track: ' + arguments[0]);
+                }
+            }
+
+            // Serialization utility
+            var serialize = function(obj, re) {
+                var result = [];
+                $.each(obj, function(i, val) {
+                    if ((re && re.test(i)) || !re)
+                        result.push(i + ': ' + (typeof val == 'object' ? val.join 
+                            ? '\'' + val.join(', ') + '\'' : serialize(val) : '\'' + val + '\''));
+                });
+                return '{' + result.join(', ') + '}';
+            }
+            
+            // Init and change handlers
+            $.address.init(function(event) {
+                log('init: ' + serialize({
+                    value: $.address.value(), 
+                    path: $.address.path(),
+                    pathNames: $.address.pathNames(),
+                    parameterNames: $.address.parameterNames(),
+                    queryString: $.address.queryString()
+                }));
+            }).change(function(event) {
+                log('change: ' + serialize(event, /parameters|parametersNames|path|pathNames|queryString|value/));
+                var names = $.map(event.pathNames, function(n) {
+                    return n.substr(0, 1).toUpperCase() + n.substr(1);
+                }).concat(event.parameters.id ? event.parameters.id.split('.') : []);
+                var links = names.slice();
+                var match = links.length ? links.shift() + ' ' + links.join('.') : 'Home';
+                $('a').each(function() {
+                    $(this).toggleClass('selected', $(this).text() == match);
+                });
+                $.address.title([title].concat(names).join(' | '));
+            });
+            
+        /*]]>*/
+        </script>
+    </head>
+    <body>
+        <ul class="nav">
+            <li>
+                <!-- Default unobtrusive link bound to the rel attribute  -->            
+                <a href="/jquery/address/samples/api/" rel="address:/">Home</a>
+            </li>
+            <li>
+                <!-- Default unobtrusive link with additional rel attribute value -->            
+                <a href="/jquery/address/samples/api/section/?id=1&amp;name=n1&amp;name=n2" rel="address:/section/?id=1&amp;name=n1&amp;name=n2 nofollow">Section 1</a>
+            </li>
+            <li>
+                <!-- Custom link click invocation -->
+                <a href="/jquery/address/samples/api/section/2" onclick="$.address.value('/section/2'); return false;">Section 2</a>
+            </li>
+            <li>
+                <!-- Custom link selector invocation -->
+                <script type="text/javascript">
+                /*<![CDATA[*/
+                
+					$(function () {
+						$('.section-2-1').address(function() {
+							return $(this).attr('href').replace('/jquery/address/samples/api', '');
+						});
+					});
+					
+                /*]]>*/
+                </script>
+                <a href="/jquery/address/samples/api/section/2/1" class="section-2-1">Section 2.1</a>
+            </li>
+            <li>
+                <!-- Simple link selector invocation -->
+                <script type="text/javascript">
+                /*<![CDATA[*/
+        
+                    $(function () {
+                        $('.section-2-2').address();
+                    });
+                    
+                /*]]>*/
+                </script>
+                <a href="#/section/?id=2.2" class="section-2-2">Section 2.2</a>
+            </li>            
+        </ul>
+    </body>
+</html>

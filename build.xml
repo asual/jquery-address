@@ -1,0 +1,121 @@
+<project name="jQuery Address" default="release" basedir=".">
+
+    <property file="build.properties" />
+    
+    <path id="classpath">
+        <fileset dir="lib" includes="*.jar" />
+    </path>
+        
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="classpath" />
+
+    <target name="release">
+        <antcall target="dist" />
+        <antcall target="samples" />
+        <antcall target="bundle" />
+    </target>
+
+    <target name="bundle">
+        <copy todir="${address}-${version}">
+            <fileset dir="${dist.dir}">
+                <include name="**/*" />
+            </fileset>            
+            <fileset dir="${basedir}">
+                <include name="${samples.dir}/**/*" />
+            </fileset>
+        </copy>
+        <zip destfile="./../${address}-${version}.zip"
+            basedir="${basedir}" 
+            includes="${address}-${version}/" />
+        <delete dir="${address}-${version}" />
+    </target>
+    
+    <target name="dist">
+        <echo message="Cleaning dist..." />
+        <delete includeemptydirs="true">
+            <fileset dir="${dist.dir}" includes="**/*" />
+        </delete>
+        <echo message="Copying files..." />
+        <copy todir="${dist.dir}">
+            <fileset dir="${src.dir}"/>
+        </copy>
+        <echo message="Processing files..." />
+        <antcall target="process">
+            <param name="file" value="${dist.dir}/${address}" />
+        </antcall>
+        <antcall target="process">
+            <param name="file" value="${dist.dir}/${optimizer}" />
+        </antcall>
+        <echo message="Compressing files..." />
+        <antcall target="compress">
+            <param name="file" value="${dist.dir}/${address}-${version}.min.js" />
+        </antcall>
+        <antcall target="compress">
+            <param name="file" value="${dist.dir}/${optimizer}-${version}.min.js" />
+        </antcall>
+    	
+    	<!-- !!! -->
+        <delete>
+            <fileset dir="${dist.dir}" includes="${optimizer}-${version}.js,${optimizer}-${version}.min.js" />
+        </delete>
+    </target>
+    
+    <target name="process">
+        <tstamp>
+            <format property="timestamp" pattern="yyyy-MM-dd HH:mm:ss Z (EEE, dd MMM yyyy)" />
+        </tstamp>
+        <replaceregexp match="\$\{version\}" file="${file}.js">
+            <substitution expression="${version}"/>
+        </replaceregexp>
+        <replaceregexp match="\$\{timestamp\}" file="${file}.js">
+            <substitution expression="${timestamp}"/>
+        </replaceregexp>
+        <copy file="${file}.js" tofile="${file}-${version}.min.js" />
+        <move file="${file}.js" tofile="${file}-${version}.js" />
+    </target>
+    
+    <target name="compress">
+    	<for list="1,2,3,4,5,6,7,8,9,10,11" param="num">
+            <sequential>
+                <replaceregexp match="((^/\*)|(^ \*/)|(^ \*((?!\r|\n).)*))" flags="m" 
+                    file="${file}">
+                    <substitution expression="license = '\1';"/>
+                </replaceregexp>
+            </sequential>
+        </for>
+        <java jar="${lib.dir}/yuicompressor.jar"
+            failonerror="true" fork="true">
+            <arg line="${file} -o ${file} --charset utf-8" />
+        </java>
+        <replaceregexp match="(\r|\n)*" flags="gm" file="${file}">
+            <substitution expression=""/>
+        </replaceregexp>
+        <replaceregexp match="license=&#34;(((?!&#34;).)*)&#34;;" flags="gm" 
+            file="${file}">
+            <substitution expression="\1&#13;"/>
+        </replaceregexp>
+    </target>
+    
+    <target name="samples">
+        <antcall target="samples:api" />
+        <antcall target="samples:tabs" />
+    </target>
+
+    <target name="samples:api">
+        <echo message="Building API sample..." />
+        <delete>
+            <fileset dir="${api.sample.dir}" includes="${address}-\d.\d+.min.js" />
+        </delete>
+        <copy file="${dist.dir}/${address}-${version}.min.js" todir="${api.sample.dir}" overwrite="true" />
+    </target>
+
+    <target name="samples:tabs">
+        <echo message="Building Tabs sample..." />
+        <delete>
+            <fileset dir="${tabs.sample.dir}" includes="${address}-\d.\d+.min.js" />
+            <fileset dir="${tabs.sample.dir}" includes="${optimizer}-\d.\d+.min.js" />
+        </delete>
+        <copy file="${dist.dir}/${address}-${version}.min.js" todir="${tabs.sample.dir}" overwrite="true" />
+        <!--copy file="${dist.dir}/${optimizer}-${version}.min.js" todir="${tabs.sample.dir}" overwrite="true" /-->
+    </target>
+    
+</project>
