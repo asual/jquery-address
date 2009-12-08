@@ -165,8 +165,7 @@
                 
                 _st(function() {
                     _init();
-                    _change();
-                    _track();
+                    _update(false);
                 }, 1);
                 
                 if (_msie && _version >= 8)
@@ -412,7 +411,7 @@
             _track();
         }
 
-        $.each(('init,change').split(','), function(i, name){
+        $.each(('init,change,internalChange,externalChange').split(','), function(i, name){
             _api[name] = function(data, fn){
                 $($.address).bind(name, fn || data, fn && data);
                 return this;
