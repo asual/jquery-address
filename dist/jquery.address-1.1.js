@@ -6,7 +6,7 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2009-12-08 10:41:38 +0200 (Tue, 08 Dec 2009)
+ * Date: 2009-12-08 23:23:05 +0200 (Tue, 08 Dec 2009)
  */
 (function ($) {
 
@@ -165,8 +165,7 @@
                 
                 _st(function() {
                     _init();
-                    _change();
-                    _track();
+                    _update(false);
                 }, 1);
                 
                 if (_msie && _version >= 8)
@@ -412,7 +411,7 @@
             _track();
         }
 
-        $.each(('init,change').split(','), function(i, name){
+        $.each(('init,change,externalChange,internalChange').split(','), function(i, name){
             _api[name] = function(data, fn){
                 $($.address).bind(name, fn || data, fn && data);
                 return this;
