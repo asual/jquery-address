@@ -6,7 +6,7 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2009-10-07 02:22:54 +0300 (Wed, 07 Oct 2009)
+ * Date: 2009-12-08 10:41:38 +0200 (Tue, 08 Dec 2009)
  */
 (function ($) {
 
@@ -45,14 +45,13 @@
             return index != -1 ? _ec(_dc(_l.href.substr(index + 1))) : '';
         };
         
-        var _getWindow = function() {
-            try {
-                top.document;
-                return top;
-            } catch (e) {
-                return window;
-            }
-        };
+    	var _getWindow = function() { 
+    		try {
+    			return top.document != undefined ? top : window;
+    		} catch (e) { 
+    			return window; 
+    		}
+    	};
 
         var _strictCheck = function(value, force) {
             if (_opts.strict)
