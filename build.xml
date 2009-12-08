@@ -80,6 +80,7 @@
     
     <target name="samples">
         <antcall target="samples:api" />
+        <antcall target="samples:events" />
         <antcall target="samples:tabs" />
     </target>
 
@@ -91,6 +92,14 @@
         <copy file="${dist.dir}/${address}-${version}.min.js" todir="${api.sample.dir}" overwrite="true" />
     </target>
 
+    <target name="samples:events">
+        <echo message="Building Events sample..." />
+        <delete>
+            <fileset dir="${events.sample.dir}" includes="${address}-\d.\d+.min.js" />
+        </delete>
+        <copy file="${dist.dir}/${address}-${version}.min.js" todir="${events.sample.dir}" overwrite="true" />
+    </target>
+    
     <target name="samples:tabs">
         <echo message="Building Tabs sample..." />
         <delete>
