@@ -84,11 +84,8 @@
                             _value = _stack[_length - 1];
                         _update(false);
                     }
-                } else if (_msie && diff) {
-                    if (_version < 7)
-                        _l.reload();
-                    else
-                        _setters.value(hash);
+                } else if (_msie && _version < 7 && diff) {
+                    _l.reload();
                 } else if (diff) {
                     _value = hash;
                     _update(false);
