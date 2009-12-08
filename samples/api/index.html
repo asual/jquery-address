@@ -19,7 +19,7 @@
                     $('<div class="log"></div>').appendTo('body');
                 }
                 $('.log').append(msg.replace(/^([^:]*):(.*)$/, '<p><b>$1:</b> <span class="$1">$2</span></p>'))
-                    .attr({scrollTop: $("div").attr('scrollHeight')})
+                    .attr({scrollTop: $('.log').attr('scrollHeight')})
                     .find('p:nth-child(even)').addClass('even');
             }
             
