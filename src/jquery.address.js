@@ -45,14 +45,13 @@
             return index != -1 ? _ec(_dc(_l.href.substr(index + 1))) : '';
         };
         
-        var _getWindow = function() {
-            try {
-                top.document;
-                return top;
-            } catch (e) {
-                return window;
-            }
-        };
+    	var _getWindow = function() { 
+    		try {
+    			return top.document != undefined ? top : window;
+    		} catch (e) { 
+    			return window; 
+    		}
+    	};
 
         var _strictCheck = function(value, force) {
             if (_opts.strict)
