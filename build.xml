@@ -52,11 +52,6 @@
         <antcall target="compress">
             <param name="file" value="${dist.dir}/${optimizer}-${version}.min.js" />
         </antcall>
-    	
-    	<!-- !!! -->
-        <delete>
-            <fileset dir="${dist.dir}" includes="${optimizer}-${version}.js,${optimizer}-${version}.min.js" />
-        </delete>
     </target>
     
     <target name="process">
@@ -74,25 +69,13 @@
     </target>
     
     <target name="compress">
-    	<for list="1,2,3,4,5,6,7,8,9,10,11" param="num">
-            <sequential>
-                <replaceregexp match="((^/\*)|(^ \*/)|(^ \*((?!\r|\n).)*))" flags="m" 
-                    file="${file}">
-                    <substitution expression="license = '\1';"/>
-                </replaceregexp>
-            </sequential>
-        </for>
-        <java jar="${lib.dir}/yuicompressor.jar"
+        <replaceregexp match="/\*" file="${file}">
+            <substitution expression="/*!" />
+        </replaceregexp>
+    	<java jar="${lib.dir}/yuicompressor.jar"
             failonerror="true" fork="true">
             <arg line="${file} -o ${file} --charset utf-8" />
         </java>
-        <replaceregexp match="(\r|\n)*" flags="gm" file="${file}">
-            <substitution expression=""/>
-        </replaceregexp>
-        <replaceregexp match="license=&#34;(((?!&#34;).)*)&#34;;" flags="gm" 
-            file="${file}">
-            <substitution expression="\1&#13;"/>
-        </replaceregexp>
     </target>
     
     <target name="samples">
@@ -115,7 +98,6 @@
             <fileset dir="${tabs.sample.dir}" includes="${optimizer}-\d.\d+.min.js" />
         </delete>
         <copy file="${dist.dir}/${address}-${version}.min.js" todir="${tabs.sample.dir}" overwrite="true" />
-        <!--copy file="${dist.dir}/${optimizer}-${version}.min.js" todir="${tabs.sample.dir}" overwrite="true" /-->
     </target>
     
 </project>
