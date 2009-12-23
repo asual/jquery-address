@@ -17,8 +17,9 @@
     <target name="bundle">
         <copy todir="${address}-${version}">
             <fileset dir="${dist.dir}">
-                <include name="**/*" />
-            </fileset>            
+                <include name="${address}-${version}.js" />
+                <include name="${address}-${version}.min.js" />
+            </fileset>
             <fileset dir="${basedir}">
                 <include name="${samples.dir}/**/*" />
             </fileset>
@@ -72,7 +73,7 @@
         <replaceregexp match="/\*" file="${file}">
             <substitution expression="/*!" />
         </replaceregexp>
-    	<java jar="${lib.dir}/yuicompressor.jar"
+        <java jar="${lib.dir}/yuicompressor.jar"
             failonerror="true" fork="true">
             <arg line="${file} -o ${file} --charset utf-8" />
         </java>
