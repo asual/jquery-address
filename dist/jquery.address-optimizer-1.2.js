@@ -1,12 +1,12 @@
 /*
- * jQuery Address Plugin v1.1
+ * jQuery Address Plugin v1.2
  * http://www.asual.com/jquery/address/
  *
  * Copyright (c) 2009 Rostislav Hristov
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2009-12-23 15:36:04 +0200 (Wed, 23 Dec 2009)
+ * Date: 2009-12-27 19:14:19 +0200 (Sun, 27 Dec 2009)
  */
 (function() {
 

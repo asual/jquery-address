@@ -1,43 +1,48 @@
 /*
- * jQuery Address Plugin v1.1
+ * jQuery Address Plugin v1.2
  * http://www.asual.com/jquery/address/
  *
  * Copyright (c) 2009 Rostislav Hristov
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2009-12-23 15:36:04 +0200 (Wed, 23 Dec 2009)
+ * Date: 2009-12-27 19:14:19 +0200 (Sun, 27 Dec 2009)
  */
 (function ($) {
 
     $.address = (function () {
     
         var _trigger = function(name) {
-            $(this).trigger(
+            $($.address).trigger(
                 $.extend($.Event(name), 
                     (function() {
                         var event = {
-                            value: this.value(),
-                            path: this.path(),
-                            pathNames: this.pathNames(),
-                            parameterNames: this.parameterNames(),
+                            value: $.address.value(),
+                            path: $.address.path(),
+                            pathNames: $.address.pathNames(),
+                            parameterNames: $.address.parameterNames(),
                             parameters: {},
-                            queryString: this.queryString()
+                            queryString: $.address.queryString()
                         };
                         for (var i = 0, l = event.parameterNames.length; i < l; i++)
-                            event.parameters[event.parameterNames[i]] = this.parameter(event.parameterNames[i]);
+                            event.parameters[event.parameterNames[i]] = $.address.parameter(event.parameterNames[i]);
                         return event;
-                    }).call(this)
+                    }).call($.address)
                 )
             );
         };
+        
+        var _bind = function(value, data, fn) {
+        	$($.address).bind(value, fn || data, fn && data);
+        	return $.address;
+        };
     
         var _init = function() {
-            _trigger.call($.address, 'init');
+            _trigger('init');
         };
         
         var _change = function() {
-            _trigger.call($.address, 'change');
+            _trigger('change');
         };
 
         var _getHash = function() {
@@ -75,8 +80,8 @@
 
         var _listen = function() {
             if (!_silent) {
-                var hash = _getHash();
-                var diff = !(_value == hash);
+                var hash = _getHash(),
+                	diff = !(_value == hash);
                 if (_safari && _version < 523) {
                     if (_length != _h.length) {
                         _length = _h.length;
@@ -96,16 +101,16 @@
         var _update = function(internal) {
             _change();
             if (internal) {
-            	_trigger.call($.address, 'internalChange');
+            	_trigger('internalChange');
             } else {
-            	_trigger.call($.address, 'externalChange');
+            	_trigger('externalChange');
             }
             _st(_track, 10);
         };
 
         var _track = function() {
-            var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + _getters.value()).replace(/\/\//, '/').replace(/^\/$/, '');
-            var fn = window[_opts.tracker];
+            var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + $.address.value()).replace(/\/\//, '/').replace(/^\/$/, ''),
+            	fn = window[_opts.tracker];
             if (typeof fn == FUNCTION)
                 fn(value);
             else if (typeof pageTracker != UNDEFINED && typeof pageTracker._trackPageview == FUNCTION)
@@ -170,154 +175,6 @@
                 else
                     _si(_listen, 50);
                 $('a[rel*=address:]').address();
-            }
-        };
-        
-        var _getters = {
-            baseURL: function() {
-                var url = _l.href;
-                if (url.indexOf('#') != -1)
-                    url = url.substr(0, url.indexOf('#'));
-                if (url.substr(url.length - 1) == '/')
-                    url = url.substr(0, url.length - 1);
-                return url;
-            }, 
-            strict: function() {
-                return _opts.strict;
-            },
-            history: function() {
-                return _opts.history;
-            },
-            tracker: function() {
-                return _opts.tracker;
-            },
-            title: function() {
-                return _d.title;
-            },
-            value: function() {
-                if (!_supported) return null;
-                return _dc(_strictCheck(_ieLocal(_value, FALSE), FALSE));
-            },
-            path: function() {
-                var value = this.value();
-                return (value.indexOf('?') != -1) ? value.split('?')[0] : value;
-            },
-            pathNames: function() {
-                var path = this.path();
-                var names = path.split('/');
-                if (path.substr(0, 1) == '/' || path.length == 0)
-                    names.splice(0, 1);
-                if (path.substr(path.length - 1, 1) == '/')
-                    names.splice(names.length - 1, 1);
-                return names;
-            },
-            queryString: function() {
-                var value = this.value();
-                var index = value.indexOf('?');
-                if (index != -1 && index < value.length) 
-                	return value.substr(index + 1);
-            },
-            parameter: function(param) {
-                var value = this.value();
-                var index = value.indexOf('?');
-                if (index != -1) {
-                    value = value.substr(index + 1);
-                    var params = value.split('&');
-                    var p, i = params.length, r = [];
-                    while(i--) {
-                        p = params[i].split('=');
-                        if (p[0] == param)
-                            r.push(p[1]);
-                    }
-                    if (r.length != 0)
-                    	return r.length != 1 ? r : r[0];
-                }
-            },
-            parameterNames: function() {
-                var value = this.value();
-                var index = value.indexOf('?');
-                var names = [];
-                if (index != -1) {
-                    value = value.substr(index + 1);
-                    if (value != '' && value.indexOf('=') != -1) {
-                        var params = value.split('&');
-                        var i = 0;
-                        while(i < params.length) {
-                            names.push(params[i].split('=')[0]);
-                            i++;
-                        }
-                    }
-                }
-                return names;
-            }        
-        };
-        
-        var _setters = {
-            strict: function(strict) {
-                _opts.strict = strict;
-            },
-            history: function(history) {
-                _opts.history = history;
-            },
-            tracker: function(tracker) {
-                _opts.tracker = tracker;
-            },
-            title: function(title) {
-                title = _dc(title);
-                _st(function() {
-                    _title = _d.title = title;
-                    if (_juststart && _frame && _frame.contentWindow && _frame.contentWindow.document) {
-                        _frame.contentWindow.document.title = title;
-                        _juststart = FALSE;
-                    }
-                    if (!_justset && _mozilla)
-                        _l.replace(_l.href.indexOf('#') != -1 ? _l.href : _l.href + '#');
-                    _justset = FALSE;
-                }, 50);
-            },
-            value: function(value) {
-                value = _ec(_dc(_strictCheck(value, TRUE)));
-                if (value == '/') value = '';
-                if (_value == value) return;
-                _justset = TRUE;
-                _value = value;
-                _silent = TRUE;
-                _update(true);
-                _stack[_h.length] = _value;
-                if (_safari) {
-                    if (_opts.history) {
-                        _l[ID][_l.pathname] = _stack.toString();
-                        _length = _h.length + 1;
-                        if (_version < 418) {
-                            if (_l.search == '') {
-                                _form.action = '#' + _value;
-                                _form.submit();
-                            }
-                        } else if (_version < 523 || _value == '') {
-                            var evt = _d.createEvent('MouseEvents');
-                            evt.initEvent('click', TRUE, TRUE);
-                            var anchor = _d.createElement('a');
-                            anchor.href = '#' + _value;
-                            anchor.dispatchEvent(evt);                
-                        } else {
-                            _l.hash = '#' + _value;
-                        }
-                    } else {
-                        _l.replace('#' + _value);
-                    }
-                } else if (_value != _getHash()) {
-                    if (_opts.history)
-                        _l.hash = '#' + _ieLocal(_value, TRUE);
-                    else
-                        _l.replace('#' + _value);
-                }
-                if ((_msie && _version < 8) && _opts.history) {
-                    _st(_htmlWrite, 50);
-                }
-                if (_safari)
-                    _st(function(){ _silent = FALSE; }, 1);
-                else
-                    _silent = FALSE;
             }
         };
 
@@ -408,32 +265,196 @@
             _track();
         }
 
-        $.each(('init,change,internalChange,externalChange').split(','), function(i, name){
-            _api[name] = function(data, fn){
-                $($.address).bind(name, fn || data, fn && data);
-                return this;
-            };
-        });
-        
-        $.each(('strict,history,tracker,title,value').split(','), function(i, name){
-            _api[name] = function(value){
-                if (typeof value != 'undefined') {
-                    if (_supported)
-                        _setters[name](value);
-                    return $.address;
-                } else {
-                    return _getters[name]();
+        return {
+        	init: function(data, fn){
+            	$(this).bind('init', fn || data, fn && data);
+            	return this;
+        	},
+        	change: function(data, fn){
+            	$(this).bind('change', fn || data, fn && data);
+            	return this;
+        	},
+        	internalChange: function(data, fn){
+            	$(this).bind('internalChange', fn || data, fn && data);
+            	return this;
+        	},
+        	externalChange: function(data, fn){
+            	$(this).bind('externalChange', fn || data, fn && data);
+            	return this;
+        	},
+        	baseURL: function() {
+                var url = _l.href;
+                if (url.indexOf('#') != -1)
+                    url = url.substr(0, url.indexOf('#'));
+                if (url.substr(url.length - 1) == '/')
+                    url = url.substr(0, url.length - 1);
+                return url;
+        	},
+        	strict: function(value) {
+        		if (value) {
+        			_opts.strict = value;
+        			return this;
+        		}
+    			return _opts.strict;
+            },
+            history: function(value) {
+        		if (value) {
+        			_opts.history = value;
+        			return this;
+        		}
+    			return _opts.history;
+            },
+            tracker: function(value) {
+        		if (value) {
+        			_opts.tracker = value;
+        			return this;
+        		}
+    			return _opts.tracker;
+            },
+            title: function(value) {
+            	if (value) {
+            		value = _dc(value);
+                    _st(function() {
+                        _title = _d.title = value;
+                        if (_juststart && _frame && _frame.contentWindow && _frame.contentWindow.document) {
+                            _frame.contentWindow.document.title = value;
+                            _juststart = FALSE;
+                        }
+                        if (!_justset && _mozilla)
+                            _l.replace(_l.href.indexOf('#') != -1 ? _l.href : _l.href + '#');
+                        _justset = FALSE;
+                    }, 50);
+                    return this;
+            	}
+                return _d.title;
+        	},
+            value: function(value) {
+        		if (value) {
+                    value = _ec(_dc(_strictCheck(value, TRUE)));
+                    if (value == '/') value = '';
+                    if (_value == value) return;
+                    _justset = TRUE;
+                    _value = value;
+                    _silent = TRUE;
+                    _update(true);
+                    _stack[_h.length] = _value;
+                    if (_safari) {
+                        if (_opts.history) {
+                            _l[ID][_l.pathname] = _stack.toString();
+                            _length = _h.length + 1;
+                            if (_version < 418) {
+                                if (_l.search == '') {
+                                    _form.action = '#' + _value;
+                                    _form.submit();
+                                }
+                            } else if (_version < 523 || _value == '') {
+                                var evt = _d.createEvent('MouseEvents');
+                                evt.initEvent('click', TRUE, TRUE);
+                                var anchor = _d.createElement('a');
+                                anchor.href = '#' + _value;
+                                anchor.dispatchEvent(evt);                
+                            } else {
+                                _l.hash = '#' + _value;
+                            }
+                        } else {
+                            _l.replace('#' + _value);
+                        }
+                    } else if (_value != _getHash()) {
+                        if (_opts.history)
+                            _l.hash = '#' + _ieLocal(_value, TRUE);
+                        else
+                            _l.replace('#' + _value);
+                    }
+                    if ((_msie && _version < 8) && _opts.history) {
+                        _st(_htmlWrite, 50);
+                    }
+                    if (_safari)
+                        _st(function(){ _silent = FALSE; }, 1);
+                    else
+                        _silent = FALSE;
+                    return this;
+        		}
+                if (!_supported) return null;
+                return _dc(_strictCheck(_ieLocal(_value, FALSE), FALSE));
+            },
+            path: function(value) {
+            	if (value) {
+                    var qs = this.queryString();
+                	this.value(value + (qs ? '?' + qs : ''));
+                	return this;
+            	}
+                var value = this.value();
+                return (value.indexOf('?') != -1) ? value.split('?')[0] : value;
+            },
+            queryString: function(value) {
+            	if (value) {
+            		this.value(this.path() + (value ? '?' + value : ''));
+            		return this;
+            	}
+                var value = this.value(),
+                	index = value.indexOf('?');
+                if (index != -1 && index < value.length) 
+                	return value.substr(index + 1);
+            },
+            parameter: function(name, value, append) {
+            	if (value) {
+            		var names = this.parameterNames(),
+            			params = [];
+            		for (var i = 0; i < names.length; i++) {
+            			var n = names[i],
+            				v = this.parameter(n);
+            			if (typeof v == 'string')
+            				v = [v];
+            			if (n == name)
+            				v = append ? v.concat([value]) : [value];
+        				for (var j = 0; j < v.length; j++)
+                			params.push(n + '=' + v[j]);
+            		}
+            		this.queryString(params.join('&'));
+            		return this;
+            	}
+                var value = this.value(),
+                	index = value.indexOf('?');
+                if (index != -1) {
+                    value = value.substr(index + 1);
+                    var params = value.split('&'),
+                    	r = [];
+                    for (var i = 0; i < params.length; i++) {
+                        var p = params[i].split('=');
+                        if (p[0] == name)
+                            r.push(p[1]);
+                    }
+                    if (r.length != 0)
+                    	return r.length != 1 ? r : r[0];
                 }
-            };
-        });
-
-        $.each(('baseURL,path,pathNames,queryString,parameter,parameterNames').split(','), function(i, name){
-            _api[name] = function(value){
-                return _getters[name](value);
-            };
-        });
-        
-        return _api;
+            },
+            pathNames: function() {
+                var path = this.path(),
+                	names = path.split('/');
+                if (path.substr(0, 1) == '/' || path.length == 0)
+                    names.splice(0, 1);
+                if (path.substr(path.length - 1, 1) == '/')
+                    names.splice(names.length - 1, 1);
+                return names;
+            },
+            parameterNames: function() {
+                var value = this.value(),
+	            	index = value.indexOf('?'),
+                	names = [];
+                if (index != -1) {
+                    value = value.substr(index + 1);
+                    if (value != '' && value.indexOf('=') != -1) {
+                        var params = value.split('&');
+                        for (var i = 0; i < params.length; i++) {
+                        	var name = params[i].split('=')[0];
+                        	if ($.inArray(name, names) == -1)
+                        		names.push(name);
+                        }
+                    }
+                }
+                return names;
+            }
+        };
         
     })();
     
