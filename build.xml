@@ -10,24 +10,25 @@
 
     <target name="release">
         <antcall target="dist" />
+        <antcall target="test" />
         <antcall target="samples" />
         <antcall target="bundle" />
     </target>
 
     <target name="bundle">
-        <copy todir="${address}-${version}">
+        <copy todir="${name}-${version}">
             <fileset dir="${dist.dir}">
-                <include name="${address}-${version}.js" />
-                <include name="${address}-${version}.min.js" />
+                <include name="${name}-${version}.js" />
+                <include name="${name}-${version}.min.js" />
             </fileset>
             <fileset dir="${basedir}">
                 <include name="${samples.dir}/**/*" />
             </fileset>
         </copy>
-        <zip destfile="./../${address}-${version}.zip"
+        <zip destfile="./../${name}-${version}.zip"
             basedir="${basedir}" 
-            includes="${address}-${version}/" />
-        <delete dir="${address}-${version}" />
+            includes="${name}-${version}/" />
+        <delete dir="${name}-${version}" />
     </target>
     
     <target name="dist">
@@ -41,14 +42,14 @@
         </copy>
         <echo message="Processing files..." />
         <antcall target="process">
-            <param name="file" value="${dist.dir}/${address}" />
+            <param name="file" value="${dist.dir}/${name}" />
         </antcall>
         <antcall target="process">
             <param name="file" value="${dist.dir}/${optimizer}" />
         </antcall>
         <echo message="Compressing files..." />
         <antcall target="compress">
-            <param name="file" value="${dist.dir}/${address}-${version}.min.js" />
+            <param name="file" value="${dist.dir}/${name}-${version}.min.js" />
         </antcall>
         <antcall target="compress">
             <param name="file" value="${dist.dir}/${optimizer}-${version}.min.js" />
@@ -79,6 +80,13 @@
         </java>
     </target>
     
+    <target name="test">
+        <delete>
+            <fileset dir="${test.dir}" includes="${name}-\d.\d+.min.js" />
+        </delete>
+        <copy file="${dist.dir}/${name}-${version}.min.js" todir="${test.dir}" overwrite="true" />
+    </target>
+    
     <target name="samples">
         <antcall target="samples:api" />
         <antcall target="samples:events" />
@@ -88,26 +96,26 @@
     <target name="samples:api">
         <echo message="Building API sample..." />
         <delete>
-            <fileset dir="${api.sample.dir}" includes="${address}-\d.\d+.min.js" />
+            <fileset dir="${api.sample.dir}" includes="${name}-\d.\d+.min.js" />
         </delete>
-        <copy file="${dist.dir}/${address}-${version}.min.js" todir="${api.sample.dir}" overwrite="true" />
+        <copy file="${dist.dir}/${name}-${version}.min.js" todir="${api.sample.dir}" overwrite="true" />
     </target>
 
     <target name="samples:events">
         <echo message="Building Events sample..." />
         <delete>
-            <fileset dir="${events.sample.dir}" includes="${address}-\d.\d+.min.js" />
+            <fileset dir="${events.sample.dir}" includes="${name}-\d.\d+.min.js" />
         </delete>
-        <copy file="${dist.dir}/${address}-${version}.min.js" todir="${events.sample.dir}" overwrite="true" />
+        <copy file="${dist.dir}/${name}-${version}.min.js" todir="${events.sample.dir}" overwrite="true" />
     </target>
     
     <target name="samples:tabs">
         <echo message="Building Tabs sample..." />
         <delete>
-            <fileset dir="${tabs.sample.dir}" includes="${address}-\d.\d+.min.js" />
+            <fileset dir="${tabs.sample.dir}" includes="${name}-\d.\d+.min.js" />
             <fileset dir="${tabs.sample.dir}" includes="${optimizer}-\d.\d+.min.js" />
         </delete>
-        <copy file="${dist.dir}/${address}-${version}.min.js" todir="${tabs.sample.dir}" overwrite="true" />
+        <copy file="${dist.dir}/${name}-${version}.min.js" todir="${tabs.sample.dir}" overwrite="true" />
     </target>
     
 </project>
