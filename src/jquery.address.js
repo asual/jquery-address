@@ -410,6 +410,8 @@
         				for (var j = 0; j < v.length; j++)
                 			params.push(n + '=' + v[j]);
             		}
+            		if ($.inArray(name, names) == -1)
+            			params.push(name + '=' + value);
             		this.queryString(params.join('&'));
             		return this;
             	}
