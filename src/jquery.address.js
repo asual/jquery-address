@@ -462,7 +462,7 @@
     })();
     
     $.fn.address = function (fn) {
-        $(this).click(function() {
+        $(this).live('click', function() {
             var value = fn ? fn.call(this) : 
                 /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
                 $(this).attr('href').replace(/^#/, '');
