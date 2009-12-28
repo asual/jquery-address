@@ -6,7 +6,7 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2009-12-28 13:29:52 +0200 (Mon, 28 Dec 2009)
+ * Date: 2009-12-28 20:07:47 +0200 (Mon, 28 Dec 2009)
  */
 (function ($) {
 
@@ -462,7 +462,7 @@
     })();
     
     $.fn.address = function (fn) {
-        $(this).click(function() {
+        $(this).live('click', function() {
             var value = fn ? fn.call(this) : 
                 /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
                 $(this).attr('href').replace(/^#/, '');
