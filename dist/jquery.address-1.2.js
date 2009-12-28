@@ -6,7 +6,7 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2009-12-27 19:14:19 +0200 (Sun, 27 Dec 2009)
+ * Date: 2009-12-28 13:29:52 +0200 (Mon, 28 Dec 2009)
  */
 (function ($) {
 
@@ -291,28 +291,28 @@
                 return url;
         	},
         	strict: function(value) {
-        		if (value) {
+        		if (value !== undefined) {
         			_opts.strict = value;
         			return this;
         		}
     			return _opts.strict;
             },
             history: function(value) {
-        		if (value) {
+        		if (value !== undefined) {
         			_opts.history = value;
         			return this;
         		}
     			return _opts.history;
             },
             tracker: function(value) {
-        		if (value) {
+        		if (value !== undefined) {
         			_opts.tracker = value;
         			return this;
         		}
     			return _opts.tracker;
             },
             title: function(value) {
-            	if (value) {
+            	if (value !== undefined) {
             		value = _dc(value);
                     _st(function() {
                         _title = _d.title = value;
@@ -329,7 +329,7 @@
                 return _d.title;
         	},
             value: function(value) {
-        		if (value) {
+        		if (value !== undefined) {
                     value = _ec(_dc(_strictCheck(value, TRUE)));
                     if (value == '/') value = '';
                     if (_value == value) return;
@@ -378,7 +378,7 @@
                 return _dc(_strictCheck(_ieLocal(_value, FALSE), FALSE));
             },
             path: function(value) {
-            	if (value) {
+            	if (value !== undefined) {
                     var qs = this.queryString();
                 	this.value(value + (qs ? '?' + qs : ''));
                 	return this;
@@ -387,7 +387,7 @@
                 return (value.indexOf('?') != -1) ? value.split('?')[0] : value;
             },
             queryString: function(value) {
-            	if (value) {
+            	if (value !== undefined) {
             		this.value(this.path() + (value ? '?' + value : ''));
             		return this;
             	}
@@ -397,7 +397,7 @@
                 	return value.substr(index + 1);
             },
             parameter: function(name, value, append) {
-            	if (value) {
+            	if (value !== undefined) {
             		var names = this.parameterNames(),
             			params = [];
             		for (var i = 0; i < names.length; i++) {
@@ -406,10 +406,13 @@
             			if (typeof v == 'string')
             				v = [v];
             			if (n == name)
-            				v = append ? v.concat([value]) : [value];
+            				v = (value === null || value == '') ? [] : 
+            					(append ? v.concat([value]) : [value]);
         				for (var j = 0; j < v.length; j++)
                 			params.push(n + '=' + v[j]);
             		}
+            		if ($.inArray(name, names) == -1)
+            			params.push(name + '=' + value);
             		this.queryString(params.join('&'));
             		return this;
             	}
