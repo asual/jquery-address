@@ -10,14 +10,14 @@
  */
 (function() {
 
-	var _getWindow = function() { 
-		try {
-			return top.document != undefined ? top : window;
-		} catch (e) { 
-			return window; 
-		}
-	};
-    
+    var _getWindow = function() { 
+        try {
+            return top.document != undefined ? top : window;
+        } catch (e) {
+            return window; 
+        }
+    };
+
     var _searchScript = function(el) {
         if (el.childNodes) {
             for (var i = 0, l = el.childNodes.length, s; i < l; i++) {
