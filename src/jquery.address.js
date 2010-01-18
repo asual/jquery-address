@@ -2,7 +2,7 @@
  * jQuery Address Plugin v${version}
  * http://www.asual.com/jquery/address/
  *
- * Copyright (c) 2009 Rostislav Hristov
+ * Copyright (c) 2009-2010 Rostislav Hristov
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
@@ -122,7 +122,7 @@
         var _htmlWrite = function() {
             var doc = _frame.contentWindow.document;
             doc.open();
-            doc.write('<html><head><title>' + _d.title + '</title><script>var ' + ID + ' = "' + _getHash() + '";</script></head></html>');
+            doc.write('<html><head><title>' + _d.title + '</title><script>var ' + ID + ' = "' + _getHash() + '";</' + 'script></head></html>');
             doc.close();
         };
 
