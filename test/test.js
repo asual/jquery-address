@@ -38,15 +38,15 @@ asyncTest("Parameter test", function() {
 
 asyncTest("Parameter test", function() {
     setTimeout(function() {
-    	$.address.queryString('')
-    		.parameter('p', 1, true)
-	        .parameter('p', 2)
-	        .parameter('p', 3, true)
-	        .parameter('s', 1)
-	        .parameter('s', 2, true)
-	        .parameter('s', 3)
-	        .parameter('t', 0)
-	        .parameter('t', null);
+        $.address.queryString('')
+            .parameter('p', 1, true)
+            .parameter('p', 2)
+            .parameter('p', 3, true)
+            .parameter('s', 1)
+            .parameter('s', 2, true)
+            .parameter('s', 3)
+            .parameter('t', 0)
+            .parameter('t', null);
         equals($.address.value(), '/test?p=2&p=3&s=3');
         equals($.address.parameter('p').toString(), '2,3');
         equals($.address.parameter('s').toString(), 3);
@@ -56,5 +56,5 @@ asyncTest("Parameter test", function() {
 });
 
 setTimeout(function() {
-	$.address.value('/');
+    $.address.value('/');
 }, 10000);

@@ -6,18 +6,18 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2009-12-28 20:07:47 +0200 (Mon, 28 Dec 2009)
+ * Date: 2010-01-18 11:40:09 +0200 (Mon, 18 Jan 2010)
  */
 (function() {
 
-	var _getWindow = function() { 
-		try {
-			return top.document != undefined ? top : window;
-		} catch (e) { 
-			return window; 
-		}
-	};
-    
+    var _getWindow = function() { 
+        try {
+            return top.document != undefined ? top : window;
+        } catch (e) {
+            return window; 
+        }
+    };
+
     var _searchScript = function(el) {
         if (el.childNodes) {
             for (var i = 0, l = el.childNodes.length, s; i < l; i++) {

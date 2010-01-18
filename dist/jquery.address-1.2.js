@@ -6,7 +6,7 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2009-12-28 20:07:47 +0200 (Mon, 28 Dec 2009)
+ * Date: 2010-01-18 11:40:09 +0200 (Mon, 18 Jan 2010)
  */
 (function ($) {
 
@@ -33,8 +33,8 @@
         };
         
         var _bind = function(value, data, fn) {
-        	$($.address).bind(value, fn || data, fn && data);
-        	return $.address;
+            $($.address).bind(value, fn || data, fn && data);
+            return $.address;
         };
     
         var _init = function() {
@@ -50,13 +50,13 @@
             return index != -1 ? _ec(_dc(_l.href.substr(index + 1))) : '';
         };
         
-    	var _getWindow = function() { 
-    		try {
-    			return top.document != undefined ? top : window;
-    		} catch (e) { 
-    			return window; 
-    		}
-    	};
+        var _getWindow = function() { 
+            try {
+                return top.document != undefined ? top : window;
+            } catch (e) { 
+                return window; 
+            }
+        };
 
         var _strictCheck = function(value, force) {
             if (_opts.strict)
@@ -81,7 +81,7 @@
         var _listen = function() {
             if (!_silent) {
                 var hash = _getHash(),
-                	diff = !(_value == hash);
+                    diff = !(_value == hash);
                 if (_safari && _version < 523) {
                     if (_length != _h.length) {
                         _length = _h.length;
@@ -101,16 +101,16 @@
         var _update = function(internal) {
             _change();
             if (internal) {
-            	_trigger('internalChange');
+                _trigger('internalChange');
             } else {
-            	_trigger('externalChange');
+                _trigger('externalChange');
             }
             _st(_track, 10);
         };
 
         var _track = function() {
             var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + $.address.value()).replace(/\/\//, '/').replace(/^\/$/, ''),
-            	fn = window[_opts.tracker];
+                fn = window[_opts.tracker];
             if (typeof fn == FUNCTION)
                 fn(value);
             else if (typeof pageTracker != UNDEFINED && typeof pageTracker._trackPageview == FUNCTION)
@@ -217,7 +217,7 @@
         if (_msie) {
             _version = parseFloat(_agent.substr(_agent.indexOf('MSIE') + 4));
             if (_d.documentMode && _d.documentMode != _version)
-            	_version = _d.documentMode != 8 ? 7 : 8;
+                _version = _d.documentMode != 8 ? 7 : 8;
         }
         
         _supported = 
@@ -266,54 +266,54 @@
         }
 
         return {
-        	init: function(data, fn){
-            	$(this).bind('init', fn || data, fn && data);
-            	return this;
-        	},
-        	change: function(data, fn){
-            	$(this).bind('change', fn || data, fn && data);
-            	return this;
-        	},
-        	internalChange: function(data, fn){
-            	$(this).bind('internalChange', fn || data, fn && data);
-            	return this;
-        	},
-        	externalChange: function(data, fn){
-            	$(this).bind('externalChange', fn || data, fn && data);
-            	return this;
-        	},
-        	baseURL: function() {
+            init: function(data, fn){
+                $(this).bind('init', fn || data, fn && data);
+                return this;
+            },
+            change: function(data, fn){
+                $(this).bind('change', fn || data, fn && data);
+                return this;
+            },
+            internalChange: function(data, fn){
+                $(this).bind('internalChange', fn || data, fn && data);
+                return this;
+            },
+            externalChange: function(data, fn){
+                $(this).bind('externalChange', fn || data, fn && data);
+                return this;
+            },
+            baseURL: function() {
                 var url = _l.href;
                 if (url.indexOf('#') != -1)
                     url = url.substr(0, url.indexOf('#'));
                 if (url.substr(url.length - 1) == '/')
                     url = url.substr(0, url.length - 1);
                 return url;
-        	},
-        	strict: function(value) {
-        		if (value !== undefined) {
-        			_opts.strict = value;
-        			return this;
-        		}
-    			return _opts.strict;
+            },
+            strict: function(value) {
+                if (value !== undefined) {
+                    _opts.strict = value;
+                    return this;
+                }
+                return _opts.strict;
             },
             history: function(value) {
-        		if (value !== undefined) {
-        			_opts.history = value;
-        			return this;
-        		}
-    			return _opts.history;
+                if (value !== undefined) {
+                    _opts.history = value;
+                    return this;
+                }
+                return _opts.history;
             },
             tracker: function(value) {
-        		if (value !== undefined) {
-        			_opts.tracker = value;
-        			return this;
-        		}
-    			return _opts.tracker;
+                if (value !== undefined) {
+                    _opts.tracker = value;
+                    return this;
+                }
+                return _opts.tracker;
             },
             title: function(value) {
-            	if (value !== undefined) {
-            		value = _dc(value);
+                if (value !== undefined) {
+                    value = _dc(value);
                     _st(function() {
                         _title = _d.title = value;
                         if (_juststart && _frame && _frame.contentWindow && _frame.contentWindow.document) {
@@ -325,11 +325,11 @@
                         _justset = FALSE;
                     }, 50);
                     return this;
-            	}
+                }
                 return _d.title;
-        	},
+            },
             value: function(value) {
-        		if (value !== undefined) {
+                if (value !== undefined) {
                     value = _ec(_dc(_strictCheck(value, TRUE)));
                     if (value == '/') value = '';
                     if (_value == value) return;
@@ -373,67 +373,67 @@
                     else
                         _silent = FALSE;
                     return this;
-        		}
+                }
                 if (!_supported) return null;
                 return _dc(_strictCheck(_ieLocal(_value, FALSE), FALSE));
             },
             path: function(value) {
-            	if (value !== undefined) {
+                if (value !== undefined) {
                     var qs = this.queryString();
-                	this.value(value + (qs ? '?' + qs : ''));
-                	return this;
-            	}
+                    this.value(value + (qs ? '?' + qs : ''));
+                    return this;
+                }
                 var value = this.value();
                 return (value.indexOf('?') != -1) ? value.split('?')[0] : value;
             },
             queryString: function(value) {
-            	if (value !== undefined) {
-            		this.value(this.path() + (value ? '?' + value : ''));
-            		return this;
-            	}
+                if (value !== undefined) {
+                    this.value(this.path() + (value ? '?' + value : ''));
+                    return this;
+                }
                 var value = this.value(),
-                	index = value.indexOf('?');
+                    index = value.indexOf('?');
                 if (index != -1 && index < value.length) 
-                	return value.substr(index + 1);
+                    return value.substr(index + 1);
             },
             parameter: function(name, value, append) {
-            	if (value !== undefined) {
-            		var names = this.parameterNames(),
-            			params = [];
-            		for (var i = 0; i < names.length; i++) {
-            			var n = names[i],
-            				v = this.parameter(n);
-            			if (typeof v == 'string')
-            				v = [v];
-            			if (n == name)
-            				v = (value === null || value == '') ? [] : 
-            					(append ? v.concat([value]) : [value]);
-        				for (var j = 0; j < v.length; j++)
-                			params.push(n + '=' + v[j]);
-            		}
-            		if ($.inArray(name, names) == -1)
-            			params.push(name + '=' + value);
-            		this.queryString(params.join('&'));
-            		return this;
-            	}
+                if (value !== undefined) {
+                    var names = this.parameterNames(),
+                        params = [];
+                    for (var i = 0; i < names.length; i++) {
+                        var n = names[i],
+                            v = this.parameter(n);
+                        if (typeof v == 'string')
+                            v = [v];
+                        if (n == name)
+                            v = (value === null || value == '') ? [] : 
+                                (append ? v.concat([value]) : [value]);
+                        for (var j = 0; j < v.length; j++)
+                            params.push(n + '=' + v[j]);
+                    }
+                    if ($.inArray(name, names) == -1)
+                        params.push(name + '=' + value);
+                    this.queryString(params.join('&'));
+                    return this;
+                }
                 var value = this.value(),
-                	index = value.indexOf('?');
+                    index = value.indexOf('?');
                 if (index != -1) {
                     value = value.substr(index + 1);
                     var params = value.split('&'),
-                    	r = [];
+                        r = [];
                     for (var i = 0; i < params.length; i++) {
                         var p = params[i].split('=');
                         if (p[0] == name)
                             r.push(p[1]);
                     }
                     if (r.length != 0)
-                    	return r.length != 1 ? r : r[0];
+                        return r.length != 1 ? r : r[0];
                 }
             },
             pathNames: function() {
                 var path = this.path(),
-                	names = path.split('/');
+                    names = path.split('/');
                 if (path.substr(0, 1) == '/' || path.length == 0)
                     names.splice(0, 1);
                 if (path.substr(path.length - 1, 1) == '/')
@@ -442,16 +442,16 @@
             },
             parameterNames: function() {
                 var value = this.value(),
-	            	index = value.indexOf('?'),
-                	names = [];
+                    index = value.indexOf('?'),
+                    names = [];
                 if (index != -1) {
                     value = value.substr(index + 1);
                     if (value != '' && value.indexOf('=') != -1) {
                         var params = value.split('&');
                         for (var i = 0; i < params.length; i++) {
-                        	var name = params[i].split('=')[0];
-                        	if ($.inArray(name, names) == -1)
-                        		names.push(name);
+                            var name = params[i].split('=')[0];
+                            if ($.inArray(name, names) == -1)
+                                names.push(name);
                         }
                     }
                 }
