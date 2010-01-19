@@ -6,7 +6,7 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2010-01-19 18:58:22 +0200 (Tue, 19 Jan 2010)
+ * Date: 2010-01-19 19:07:07 +0200 (Tue, 19 Jan 2010)
  */
 (function ($) {
 
@@ -16,14 +16,15 @@
             $($.address).trigger(
                 $.extend($.Event(name), 
                     (function() {
-                        var parameters = {};
-                        for (var i = 0, l = event.parameterNames.length; i < l; i++)
-                            parameters[event.parameterNames[i]] = $.address.parameter(event.parameterNames[i]);                        
+                        var parameters = {},
+                            parameterNames = $.address.parameterNames();
+                        for (var i = 0, l = parameterNames.length; i < l; i++)
+                            parameters[parameterNames[i]] = $.address.parameter(parameterNames[i]);                        
                         return {
                             value: $.address.value(),
                             path: $.address.path(),
                             pathNames: $.address.pathNames(),
-                            parameterNames: $.address.parameterNames(),
+                            parameterNames: parameterNames,
                             parameters: parameters,
                             queryString: $.address.queryString()
                         };
