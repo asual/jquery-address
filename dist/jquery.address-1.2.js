@@ -6,7 +6,7 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2010-01-18 23:13:36 +0200 (Mon, 18 Jan 2010)
+ * Date: 2010-01-19 18:58:22 +0200 (Tue, 19 Jan 2010)
  */
 (function ($) {
 
@@ -16,33 +16,26 @@
             $($.address).trigger(
                 $.extend($.Event(name), 
                     (function() {
-                        var event = {
+                        var parameters = {};
+                        for (var i = 0, l = event.parameterNames.length; i < l; i++)
+                            parameters[event.parameterNames[i]] = $.address.parameter(event.parameterNames[i]);                        
+                        return {
                             value: $.address.value(),
                             path: $.address.path(),
                             pathNames: $.address.pathNames(),
                             parameterNames: $.address.parameterNames(),
-                            parameters: {},
+                            parameters: parameters,
                             queryString: $.address.queryString()
                         };
-                        for (var i = 0, l = event.parameterNames.length; i < l; i++)
-                            event.parameters[event.parameterNames[i]] = $.address.parameter(event.parameterNames[i]);
-                        return event;
                     }).call($.address)
                 )
             );
         };
         
         var _bind = function(value, data, fn) {
-            $($.address).bind(value, fn || data, fn && data);
+            if (fn || data)
+                $($.address).bind(value, fn || data, fn && data);
             return $.address;
-        };
-    
-        var _init = function() {
-            _trigger('init');
-        };
-        
-        var _change = function() {
-            _trigger('change');
         };
 
         var _getHash = function() {
@@ -99,12 +92,8 @@
         };
 
         var _update = function(internal) {
-            _change();
-            if (internal) {
-                _trigger('internalChange');
-            } else {
-                _trigger('externalChange');
-            }
+            _trigger('change');
+            _trigger(internal ? 'internalChange' : 'externalChange');
             _st(_track, 10);
         };
 
@@ -166,7 +155,7 @@
                 }
                 
                 _st(function() {
-                    _init();
+                    _trigger('init');
                     _update(false);
                 }, 1);
                 
@@ -266,21 +255,17 @@
         }
 
         return {
-            init: function(data, fn){
-                $(this).bind('init', fn || data, fn && data);
-                return this;
+            init: function(data, fn) {
+                return _bind('init', data, fn);
             },
-            change: function(data, fn){
-                $(this).bind('change', fn || data, fn && data);
-                return this;
+            change: function(data, fn) {
+                return _bind('change', data, fn);
             },
-            internalChange: function(data, fn){
-                $(this).bind('internalChange', fn || data, fn && data);
-                return this;
+            internalChange: function(data, fn) {
+                return _bind('internalChange', data, fn);
             },
-            externalChange: function(data, fn){
-                $(this).bind('externalChange', fn || data, fn && data);
-                return this;
+            externalChange: function(data, fn) {
+                return _bind('externalChange', data, fn);
             },
             baseURL: function() {
                 var url = _l.href;
