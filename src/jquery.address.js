@@ -16,14 +16,15 @@
             $($.address).trigger(
                 $.extend($.Event(name), 
                     (function() {
-                        var parameters = {};
-                        for (var i = 0, l = event.parameterNames.length; i < l; i++)
-                            parameters[event.parameterNames[i]] = $.address.parameter(event.parameterNames[i]);                        
+                        var parameters = {},
+                            parameterNames = $.address.parameterNames();
+                        for (var i = 0, l = parameterNames.length; i < l; i++)
+                            parameters[parameterNames[i]] = $.address.parameter(parameterNames[i]);                        
                         return {
                             value: $.address.value(),
                             path: $.address.path(),
                             pathNames: $.address.pathNames(),
-                            parameterNames: $.address.parameterNames(),
+                            parameterNames: parameterNames,
                             parameters: parameters,
                             queryString: $.address.queryString()
                         };
