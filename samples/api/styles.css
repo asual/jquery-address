@@ -1,8 +1,10 @@
+html, body {
+    background: #000000;
+}    
 body {
     font: 14px Arial, "Helvetica Neue", sans-serif;
     margin: 20px;
     padding: 0;
-    background: #000000;
 }
 .nav {
     height: 20px;
