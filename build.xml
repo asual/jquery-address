@@ -71,13 +71,22 @@
     </target>
     
     <target name="compress">
-        <replaceregexp match="/\*" file="${file}">
-            <substitution expression="/*!" />
-        </replaceregexp>
-        <java jar="${lib.dir}/yuicompressor.jar"
+        <java jar="${lib.dir}/compiler.jar"
             failonerror="true" fork="true">
-            <arg line="${file} -o ${file} --charset utf-8" />
+            <arg line="--js=${file} --js_output_file=${file}.tmp" />
         </java>
+        <concat destfile="${file}.lic">
+        	<filelist files="${file}" />
+        	<filterchain>
+            	<headfilter lines="10" />
+        	</filterchain>
+    	</concat>
+        <concat destfile="${file}">
+            <filelist files="${file}.lic,${file}.tmp" />
+        </concat>
+    	<delete>
+    		<filelist files="${file}.lic,${file}.tmp" />
+    	</delete>
     </target>
     
     <target name="test">
