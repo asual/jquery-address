@@ -11,48 +11,50 @@
 (function() {
 
     var _getWindow = function() { 
-        try {
-            return top.document != undefined ? top : window;
-        } catch (e) {
-            return window; 
-        }
-    };
-
-    var _searchScript = function(el) {
-        if (el.childNodes) {
-            for (var i = 0, l = el.childNodes.length, s; i < l; i++) {
-                if (el.childNodes[i].src)
-                    _url = String(el.childNodes[i].src);
-                if (s = _searchScript(el.childNodes[i]))
-                    return s;
+	        try {
+	            return top.document !== undefined ? top : window;
+	        } catch (e) { 
+	            return window;
+	        }
+	    },
+        _searchScript = function(el) {
+        	var url, s;
+            for (var i = 0, l = el.childNodes.length; i < l; i++) {
+                if (el.childNodes[i].src) {
+                    url = String(el.childNodes[i].src);
+                }
+                s = _searchScript(el.childNodes[i]);
+                if (s) {
+                    url = s;
+                }
             }
-        }
-    };
+            return url;
+        },
+	    UNDEFINED = 'undefined', 
+        _url = _searchScript(document),
+        _qi = _url ? _url.indexOf('?') : -1,
+	    _t = _getWindow(),
+	    _d = _t.document,
+	    _l = _t.location,
+	    _n = navigator,
+	    _index = _l.href.indexOf('#'),
+	    _hash = (_index != -1),
+	    _opts = {};
     
-    var UNDEFINED = 'undefined', 
-        _url,
-        _t = _getWindow(),
-        _d = _t.document,
-        _l = _t.location,
-        _n = navigator,
-        _index = _l.href.indexOf('#'),
-        _hash = (_index != -1),
-        _opts = {};
-    
-    _searchScript(document);
-    var _qi = _url ? _url.indexOf('?') : -1;
-    if (_qi != -1) {
+    if (_url && _qi != -1) {
         var param, params = _url.substr(_qi + 1).split('&');
-        for (var i = 0, p; p = params[i]; i++) {
-            param = p.split('=');
-            if (/^(base|address)$/.test(param[0]))
+        for (var i = 0; i < params.length; i++) {
+            param = params[i].split('=');
+            if (/^(base|address)$/.test(param[0])) {
                 _opts[param[0]] = unescape(param[1]);
+            }
         }
     }
     
     if (_hash && (_index - (_l.href.indexOf(_l.pathname, _l.protocol.length + 2) + 
-        _l.pathname.indexOf(_opts.base) + _opts.base.length)) > 1)
+        _l.pathname.indexOf(_opts.base) + _opts.base.length)) > 1) {
         _hash = false;
+    }
     
     var value = _l.href.split(_l.hostname)[1].replace(_opts.base, '');
     if (_opts.address != '/' && (!_hash || _index == _l.href.length - 1) && (value != '' && value != '/')) {
