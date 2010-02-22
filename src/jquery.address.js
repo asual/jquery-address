@@ -245,7 +245,7 @@
                 var param, params = _url.substr(_qi + 1).split('&');
                 for (i = 0; i < params.length; i++) {
                     param = params[i].split('=');
-                    if (/^(history|strict)$/.test(param[0])) {
+                    if (/^(autoUpdate|history|strict)$/.test(param[0])) {
                         _opts[param[0]] = (isNaN(param[1]) ? /^(true|yes)$/i.test(param[1]) : (parseInt(param[1], 10) !== 0));
                     }
                     if (/^tracker$/.test(param[0])) {
