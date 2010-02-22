@@ -6,7 +6,7 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2010-02-22 02:08:10 +0200 (Mon, 22 Feb 2010)
+ * Date: 2010-02-23 00:42:34 +0200 (Tue, 23 Feb 2010)
  */
 (function ($) {
 
@@ -96,7 +96,7 @@
 	        _update = function(internal) {
 	            _trigger('change');
 	            _trigger(internal ? 'internalChange' : 'externalChange');
-	            _st(_track, 10, TRUE);
+	            _st(_track, 10);
 	        },
 	        _track = function() {
 	            var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + $.address.value()).replace(/\/\//, '/').replace(/^\/$/, ''),
@@ -147,7 +147,7 @@
 	                        if (typeof _frame.contentWindow[ID] == UNDEFINED) {
 	                            _htmlWrite();
 	                        }
-	                    }, 50, TRUE);
+	                    }, 50);
 	                } else if (_safari) {
 	                    if (_version < 418) {
 	                        $(_d.body).append('<form id="' + ID + '" style="position:absolute;top:-9999px;" method="get"></form>');
@@ -164,12 +164,12 @@
 	                _st(function() {
 	                    _trigger('init');
 	                    _update(FALSE);
-	                }, 1, TRUE);
+	                }, 1);
 	                
 	                if (_msie && _version >= 8) {
 	                    _d.body.onhashchange = _listen;
 	                } else {
-	                    _si(_listen, 50, TRUE);
+	                    _si(_listen, 50);
 	                }
 	                $('a[rel*=address:]').address();
 	            }
@@ -343,7 +343,7 @@
                             _l.replace(_l.href.indexOf('#') != -1 ? _l.href : _l.href + '#');
                         }
                         _justset = FALSE;
-                    }, 50, TRUE);
+                    }, 50);
                     return this;
                 }
                 return _d.title;
@@ -392,10 +392,10 @@
 	                        }
 	                    }
 	                    if ((_msie && _version < 8) && _opts.history) {
-	                        _st(_htmlWrite, 50, TRUE);
+	                        _st(_htmlWrite, 50);
 	                    }
 	                    if (_safari) {
-	                        _st(function(){ _silent = FALSE; }, 1, TRUE);
+	                        _st(function(){ _silent = FALSE; }, 1);
 	                    } else {
 	                        _silent = FALSE;
 	                    }
