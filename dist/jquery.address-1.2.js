@@ -6,7 +6,7 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2010-02-21 17:26:43 +0200 (Sun, 21 Feb 2010)
+ * Date: 2010-02-22 02:08:10 +0200 (Mon, 22 Feb 2010)
  */
 (function ($) {
 
@@ -245,7 +245,7 @@
                 var param, params = _url.substr(_qi + 1).split('&');
                 for (i = 0; i < params.length; i++) {
                     param = params[i].split('=');
-                    if (/^(history|strict)$/.test(param[0])) {
+                    if (/^(autoUpdate|history|strict)$/.test(param[0])) {
                         _opts[param[0]] = (isNaN(param[1]) ? /^(true|yes)$/i.test(param[1]) : (parseInt(param[1], 10) !== 0));
                     }
                     if (/^tracker$/.test(param[0])) {
