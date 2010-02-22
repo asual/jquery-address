@@ -1,0 +1,65 @@
+body { 
+    font: 0.8em Arial, sans-serif; 
+    background: #000; 
+}
+.content { 
+    width: 480px; 
+    margin: 20px; 
+}
+.content h1 { 
+    margin: 0 0 10px; 
+    padding: 0; 
+    color: #fff; 
+}
+.accordion { 
+    list-style-type: none; 
+    padding: 0; 
+    margin: 0 0 30px; 
+    border-top: none; 
+    border-left: none; 
+}
+.accordion *:focus { 
+    outline: none;
+}
+.accordion ul { 
+    padding: 0; 
+    margin: 0; 
+    float: left; 
+    display: block; 
+    width: 100%; 
+}
+.accordion li { 
+    background: #3cf; 
+    cursor: pointer; 
+    list-style-type: none; 
+    padding: 0; 
+    margin: 0; 
+    float: left; 
+    display: block; 
+    width: 100%;
+}
+.accordion li.active>a { 
+    background: url('images/close.gif') no-repeat center right; 
+}
+.accordion li div { 
+    padding: 20px; 
+    background: #aef; 
+    display: block; 
+    clear: both; 
+    float: left; 
+    width: 440px;
+}
+.accordion a { 
+    text-decoration: none; 
+    border-bottom: 1px solid #4df; 
+    font: bold 1.1em/2em Arial, sans-serif; 
+    color: #222; 
+    padding: 0 10px; 
+    display: block; 
+    cursor: pointer; 
+    background: url('images/open.gif') no-repeat center right;
+}
+.accordion li ul li { 
+    background: #7FD2FF; 
+    font-size: 0.9em; 
+}
