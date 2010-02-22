@@ -1,5 +1,4 @@
-jQuery Address
-==============
+# jQuery Address
 
 The jQuery Address plugin provides powerful deep linking capabilities and allows the 
 creation of unique virtual addresses that can point to a website section or an 
@@ -10,8 +9,7 @@ application state. It enables a number of important capabilities including:
 * Finding specific content using the major search engines
 * Utilizing browser history and reload buttons
 
-Usage
------
+## Usage
 
 A basic implementation in pure JavaScript can look like this:
 
@@ -37,3 +35,24 @@ By default the plugin automatically adds the appropriate JavaScript event handle
 link that has a rel attribute in the following format:
 
     <a href="/deep-link" rel="address:/deep-link">Deep link</a> 
+
+## Changes
+
+### 02/21/2010 - jQuery Address 1.2
+
+- New queryString, parameter and path setters.
+- New autoUpdate mode
+- New Accordion sample
+- Switched to the Closure compiler.
+- Simple test suite.
+
+### 12/23/2009 - jQuery Address 1.1
+
+- New internalChange and externalChange events.
+- New Events sample.
+- Improved IE support.
+- Frameset support.
+
+### 04/28/2009 - jQuery Address 1.0
+
+Initial release.
