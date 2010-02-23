@@ -6,7 +6,7 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2010-02-23 00:42:34 +0200 (Tue, 23 Feb 2010)
+ * Date: 2010-02-24 00:26:11 +0200 (Wed, 24 Feb 2010)
  */
 (function ($) {
 
@@ -166,8 +166,14 @@
 	                    _update(FALSE);
 	                }, 1);
 	                
-	                if (_msie && _version >= 8) {
-	                    _d.body.onhashchange = _listen;
+	                if ((_msie && _version > 7) || (!_msie && 'onhashchange' in _t)) {
+	                    var hashChange = _d.body.onhashchange;
+	                    _d.body.onhashchange = function() {
+	                        if (typeof hashChange == FUNCTION) {
+                                hashChange.call(_t);
+	                        }
+	                        _listen.call(_t);
+	                    };
 	                } else {
 	                    _si(_listen, 50);
 	                }
