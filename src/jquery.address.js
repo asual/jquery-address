@@ -166,8 +166,14 @@
 	                    _update(FALSE);
 	                }, 1);
 	                
-	                if (_msie && _version >= 8) {
-	                    _d.body.onhashchange = _listen;
+	                if ((_msie && _version > 7) || (!_msie && 'onhashchange' in _t)) {
+	                    var hashChange = _d.body.onhashchange;
+	                    _d.body.onhashchange = function() {
+	                        if (typeof hashChange == FUNCTION) {
+                                hashChange.call(_t);
+	                        }
+	                        _listen.call(_t);
+	                    };
 	                } else {
 	                    _si(_listen, 50);
 	                }
