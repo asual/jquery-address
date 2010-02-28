@@ -6,7 +6,7 @@
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2010-02-24 00:26:11 +0200 (Wed, 24 Feb 2010)
+ * Date: 2010-03-01 01:08:40 +0200 (Mon, 01 Mar 2010)
  */
 (function ($) {
 
@@ -166,23 +166,29 @@
 	                    _update(FALSE);
 	                }, 1);
 	                
-	                if ((_msie && _version > 7) || (!_msie && 'onhashchange' in _t)) {
-	                    var hashChange = _d.body.onhashchange;
-	                    _d.body.onhashchange = function() {
-	                        if (typeof hashChange == FUNCTION) {
-                                hashChange.call(_t);
-	                        }
-	                        _listen.call(_t);
-	                    };
+	                if ((_msie && _version > 7) || (!_msie && ('on' + HASH_CHANGE) in _t)) {
+                        if (_t.addEventListener) {
+                            _t.addEventListener(HASH_CHANGE, _listen, false);
+                        } else if (_t.attachEvent) {
+                            _t.attachEvent('on' + HASH_CHANGE, _listen);
+                        }
 	                } else {
 	                    _si(_listen, 50);
 	                }
 	                $('a[rel*=address:]').address();
 	            }
 	        },
+	        _unload = function() {
+                if (_t.removeEventListener) {
+                    _t.removeEventListener(HASH_CHANGE, _listen, false);
+                } else if (_t.detachEvent) {
+                    _t.detachEvent('on' + HASH_CHANGE, _listen);
+                }
+	        },
 	        ID = 'jQueryAddress',
 	        FUNCTION = 'function',
 	        UNDEFINED = 'undefined',
+	        HASH_CHANGE = 'hashchange',
 	        TRUE = true,
 	        FALSE = false,
 	        _browser = $.browser, 
@@ -259,15 +265,12 @@
                     }
                 }
             }
-
-            if (_d.readyState == 'complete') {
+            
+            if (document.readyState == 'complete') {
             	_load();
-            } else {
-            	if (window == _t) {
-            		$(_load);
-            	}
-            	$(_t).load(_load);
             }
+            $(_load);
+            $(window).bind('unload', _unload);
             
         } else if ((!_supported && _l.href.indexOf('#') != -1) || 
             (_safari && _version < 418 && _l.href.indexOf('#') != -1 && _l.search != '')) {
