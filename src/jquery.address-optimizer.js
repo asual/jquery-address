@@ -3,8 +3,8 @@
  * http://www.asual.com/jquery/address/
  *
  * Copyright (c) 2009-2010 Rostislav Hristov
- * Dual licensed under the MIT and GPL licenses.
- * http://docs.jquery.com/License
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * Date: ${timestamp}
  */
