@@ -6,40 +6,40 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-03-02 09:29:29 +0200 (Tue, 02 Mar 2010)
+ * Date: 2010-03-03 21:24:30 +0200 (Wed, 03 Mar 2010)
  */
 (function() {
 
-    var _getWindow = function() { 
-	        try {
-	            return top.document !== undefined ? top : window;
-	        } catch (e) { 
-	            return window;
-	        }
-	    },
-        _searchScript = function(el) {
-        	var url, s;
+    var _window = function() { 
+            try {
+                return top.document !== undefined ? top : window;
+            } catch (e) { 
+                return window;
+            }
+        },
+        _search = function(el) {
+            var url, s;
             for (var i = 0, l = el.childNodes.length; i < l; i++) {
                 if (el.childNodes[i].src) {
                     url = String(el.childNodes[i].src);
                 }
-                s = _searchScript(el.childNodes[i]);
+                s = _search(el.childNodes[i]);
                 if (s) {
                     url = s;
                 }
             }
             return url;
         },
-	    UNDEFINED = 'undefined', 
-        _url = _searchScript(document),
+        UNDEFINED = 'undefined', 
+        _url = _search(document),
         _qi = _url ? _url.indexOf('?') : -1,
-	    _t = _getWindow(),
-	    _d = _t.document,
-	    _l = _t.location,
-	    _n = navigator,
-	    _index = _l.href.indexOf('#'),
-	    _hash = (_index != -1),
-	    _opts = {};
+        _t = _window(),
+        _d = _t.document,
+        _l = _t.location,
+        _n = navigator,
+        _index = _l.href.indexOf('#'),
+        _hash = (_index != -1),
+        _opts = {};
     
     if (_url && _qi != -1) {
         var param, params = _url.substr(_qi + 1).split('&');
@@ -68,7 +68,7 @@
                 } catch(e) {
                     xhr = new ActiveXObject('Microsoft.XMLHTTP');
                 }
-            } catch(e) {}
+            } catch(ae) {}
         }
         if (xhr) {
             xhr.open('get', ((typeof _opts.base != UNDEFINED) ? _opts.base : '') + '/?' + _opts.address + (_l.hash != '' ? '&hash=' + _l.hash.replace(/^#/, '') : ''), false);

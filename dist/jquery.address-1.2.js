@@ -6,224 +6,227 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-03-02 09:29:29 +0200 (Tue, 02 Mar 2010)
+ * Date: 2010-03-03 21:24:30 +0200 (Wed, 03 Mar 2010)
  */
 (function ($) {
 
     $.address = (function () {
 
         var _trigger = function(name) {
-	            $($.address).trigger(
-	                $.extend($.Event(name), 
-	                    (function() {
-	                        var parameters = {},
-	                            parameterNames = $.address.parameterNames();
-	                        for (var i = 0, l = parameterNames.length; i < l; i++) {
-	                            parameters[parameterNames[i]] = $.address.parameter(parameterNames[i]);
-	                        }
-	                        return {
-	                            value: $.address.value(),
-	                            path: $.address.path(),
-	                            pathNames: $.address.pathNames(),
-	                            parameterNames: parameterNames,
-	                            parameters: parameters,
-	                            queryString: $.address.queryString()
-	                        };
-	                    }).call($.address)
-	                )
-	            );
-	        },
-	        _bind = function(value, data, fn) {
-	            if (fn || data) {
-	                $($.address).bind(value, fn || data, fn && data);
-	            }
-	            return $.address;
-	        },
-	        _getHash = function() {
-	            var index = _l.href.indexOf('#');
-	            return index != -1 ? _ec(_dc(_l.href.substr(index + 1))) : '';
-	        },
-	        _getWindow = function() { 
-	            try {
-	                return top.document !== undefined ? top : window;
-	            } catch (e) { 
-	                return window;
-	            }
-	        },
-	        _strictCheck = function(value, force) {
-	            if (_opts.strict) {
-	                value = force ? (value.substr(0, 1) != '/' ? '/' + value : value) : (value == '' ? '/' : value);
-	            }
-	            return value;
-	        },
-	        _ieLocal = function(value, direction) {
-	            return (_msie && _l.protocol == 'file:') ? 
-	                (direction ? _value.replace(/\?/, '%3F') : _value.replace(/%253F/, '?')) : value;
-	        },
-	        _searchScript = function(el) {
-	        	var url, s;
-	            for (var i = 0, l = el.childNodes.length; i < l; i++) {
-	                if (el.childNodes[i].src) {
-	                    url = String(el.childNodes[i].src);
-	                }
-	                s = _searchScript(el.childNodes[i]);
-	                if (s) {
-	                    url = s;
-	                }
-	            }
-	            return url;
-	        },
-	        _listen = function() {
-	            if (!_silent) {
-	                var hash = _getHash(),
-	                    diff = _value != hash;
-	                if (_safari && _version < 523) {
-	                    if (_length != _h.length) {
-	                        _length = _h.length;
-	                        if (typeof _stack[_length - 1] != UNDEFINED) {
-	                            _value = _stack[_length - 1];
-	                        }
-	                        _update(FALSE);
-	                    }
-	                } else if (_msie && _version < 7 && diff) {
-	                    _l.reload();
-	                } else if (diff) {
-	                    _value = hash;
-	                    _update(FALSE);
-	                }
-	            }
-	        },
-	        _update = function(internal) {
-	            _trigger('change');
-	            _trigger(internal ? 'internalChange' : 'externalChange');
-	            _st(_track, 10);
-	        },
-	        _track = function() {
-	            var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + $.address.value()).replace(/\/\//, '/').replace(/^\/$/, ''),
-	                fn = window[_opts.tracker];
-	            if (typeof fn == FUNCTION) {
-	                fn(value);
-	            } else if (typeof _gaq != UNDEFINED && typeof _gaq.push == FUNCTION) {
-	                _gaq.push(['_trackPageview', value]);
-	            } else if (typeof pageTracker != UNDEFINED && typeof pageTracker._trackPageview == FUNCTION) {
-	                pageTracker._trackPageview(value);
-	        	} else if (typeof urchinTracker == FUNCTION) {
-	                urchinTracker(value);
-    			}
-    		},
-	        _htmlWrite = function() {
-	            var doc = _frame.contentWindow.document;
-	            doc.open();
-	            doc.write('<html><head><title>' + _d.title + '</title><script>var ' + ID + ' = "' + _getHash() + '";</' + 'script></head></html>');
-	            doc.close();
-	        },
-	        _load = function() {
-	            if (!_loaded) {
-	                _loaded = TRUE;
-	                if (_msie && _version < 8) {
-	                    var frameset = _d.getElementsByTagName('frameset')[0];
-	                    _frame = _d.createElement((frameset ? '' : 'i') + 'frame');
-	                    if (frameset) {
-	                        frameset.insertAdjacentElement('beforeEnd', _frame);
-	                        frameset[frameset.cols ? 'cols' : 'rows'] += ',0';
-	                        _frame.src = 'javascript:false';
-	                        _frame.noResize = TRUE;
-	                        _frame.frameBorder = _frame.frameSpacing = 0;
-	                    } else {
-	                        _frame.src = 'javascript:false';
-	                        _frame.style.display = 'none';
-	                        _d.body.insertAdjacentElement('afterBegin', _frame);
-	                    }
-	                    _st(function() {
-	                        $(_frame).bind('load', function() {
-	                            var win = _frame.contentWindow;
-	                            var src = win.location.href;
-	                            _value = (typeof win[ID] != UNDEFINED ? win[ID] : '');
-	                            if (_value != _getHash()) {
-	                                _update(FALSE);
-	                                _l.hash = _ieLocal(_value, TRUE);
-	                            }
-	                        });
-	                        if (typeof _frame.contentWindow[ID] == UNDEFINED) {
-	                            _htmlWrite();
-	                        }
-	                    }, 50);
-	                } else if (_safari) {
-	                    if (_version < 418) {
-	                        $(_d.body).append('<form id="' + ID + '" style="position:absolute;top:-9999px;" method="get"></form>');
-	                        _form = _d.getElementById(ID);
-	                    }
-	                    if (typeof _l[ID] == UNDEFINED) {
-	                    	_l[ID] = {};
-	                    }
-	                    if (typeof _l[ID][_l.pathname] != UNDEFINED) {
-	                    	_stack = _l[ID][_l.pathname].split(',');
-	                    }
-	                }
+                $($.address).trigger(
+                    $.extend($.Event(name), 
+                        (function() {
+                            var parameters = {},
+                                parameterNames = $.address.parameterNames();
+                            for (var i = 0, l = parameterNames.length; i < l; i++) {
+                                parameters[parameterNames[i]] = $.address.parameter(parameterNames[i]);
+                            }
+                            return {
+                                value: $.address.value(),
+                                path: $.address.path(),
+                                pathNames: $.address.pathNames(),
+                                parameterNames: parameterNames,
+                                parameters: parameters,
+                                queryString: $.address.queryString()
+                            };
+                        }).call($.address)
+                    )
+                );
+            },
+            _bind = function(value, data, fn) {
+                if (fn || data) {
+                    $($.address).bind(value, fn || data, fn && data);
+                }
+                return $.address;
+            },
+            _hash = function() {
+                var index = _l.href.indexOf('#');
+                return index != -1 ? _ec(_dc(_l.href.substr(index + 1))) : '';
+            },
+            _window = function() {
+                try {
+                    return top.document !== undefined ? top : window;
+                } catch (e) { 
+                    return window;
+                }
+            },
+            _js = function() {
+                return 'javascript';
+            },
+            _strict = function(value, force) {
+                if (_opts.strict) {
+                    value = force ? (value.substr(0, 1) != '/' ? '/' + value : value) : (value == '' ? '/' : value);
+                }
+                return value;
+            },
+            _local = function(value, direction) {
+                return (_msie && _l.protocol == 'file:') ? 
+                    (direction ? _value.replace(/\?/, '%3F') : _value.replace(/%253F/, '?')) : value;
+            },
+            _search = function(el) {
+                var url, s;
+                for (var i = 0, l = el.childNodes.length; i < l; i++) {
+                    if (el.childNodes[i].src) {
+                        url = String(el.childNodes[i].src);
+                    }
+                    s = _search(el.childNodes[i]);
+                    if (s) {
+                        url = s;
+                    }
+                }
+                return url;
+            },
+            _listen = function() {
+                if (!_silent) {
+                    var hash = _hash(),
+                        diff = _value != hash;
+                    if (_safari && _version < 523) {
+                        if (_length != _h.length) {
+                            _length = _h.length;
+                            if (typeof _stack[_length - 1] != UNDEFINED) {
+                                _value = _stack[_length - 1];
+                            }
+                            _update(FALSE);
+                        }
+                    } else if (_msie && _version < 7 && diff) {
+                        _l.reload();
+                    } else if (diff) {
+                        _value = hash;
+                        _update(FALSE);
+                    }
+                }
+            },
+            _update = function(internal) {
+                _trigger('change');
+                _trigger(internal ? 'internalChange' : 'externalChange');
+                _st(_track, 10);
+            },
+            _track = function() {
+                var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + $.address.value()).replace(/\/\//, '/').replace(/^\/$/, ''),
+                    fn = window[_opts.tracker];
+                if (typeof fn == FUNCTION) {
+                    fn(value);
+                } else if (typeof _gaq != UNDEFINED && typeof _gaq.push == FUNCTION) {
+                    _gaq.push(['_trackPageview', value]);
+                } else if (typeof pageTracker != UNDEFINED && typeof pageTracker._trackPageview == FUNCTION) {
+                    pageTracker._trackPageview(value);
+                } else if (typeof urchinTracker == FUNCTION) {
+                    urchinTracker(value);
+                }
+            },
+            _html = function() {
+                var doc = _frame.contentWindow.document;
+                doc.open();
+                doc.write('<html><head><title>' + _d.title + '</title><script>var ' + ID + ' = "' + _hash() + '";</' + 'script></head></html>');
+                doc.close();
+            },
+            _load = function() {
+                if (!_loaded) {
+                    _loaded = TRUE;
+                    if (_msie && _version < 8) {
+                        var frameset = _d.getElementsByTagName('frameset')[0];
+                        _frame = _d.createElement((frameset ? '' : 'i') + 'frame');
+                        if (frameset) {
+                            frameset.insertAdjacentElement('beforeEnd', _frame);
+                            frameset[frameset.cols ? 'cols' : 'rows'] += ',0';
+                            _frame.src = _js() + ':' + FALSE;
+                            _frame.noResize = TRUE;
+                            _frame.frameBorder = _frame.frameSpacing = 0;
+                        } else {
+                            _frame.src = _js() + ':' + FALSE;
+                            _frame.style.display = 'none';
+                            _d.body.insertAdjacentElement('afterBegin', _frame);
+                        }
+                        _st(function() {
+                            $(_frame).bind('load', function() {
+                                var win = _frame.contentWindow;
+                                var src = win.location.href;
+                                _value = (typeof win[ID] != UNDEFINED ? win[ID] : '');
+                                if (_value != _hash()) {
+                                    _update(FALSE);
+                                    _l.hash = _local(_value, TRUE);
+                                }
+                            });
+                            if (typeof _frame.contentWindow[ID] == UNDEFINED) {
+                                _html();
+                            }
+                        }, 50);
+                    } else if (_safari) {
+                        if (_version < 418) {
+                            $(_d.body).append('<form id="' + ID + '" style="position:absolute;top:-9999px;" method="get"></form>');
+                            _form = _d.getElementById(ID);
+                        }
+                        if (typeof _l[ID] == UNDEFINED) {
+                            _l[ID] = {};
+                        }
+                        if (typeof _l[ID][_l.pathname] != UNDEFINED) {
+                            _stack = _l[ID][_l.pathname].split(',');
+                        }
+                    }
 
-	                _st(function() {
-	                    _trigger('init');
-	                    _update(FALSE);
-	                }, 1);
-	                
-	                if ((_msie && _version > 7) || (!_msie && ('on' + HASH_CHANGE) in _t)) {
+                    _st(function() {
+                        _trigger('init');
+                        _update(FALSE);
+                    }, 1);
+                    
+                    if ((_msie && _version > 7) || (!_msie && ('on' + HASH_CHANGE) in _t)) {
                         if (_t.addEventListener) {
                             _t.addEventListener(HASH_CHANGE, _listen, false);
                         } else if (_t.attachEvent) {
                             _t.attachEvent('on' + HASH_CHANGE, _listen);
                         }
-	                } else {
-	                    _si(_listen, 50);
-	                }
-	                $('a[rel*=address:]').address();
-	            }
-	        },
-	        _unload = function() {
+                    } else {
+                        _si(_listen, 50);
+                    }
+                    $('a[rel*=address:]').address();
+                }
+            },
+            _unload = function() {
                 if (_t.removeEventListener) {
                     _t.removeEventListener(HASH_CHANGE, _listen, false);
                 } else if (_t.detachEvent) {
                     _t.detachEvent('on' + HASH_CHANGE, _listen);
                 }
-	        },
-	        ID = 'jQueryAddress',
-	        FUNCTION = 'function',
-	        UNDEFINED = 'undefined',
-	        HASH_CHANGE = 'hashchange',
-	        TRUE = true,
-	        FALSE = false,
-	        _browser = $.browser, 
-	        _version = parseFloat($.browser.version),
-	        _mozilla = _browser.mozilla,
-	        _msie = _browser.msie,
-	        _opera = _browser.opera,
-	        _safari = _browser.safari,
-	        _supported = FALSE,
-	        _t = _getWindow(),
-	        _d = _t.document,
-	        _h = _t.history, 
-	        _l = _t.location,
-	        _si = setInterval,
-	        _st = setTimeout, 
-	        _dc = decodeURI,
-	        _ec = encodeURI,
-	        _agent = navigator.userAgent,            
-	        _frame,
-	        _form,
-	        _url = _searchScript(document),
-	        _qi = _url ? _url.indexOf('?') : -1,
-	        _title = _d.title, 
-	        _length = _h.length, 
-	        _silent = FALSE,
-	        _loaded = FALSE,
-	        _justset = TRUE,
-	        _juststart = TRUE,
-	        _updating = FALSE,
-	        _stack = [], 
-	        _listeners = {}, 
-	        _value = _getHash(),
-	        _api = {},
-	        _opts = {autoUpdate: TRUE, history: TRUE, strict: TRUE};
-	        
+            },
+            ID = 'jQueryAddress',
+            FUNCTION = 'function',
+            UNDEFINED = 'undefined',
+            HASH_CHANGE = 'hashchange',
+            TRUE = true,
+            FALSE = false,
+            _browser = $.browser, 
+            _version = parseFloat($.browser.version),
+            _mozilla = _browser.mozilla,
+            _msie = _browser.msie,
+            _opera = _browser.opera,
+            _safari = _browser.safari,
+            _supported = FALSE,
+            _t = _window(),
+            _d = _t.document,
+            _h = _t.history, 
+            _l = _t.location,
+            _si = setInterval,
+            _st = setTimeout, 
+            _dc = decodeURI,
+            _ec = encodeURI,
+            _agent = navigator.userAgent,            
+            _frame,
+            _form,
+            _url = _search(document),
+            _qi = _url ? _url.indexOf('?') : -1,
+            _title = _d.title, 
+            _length = _h.length, 
+            _silent = FALSE,
+            _loaded = FALSE,
+            _justset = TRUE,
+            _juststart = TRUE,
+            _updating = FALSE,
+            _stack = [], 
+            _listeners = {}, 
+            _value = _hash(),
+            _api = {},
+            _opts = {autoUpdate: TRUE, history: TRUE, strict: TRUE};
+            
         if (_msie) {
             _version = parseFloat(_agent.substr(_agent.indexOf('MSIE') + 4));
             if (_d.documentMode && _d.documentMode != _version) {
@@ -243,10 +246,10 @@
                 _stack.push('');
             }
             
-            _stack.push(_getHash());
+            _stack.push(_value);
         
-            if (_msie && _l.hash != _getHash()) {
-                _l.hash = '#' + _ieLocal(_getHash(), TRUE);
+            if (_msie && _l.hash != _value) {
+                _l.hash = '#' + _local(_value, TRUE);
             }
             
             if (_opera) {
@@ -267,7 +270,7 @@
             }
             
             if (document.readyState == 'complete') {
-            	_load();
+                _load();
             }
             $(_load);
             $(window).bind('unload', _unload);
@@ -320,10 +323,10 @@
                 return _opts.autoUpdate;
             },
             update: function() {
-            	_updating = TRUE;
-            	this.value(_value);
-            	_updating = FALSE;
-            	return this;
+                _updating = TRUE;
+                this.value(_value);
+                _updating = FALSE;
+                return this;
             },
             history: function(value) {
                 if (value !== undefined) {
@@ -359,62 +362,62 @@
             },
             value: function(value) {
                 if (value !== undefined) {
-                    value = _ec(_dc(_strictCheck(value, TRUE)));
+                    value = _ec(_dc(_strict(value, TRUE)));
                     if (value == '/') {
-                    	value = '';
+                        value = '';
                     }
                     if (_value == value && !_updating) {
-                    	return;
+                        return;
                     }
                     _justset = TRUE;
                     _value = value;
                     if (_opts.autoUpdate || _updating) {
-	                    _silent = TRUE;
-	                    _update(TRUE);
-	                    _stack[_h.length] = _value;
-	                    if (_safari) {
-	                        if (_opts.history) {
-	                            _l[ID][_l.pathname] = _stack.toString();
-	                            _length = _h.length + 1;
-	                            if (_version < 418) {
-	                                if (_l.search == '') {
-	                                    _form.action = '#' + _value;
-	                                    _form.submit();
-	                                }
-	                            } else if (_version < 523 || _value == '') {
-	                                var evt = _d.createEvent('MouseEvents');
-	                                evt.initEvent('click', TRUE, TRUE);
-	                                var anchor = _d.createElement('a');
-	                                anchor.href = '#' + _value;
-	                                anchor.dispatchEvent(evt);                
-	                            } else {
-	                                _l.hash = '#' + _value;
-	                            }
-	                        } else {
-	                            _l.replace('#' + _value);
-	                        }
-	                    } else if (_value != _getHash()) {
-	                        if (_opts.history) {
-	                            _l.hash = '#' + _ieLocal(_value, TRUE);
-	                        } else {
-	                            _l.replace('#' + _value);
-	                        }
-	                    }
-	                    if ((_msie && _version < 8) && _opts.history) {
-	                        _st(_htmlWrite, 50);
-	                    }
-	                    if (_safari) {
-	                        _st(function(){ _silent = FALSE; }, 1);
-	                    } else {
-	                        _silent = FALSE;
-	                    }
-	                }
+                        _silent = TRUE;
+                        _update(TRUE);
+                        _stack[_h.length] = _value;
+                        if (_safari) {
+                            if (_opts.history) {
+                                _l[ID][_l.pathname] = _stack.toString();
+                                _length = _h.length + 1;
+                                if (_version < 418) {
+                                    if (_l.search == '') {
+                                        _form.action = '#' + _value;
+                                        _form.submit();
+                                    }
+                                } else if (_version < 523 || _value == '') {
+                                    var evt = _d.createEvent('MouseEvents');
+                                    evt.initEvent('click', TRUE, TRUE);
+                                    var anchor = _d.createElement('a');
+                                    anchor.href = '#' + _value;
+                                    anchor.dispatchEvent(evt);                
+                                } else {
+                                    _l.hash = '#' + _value;
+                                }
+                            } else {
+                                _l.replace('#' + _value);
+                            }
+                        } else if (_value != _hash()) {
+                            if (_opts.history) {
+                                _l.hash = '#' + _local(_value, TRUE);
+                            } else {
+                                _l.replace('#' + _value);
+                            }
+                        }
+                        if ((_msie && _version < 8) && _opts.history) {
+                            _st(_html, 50);
+                        }
+                        if (_safari) {
+                            _st(function(){ _silent = FALSE; }, 1);
+                        } else {
+                            _silent = FALSE;
+                        }
+                    }
                     return this;
                 }
                 if (!_supported) {
-                	return null;
+                    return null;
                 }
-                return _dc(_strictCheck(_ieLocal(_value, FALSE), FALSE));
+                return _dc(_strict(_local(_value, FALSE), FALSE));
             },
             path: function(value) {
                 if (value !== undefined) {
@@ -437,7 +440,7 @@
                 }
             },
             parameter: function(name, value, append) {
-            	var i, params;
+                var i, params;
                 if (value !== undefined) {
                     var names = this.parameterNames();
                     params = [];
@@ -512,7 +515,7 @@
     })();
     
     $.fn.address = function (fn) {
-    	var f = function() {
+        var f = function() {
             var value = fn ? fn.call(this) : 
                 /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
                 $(this).attr('href').replace(/^#/, '');
