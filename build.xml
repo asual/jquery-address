@@ -36,6 +36,13 @@
         <delete includeemptydirs="true">
             <fileset dir="${dist.dir}" includes="**/*" />
         </delete>
+        <echo message="Validating files..." />
+        <antcall target="validate">
+            <param name="file" value="${src.dir}/${name}" />
+        </antcall>
+        <antcall target="validate">
+            <param name="file" value="${src.dir}/${optimizer}" />
+        </antcall>
         <echo message="Copying files..." />
         <copy todir="${dist.dir}">
             <fileset dir="${src.dir}"/>
@@ -56,6 +63,14 @@
         </antcall>
     </target>
     
+    <target name="validate">
+        <java classpath="lib/js.jar" 
+        	classname="org.mozilla.javascript.tools.shell.Main"
+            failonerror="true" fork="true">
+            <arg line="${lib.dir}/rhino.js ${file}.js" />
+        </java>
+    </target>
+	
     <target name="process">
         <tstamp>
             <format property="timestamp" pattern="yyyy-MM-dd HH:mm:ss Z (EEE, dd MMM yyyy)" />
