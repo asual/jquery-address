@@ -1,11 +1,19 @@
 body {
-    background: #91989D;
+    font: 13px "Helvetica Neue", Arial, sans-serif;
+	background: #91989D;
 }
-
-#tabs {
+.content {
     width: 720px;
+    margin: 20px auto;
+}
+.content h1 { 
+    font-size: 27px;
+    margin: 0 3px 17px; 
+    padding: 0;
+    color: #fff; 
+}
+#tabs {
     height: auto !important;
     height: 320px;
     min-height: 320px;
-    margin: 20px auto;
 }

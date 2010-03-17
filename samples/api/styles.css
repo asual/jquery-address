@@ -1,14 +1,24 @@
 html, body {
     background: #000000;
-}    
+}
 body {
-    font: 14px Arial, "Helvetica Neue", sans-serif;
+    font: 14px "Helvetica Neue", Arial, sans-serif;
     margin: 20px;
     padding: 0;
 }
+.content {
+    width: 760px;
+    margin: 0 auto;
+}
+.content h1 { 
+    font-size: 27px;
+    margin: 0 3px 17px; 
+    padding: 0;
+    color: #fff; 
+}
 .nav {
     height: 20px;
-    margin: 0 0 20px;
+    margin: 0 0 10px;
     padding: 0;
 }
 .nav:after {
