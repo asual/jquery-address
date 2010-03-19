@@ -14,7 +14,7 @@
             // Simple log
             var log = function(msg) {
                 if (!$('.log').length) {
-                    $('<div class="log"></div>').appendTo('.content');
+                    $('<div class="log" />').appendTo('.content');
                 }
                 $('.log').append(msg.replace(/^([^:]*):(.*)$/, '<p><b>$1:</b> <span class="$1">$2</span></p>'))
                     .attr({scrollTop: $('.log').attr('scrollHeight')})
@@ -64,7 +64,7 @@
         </script>
     </head>
     <body>
-        <div class="content">
+        <div class="page">
             <h1>jQuery Address API</h1>
             <ul class="nav">
                 <li>

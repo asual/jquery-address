@@ -1,16 +1,18 @@
-body { 
-    font: 13px "Helvetica Neue", Arial, sans-serif;
-    background: #000; 
+html, body {
+    background: #000;
 }
-.content { 
+body {
+    font: 13px "Helvetica Neue", Arial, sans-serif;
+}
+.page { 
     width: 640px; 
     margin: 20px auto;
 }
-.content h1 { 
+.page h1 { 
 	font-size: 27px;
     margin: 0 3px 17px; 
     padding: 0;
-    color: #fff; 
+    color: #FFF; 
 }
 .accordion { 
     list-style-type: none; 

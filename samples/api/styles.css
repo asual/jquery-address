@@ -1,20 +1,20 @@
 html, body {
-    background: #000000;
+    background: #000;
 }
 body {
     font: 14px "Helvetica Neue", Arial, sans-serif;
     margin: 20px;
     padding: 0;
 }
-.content {
+.page {
     width: 760px;
     margin: 0 auto;
 }
-.content h1 { 
+.page h1 { 
     font-size: 27px;
     margin: 0 3px 17px; 
     padding: 0;
-    color: #fff; 
+    color: #FFF; 
 }
 .nav {
     height: 20px;
@@ -39,7 +39,7 @@ body {
     padding: 0 4px;
     display: block;
     line-height: 20px;
-    color: #FFFFFF;
+    color: #FFF;
 }
 .nav a:hover {
     background: #5DB0E6;
@@ -59,7 +59,7 @@ body {
     height: 399px;
     overflow: auto;
     border: 1px solid #F3F3F3;
-    background: #FFFFFF;
+    background: #FFF;
 }
 .log p {
     height: 25px;

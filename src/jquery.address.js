@@ -41,7 +41,7 @@
             },
             _hash = function() {
                 var index = _l.href.indexOf('#');
-                return index != -1 ? _ec(_dc(_l.href.substr(index + 1))) : '';
+                return index != -1 ? _ec(_dc(_crawl(_l.href.substr(index + 1), FALSE))) : '';
             },
             _window = function() {
                 try {
@@ -62,6 +62,9 @@
             _local = function(value, direction) {
                 return (_msie && _l.protocol == 'file:') ? 
                     (direction ? _value.replace(/\?/, '%3F') : _value.replace(/%253F/, '?')) : value;
+            },
+            _crawl = function(value, direction) {
+                return direction ? (value != '' ? '!' : '') + value : value.replace(/^\!/, '');
             },
             _search = function(el) {
                 var url, s;
@@ -144,7 +147,7 @@
                                 _value = (typeof win[ID] != UNDEFINED ? win[ID] : '');
                                 if (_value != _hash()) {
                                     _update(FALSE);
-                                    _l.hash = _local(_value, TRUE);
+                                    _l.hash = _local(_crawl(_value, TRUE), TRUE);
                                 }
                             });
                             if (typeof _frame.contentWindow[ID] == UNDEFINED) {
@@ -225,7 +228,12 @@
             _listeners = {}, 
             _value = _hash(),
             _api = {},
-            _opts = {autoUpdate: TRUE, history: TRUE, strict: TRUE};
+            _opts = {
+                autoUpdate: TRUE, 
+                crawlable: TRUE,
+                history: TRUE, 
+                strict: TRUE
+            };
             
         if (_msie) {
             _version = parseFloat(_agent.substr(_agent.indexOf('MSIE') + 4));
@@ -249,7 +257,7 @@
             _stack.push(_value);
         
             if (_msie && _l.hash != _value) {
-                _l.hash = '#' + _local(_value, TRUE);
+                _l.hash = '#' + _local(_crawl(_value, TRUE), TRUE);
             }
             
             if (_opera) {
@@ -260,7 +268,7 @@
                 var param, params = _url.substr(_qi + 1).split('&');
                 for (i = 0; i < params.length; i++) {
                     param = params[i].split('=');
-                    if (/^(autoUpdate|history|strict)$/.test(param[0])) {
+                    if (/^(autoUpdate|crawlable|history|strict)$/.test(param[0])) {
                         _opts[param[0]] = (isNaN(param[1]) ? /^(true|yes)$/i.test(param[1]) : (parseInt(param[1], 10) !== 0));
                     }
                     if (/^tracker$/.test(param[0])) {
@@ -275,8 +283,8 @@
             $(_load);
             $(window).bind('unload', _unload);
             
-        } else if ((!_supported && _l.href.indexOf('#') != -1) || 
-            (_safari && _version < 418 && _l.href.indexOf('#') != -1 && _l.search != '')) {
+        } else if ((!_supported && _hash() != '') || 
+            (_safari && _version < 418 && _hash() != '' && _l.search != '')) {
             _d.open();
             _d.write('<html><head><meta http-equiv="refresh" content="0;url=' + 
                 _l.href.substr(0, _l.href.indexOf('#')) + '" /></head></html>');
@@ -300,10 +308,10 @@
             },
             baseURL: function() {
                 var url = _l.href;
-                if (url.indexOf('#') != -1) {
+                if (_hash() != '') {
                     url = url.substr(0, url.indexOf('#'));
                 }
-                if (url.substr(url.length - 1) == '/') {
+                if (/\/$/.test(url)) {
                     url = url.substr(0, url.length - 1);
                 }
                 return url;
@@ -314,6 +322,13 @@
                     return this;
                 }
                 return _opts.strict;
+            },
+            crawlable: function(value) {
+                if (value !== undefined) {
+                    _opts.crawlable = value;
+                    return this;
+                }
+                return _opts.crawlable;
             },
             autoUpdate: function(value) {
                 if (value !== undefined) {
@@ -381,26 +396,26 @@
                                 _length = _h.length + 1;
                                 if (_version < 418) {
                                     if (_l.search == '') {
-                                        _form.action = '#' + _value;
+                                        _form.action = '#' + _crawl(_value, TRUE);
                                         _form.submit();
                                     }
                                 } else if (_version < 523 || _value == '') {
                                     var evt = _d.createEvent('MouseEvents');
                                     evt.initEvent('click', TRUE, TRUE);
                                     var anchor = _d.createElement('a');
-                                    anchor.href = '#' + _value;
+                                    anchor.href = '#' + _crawl(_value, TRUE);
                                     anchor.dispatchEvent(evt);                
                                 } else {
-                                    _l.hash = '#' + _value;
+                                    _l.hash = '#' + _crawl(_value, TRUE);
                                 }
                             } else {
-                                _l.replace('#' + _value);
+                                _l.replace('#' + _crawl(_value, TRUE));
                             }
                         } else if (_value != _hash()) {
                             if (_opts.history) {
-                                _l.hash = '#' + _local(_value, TRUE);
+                                _l.hash = '#' + _local(_crawl(_value, TRUE), TRUE);
                             } else {
-                                _l.replace('#' + _value);
+                                _l.replace('#' + _crawl(_value, TRUE));
                             }
                         }
                         if ((_msie && _version < 8) && _opts.history) {
@@ -518,7 +533,7 @@
         var f = function() {
             var value = fn ? fn.call(this) : 
                 /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
-                $(this).attr('href').replace(/^#/, '');
+                $(this).attr('href').replace(/^#\!?/, '');
             $.address.value(value);
             return false;
         };
