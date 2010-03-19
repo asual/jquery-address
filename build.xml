@@ -65,12 +65,12 @@
     
     <target name="validate">
         <java classpath="lib/js.jar" 
-        	classname="org.mozilla.javascript.tools.shell.Main"
+            classname="org.mozilla.javascript.tools.shell.Main"
             failonerror="true" fork="true">
             <arg line="${lib.dir}/rhino.js ${file}.js" />
         </java>
     </target>
-	
+    
     <target name="process">
         <tstamp>
             <format property="timestamp" pattern="yyyy-MM-dd HH:mm:ss Z (EEE, dd MMM yyyy)" />
@@ -91,19 +91,26 @@
             <arg line="--js=${file} --js_output_file=${file}.tmp" />
         </java>
         <concat destfile="${file}.lic">
-        	<filelist files="${file}" />
-        	<filterchain>
-            	<headfilter lines="10" />
-        	</filterchain>
-    	</concat>
+            <filelist files="${file}" />
+            <filterchain>
+                <headfilter lines="10" />
+            </filterchain>
+        </concat>
         <concat destfile="${file}">
             <filelist files="${file}.lic,${file}.tmp" />
         </concat>
-    	<delete>
-    		<filelist files="${file}.lic,${file}.tmp" />
-    	</delete>
+        <delete>
+            <filelist files="${file}.lic,${file}.tmp" />
+        </delete>
     </target>
-    
+
+    <target name="sample">
+        <delete>
+            <fileset dir="${dir}" includes="${name}-\d.\d+.min.js" />
+        </delete>
+        <copy file="${dist.dir}/${name}-${version}.min.js" todir="${dir}" overwrite="true" />
+    </target>
+	
     <target name="test">
         <delete>
             <fileset dir="${test.dir}" includes="${name}-\d.\d+.min.js" />
@@ -112,34 +119,21 @@
     </target>
     
     <target name="samples">
-        <antcall target="samples:api" />
-        <antcall target="samples:events" />
-        <antcall target="samples:tabs" />
-    </target>
-
-    <target name="samples:api">
-        <echo message="Building API sample..." />
-        <delete>
-            <fileset dir="${api.sample.dir}" includes="${name}-\d.\d+.min.js" />
-        </delete>
-        <copy file="${dist.dir}/${name}-${version}.min.js" todir="${api.sample.dir}" overwrite="true" />
-    </target>
-
-    <target name="samples:events">
-        <echo message="Building Events sample..." />
-        <delete>
-            <fileset dir="${events.sample.dir}" includes="${name}-\d.\d+.min.js" />
-        </delete>
-        <copy file="${dist.dir}/${name}-${version}.min.js" todir="${events.sample.dir}" overwrite="true" />
-    </target>
-    
-    <target name="samples:tabs">
-        <echo message="Building Tabs sample..." />
-        <delete>
-            <fileset dir="${tabs.sample.dir}" includes="${name}-\d.\d+.min.js" />
-            <fileset dir="${tabs.sample.dir}" includes="${optimizer}-\d.\d+.min.js" />
-        </delete>
-        <copy file="${dist.dir}/${name}-${version}.min.js" todir="${tabs.sample.dir}" overwrite="true" />
+        <antcall target="sample">
+            <param name="dir" value="${samples.dir}/accordion" />
+        </antcall>
+        <antcall target="sample">
+            <param name="dir" value="${samples.dir}/api" />
+        </antcall>
+        <antcall target="sample">
+            <param name="dir" value="${samples.dir}/crawling" />
+        </antcall>
+        <antcall target="sample">
+            <param name="dir" value="${samples.dir}/events" />
+        </antcall>
+        <antcall target="sample">
+            <param name="dir" value="${samples.dir}/tabs" />
+        </antcall>
     </target>
     
 </project>
