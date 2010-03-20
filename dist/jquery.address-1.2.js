@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-03-19 09:31:48 +0200 (Fri, 19 Mar 2010)
+ * Date: 2010-03-20 21:26:11 +0200 (Sat, 20 Mar 2010)
  */
 (function ($) {
 
@@ -64,7 +64,10 @@
                     (direction ? _value.replace(/\?/, '%3F') : _value.replace(/%253F/, '?')) : value;
             },
             _crawl = function(value, direction) {
-                return direction ? (value != '' ? '!' : '') + value : value.replace(/^\!/, '');
+                if (_opts.crawlable) {
+                    return direction ? (value != '' ? '!' : '') + value : value.replace(/^\!/, '');
+                }
+                return value;
             },
             _search = function(el) {
                 var url, s;
@@ -197,6 +200,12 @@
             HASH_CHANGE = 'hashchange',
             TRUE = true,
             FALSE = false,
+            _opts = {
+                autoUpdate: TRUE, 
+                crawlable: TRUE,
+                history: TRUE, 
+                strict: TRUE
+            },
             _browser = $.browser, 
             _version = parseFloat($.browser.version),
             _mozilla = _browser.mozilla,
@@ -226,14 +235,7 @@
             _updating = FALSE,
             _stack = [], 
             _listeners = {}, 
-            _value = _hash(),
-            _api = {},
-            _opts = {
-                autoUpdate: TRUE, 
-                crawlable: TRUE,
-                history: TRUE, 
-                strict: TRUE
-            };
+            _value = _hash();
             
         if (_msie) {
             _version = parseFloat(_agent.substr(_agent.indexOf('MSIE') + 4));
