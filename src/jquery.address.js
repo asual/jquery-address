@@ -242,6 +242,11 @@
             if (_d.documentMode && _d.documentMode != _version) {
                 _version = _d.documentMode != 8 ? 7 : 8;
             }
+            $(document).bind('propertychange', function() {
+    	        if (_d.title != _title && _d.title.indexOf('#') != -1) {
+    	            _d.title = _title;
+    	        }
+            });
         }
         
         _supported = 
@@ -278,7 +283,7 @@
                     }
                 }
             }
-            
+
             if (document.readyState == 'complete') {
                 _load();
             }
