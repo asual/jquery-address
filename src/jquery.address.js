@@ -243,9 +243,9 @@
                 _version = _d.documentMode != 8 ? 7 : 8;
             }
             $(document).bind('propertychange', function() {
-    	        if (_d.title != _title && _d.title.indexOf('#') != -1) {
-    	            _d.title = _title;
-    	        }
+                if (_d.title != _title && _d.title.indexOf('#' + _hash()) != -1) {
+                    _d.title = _title;
+                }
             });
         }
         
