@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-03-20 21:26:11 +0200 (Sat, 20 Mar 2010)
+ * Date: 2010-03-25 10:06:32 +0200 (Thu, 25 Mar 2010)
  */
 (function ($) {
 
@@ -242,6 +242,11 @@
             if (_d.documentMode && _d.documentMode != _version) {
                 _version = _d.documentMode != 8 ? 7 : 8;
             }
+            $(document).bind('propertychange', function() {
+                if (_d.title != _title && _d.title.indexOf('#' + _hash()) != -1) {
+                    _d.title = _title;
+                }
+            });
         }
         
         _supported = 
@@ -278,7 +283,7 @@
                     }
                 }
             }
-            
+
             if (document.readyState == 'complete') {
                 _load();
             }
