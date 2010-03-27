@@ -482,15 +482,17 @@
             },
             path: function(value) {
                 if (value !== undefined) {
-                    var qs = this.queryString();
-                    this.value(value + (qs ? '?' + qs : ''));
+                    var qs = this.queryString(),
+                        hash = this.hash();
+                    this.value(value + (qs ? '?' + qs : '') + (hash ? '#' + hash : ''));
                     return this;
                 }
                 return this.value().split('#')[0].split('?')[0];
             },
             queryString: function(value) {
                 if (value !== undefined) {
-                    this.value(this.path() + (value ? '?' + value : ''));
+                    var hash = this.hash();
+                    this.value(this.path() + (value ? '?' + value : '') + (hash ? '#' + hash : ''));
                     return this;
                 }
                 var arr = this.value().split('?');
@@ -538,7 +540,7 @@
             },
             pathNames: function() {
                 var path = this.path(),
-                    names = path.split('/');
+                    names = path.replace(/\/{2,9}/g, '/').split('/');
                 if (path.substr(0, 1) == '/' || path.length === 0) {
                     names.splice(0, 1);
                 }
@@ -548,18 +550,14 @@
                 return names;
             },
             parameterNames: function() {
-                var value = this.value(),
-                    index = value.indexOf('?'),
+                var qs = this.queryString(),
                     names = [];
-                if (index != -1) {
-                    value = value.substr(index + 1);
-                    if (value != '' && value.indexOf('=') != -1) {
-                        var params = value.split('&');
-                        for (var i = 0; i < params.length; i++) {
-                            var name = params[i].split('=')[0];
-                            if ($.inArray(name, names) == -1) {
-                                names.push(name);
-                            }
+                if (qs && qs.indexOf('=') != -1) {
+                    var params = qs.split('&');
+                    for (var i = 0; i < params.length; i++) {
+                        var name = params[i].split('=')[0];
+                        if ($.inArray(name, names) == -1) {
+                            names.push(name);
                         }
                     }
                 }
