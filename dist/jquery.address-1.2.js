@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-03-25 10:06:32 +0200 (Thu, 25 Mar 2010)
+ * Date: 2010-03-27 14:50:00 +0200 (Sat, 27 Mar 2010)
  */
 (function ($) {
 
@@ -69,6 +69,9 @@
                 }
                 return value;
             },
+            _cssint = function(el, value) {
+                return parseInt(el.css(value), 10);
+            },
             _search = function(el) {
                 var url, s;
                 for (var i = 0, l = el.childNodes.length; i < l; i++) {
@@ -103,8 +106,8 @@
                 }
             },
             _update = function(internal) {
-                _trigger('change');
-                _trigger(internal ? 'internalChange' : 'externalChange');
+                _trigger(CHANGE);
+                _trigger(internal ? INTERNAL_CHANGE : EXTERNAL_CHANGE);
                 _st(_track, 10);
             },
             _track = function() {
@@ -129,6 +132,30 @@
             _load = function() {
                 if (!_loaded) {
                     _loaded = TRUE;
+                    if (_opts.wrap) {
+                        var body = $('body');
+                            wrap = $('body > *')
+                                .wrapAll('<div style="padding:' + 
+                                    (_cssint(body, 'marginTop') + _cssint(body, 'paddingTop')) + 'px ' + 
+                                    (_cssint(body, 'marginRight') + _cssint(body, 'paddingRight')) + 'px ' + 
+                                    (_cssint(body, 'marginBottom') + _cssint(body, 'paddingBottom')) + 'px ' + 
+                                    (_cssint(body, 'marginLeft') + _cssint(body, 'paddingLeft')) + 'px;" />')
+                                .parent()
+                                .wrap('<div id="' + ID + '" style="height:100%; overflow:auto;' + 
+                                    (_safari ? (window.statusbar.visible && !/chrome/i.test(_agent) ? '' : ' resize:both;') : '') + '" />');
+                        $('html, body')
+                            .css({
+                                height: '100%',
+                                margin: 0,
+                                padding: 0,
+                                overflow: 'hidden'
+                            });
+                        if (_safari) {
+                            $('<style type="text/css" />')
+                                .appendTo('head')
+                                .text('#' + ID + '::-webkit-resizer { background-color: #fff; }');
+                        }
+                    }
                     if (_msie && _version < 8) {
                         var frameset = _d.getElementsByTagName('frameset')[0];
                         _frame = _d.createElement((frameset ? '' : 'i') + 'frame');
@@ -198,13 +225,18 @@
             FUNCTION = 'function',
             UNDEFINED = 'undefined',
             HASH_CHANGE = 'hashchange',
+            INIT = 'init',
+            CHANGE = 'change',
+            INTERNAL_CHANGE = 'internalChange',
+            EXTERNAL_CHANGE = 'externalChange',
             TRUE = true,
             FALSE = false,
             _opts = {
                 autoUpdate: TRUE, 
-                crawlable: TRUE,
+                crawlable: FALSE,
                 history: TRUE, 
-                strict: TRUE
+                strict: TRUE,
+                wrap: FALSE
             },
             _browser = $.browser, 
             _version = parseFloat($.browser.version),
@@ -275,7 +307,7 @@
                 var param, params = _url.substr(_qi + 1).split('&');
                 for (i = 0; i < params.length; i++) {
                     param = params[i].split('=');
-                    if (/^(autoUpdate|crawlable|history|strict)$/.test(param[0])) {
+                    if (/^(autoUpdate|crawlable|history|strict|wrap)$/.test(param[0])) {
                         _opts[param[0]] = (isNaN(param[1]) ? /^(true|yes)$/i.test(param[1]) : (parseInt(param[1], 10) !== 0));
                     }
                     if (/^tracker$/.test(param[0])) {
@@ -294,7 +326,7 @@
             (_safari && _version < 418 && _hash() != '' && _l.search != '')) {
             _d.open();
             _d.write('<html><head><meta http-equiv="refresh" content="0;url=' + 
-                _l.href.substr(0, _l.href.indexOf('#')) + '" /></head></html>');
+                encodeURI(_l.href.substr(0, _l.href.indexOf('#'))) + '" /></head></html>');
             _d.close();
         } else {
             _track();
@@ -302,16 +334,16 @@
 
         return {
             init: function(data, fn) {
-                return _bind('init', data, fn);
+                return _bind(INIT, data, fn);
             },
             change: function(data, fn) {
-                return _bind('change', data, fn);
+                return _bind(CHANGE, data, fn);
             },
             internalChange: function(data, fn) {
-                return _bind('internalChange', data, fn);
+                return _bind(INTERNAL_CHANGE, data, fn);
             },
             externalChange: function(data, fn) {
-                return _bind('externalChange', data, fn);
+                return _bind(EXTERNAL_CHANGE, data, fn);
             },
             baseURL: function() {
                 var url = _l.href;
@@ -323,12 +355,12 @@
                 }
                 return url;
             },
-            strict: function(value) {
+            autoUpdate: function(value) {
                 if (value !== undefined) {
-                    _opts.strict = value;
+                    _opts.autoUpdate = value;
                     return this;
                 }
-                return _opts.strict;
+                return _opts.autoUpdate;
             },
             crawlable: function(value) {
                 if (value !== undefined) {
@@ -337,19 +369,6 @@
                 }
                 return _opts.crawlable;
             },
-            autoUpdate: function(value) {
-                if (value !== undefined) {
-                    _opts.autoUpdate = value;
-                    return this;
-                }
-                return _opts.autoUpdate;
-            },
-            update: function() {
-                _updating = TRUE;
-                this.value(_value);
-                _updating = FALSE;
-                return this;
-            },
             history: function(value) {
                 if (value !== undefined) {
                     _opts.history = value;
@@ -357,12 +376,32 @@
                 }
                 return _opts.history;
             },
+            strict: function(value) {
+                if (value !== undefined) {
+                    _opts.strict = value;
+                    return this;
+                }
+                return _opts.strict;
+            },
             tracker: function(value) {
                 if (value !== undefined) {
                     _opts.tracker = value;
                     return this;
                 }
                 return _opts.tracker;
+            },
+            wrap: function(value) {
+                if (value !== undefined) {
+                    _opts.wrap = value;
+                    return this;
+                }
+                return _opts.wrap;
+            },
+            update: function() {
+                _updating = TRUE;
+                this.value(_value);
+                _updating = FALSE;
+                return this;
             },
             title: function(value) {
                 if (value !== undefined) {
@@ -443,23 +482,21 @@
             },
             path: function(value) {
                 if (value !== undefined) {
-                    var qs = this.queryString();
-                    this.value(value + (qs ? '?' + qs : ''));
+                    var qs = this.queryString(),
+                        hash = this.hash();
+                    this.value(value + (qs ? '?' + qs : '') + (hash ? '#' + hash : ''));
                     return this;
                 }
-                value = this.value();
-                return (value.indexOf('?') != -1) ? value.split('?')[0] : value;
+                return this.value().split('#')[0].split('?')[0];
             },
             queryString: function(value) {
                 if (value !== undefined) {
-                    this.value(this.path() + (value ? '?' + value : ''));
+                    var hash = this.hash();
+                    this.value(this.path() + (value ? '?' + value : '') + (hash ? '#' + hash : ''));
                     return this;
                 }
-                value = this.value();
-                var index = value.indexOf('?');
-                if (index != -1 && index < value.length) {
-                    return value.substr(index + 1);
-                }
+                var arr = this.value().split('?');
+                return arr.slice(1, arr.length).join('?').split('#')[0];
             },
             parameter: function(name, value, append) {
                 var i, params;
@@ -486,10 +523,8 @@
                     this.queryString(params.join('&'));
                     return this;
                 }
-                value = this.value();
-                var index = value.indexOf('?');
-                if (index != -1) {
-                    value = value.substr(index + 1);
+                value = this.queryString();
+                if (value) {
                     params = value.split('&');
                     var r = [];
                     for (i = 0; i < params.length; i++) {
@@ -505,7 +540,7 @@
             },
             pathNames: function() {
                 var path = this.path(),
-                    names = path.split('/');
+                    names = path.replace(/\/{2,9}/g, '/').split('/');
                 if (path.substr(0, 1) == '/' || path.length === 0) {
                     names.splice(0, 1);
                 }
@@ -515,23 +550,27 @@
                 return names;
             },
             parameterNames: function() {
-                var value = this.value(),
-                    index = value.indexOf('?'),
+                var qs = this.queryString(),
                     names = [];
-                if (index != -1) {
-                    value = value.substr(index + 1);
-                    if (value != '' && value.indexOf('=') != -1) {
-                        var params = value.split('&');
-                        for (var i = 0; i < params.length; i++) {
-                            var name = params[i].split('=')[0];
-                            if ($.inArray(name, names) == -1) {
-                                names.push(name);
-                            }
+                if (qs && qs.indexOf('=') != -1) {
+                    var params = qs.split('&');
+                    for (var i = 0; i < params.length; i++) {
+                        var name = params[i].split('=')[0];
+                        if ($.inArray(name, names) == -1) {
+                            names.push(name);
                         }
                     }
                 }
                 return names;
-            }
+            },
+            hash: function(value) {
+                if (value !== undefined) {
+                    this.value(this.value().split('#')[0] + (value ? '#' + value : ''));
+                    return this;
+                }
+                var arr = this.value().split('#');
+                return arr.slice(1, arr.length).join('#');
+            }            
         };
         
     })();
