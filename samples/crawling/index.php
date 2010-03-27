@@ -33,7 +33,7 @@
                         .show()
                         .html($('.abstract', data));
                 });
-            });
+            }).crawlable(true);
 
             // Graceful FOUC
             document.write('<style type="text/css"> .content { display: none; } </style>');
