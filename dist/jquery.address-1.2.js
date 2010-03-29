@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-03-27 14:50:00 +0200 (Sat, 27 Mar 2010)
+ * Date: 2010-03-29 09:48:18 +0300 (Mon, 29 Mar 2010)
  */
 (function ($) {
 
@@ -64,10 +64,10 @@
                     (direction ? _value.replace(/\?/, '%3F') : _value.replace(/%253F/, '?')) : value;
             },
             _crawl = function(value, direction) {
-                if (_opts.crawlable) {
-                    return direction ? (value != '' ? '!' : '') + value : value.replace(/^\!/, '');
+                if (_opts.crawlable && direction) {
+                    value = (value != '' ? '!' : '') + value;
                 }
-                return value;
+                return value.replace(/^\!/, '');
             },
             _cssint = function(el, value) {
                 return parseInt(el.css(value), 10);
