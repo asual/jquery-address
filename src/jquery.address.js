@@ -64,10 +64,10 @@
                     (direction ? _value.replace(/\?/, '%3F') : _value.replace(/%253F/, '?')) : value;
             },
             _crawl = function(value, direction) {
-                if (_opts.crawlable) {
-                    return direction ? (value != '' ? '!' : '') + value : value.replace(/^\!/, '');
+                if (_opts.crawlable && direction) {
+                    value = (value != '' ? '!' : '') + value;
                 }
-                return value;
+                return value.replace(/^\!/, '');
             },
             _cssint = function(el, value) {
                 return parseInt(el.css(value), 10);
