@@ -1,20 +1,25 @@
 <?php 
     
     define('FRAGMENT', '_escaped_fragment_');
-
-    if (!isset($_REQUEST[FRAGMENT]) || $_REQUEST[FRAGMENT] == '') {
-        $fragment = '/';
-    } else {
-        $fragment = $_REQUEST[FRAGMENT];
+    
+    // Initializes the fragment value
+    $fragment = (!isset($_REQUEST[FRAGMENT]) || $_REQUEST[FRAGMENT] == '') ? '/' : $_REQUEST[FRAGMENT];
+ 
+    // Parses parameters if any
+    $arr = explode('?', $fragment);
+    $parameters = array();
+    if (count($arr) > 1) {
+        parse_str($arr[1], $parameters);
     }
 
-    $arr = explode('?', $fragment, 2);
-
-    if (count($arr) > 1) {
-        $fragment = $arr[0];
-        parse_str($arr[1], $params);
+    // Adds support for both /name and /?page=name
+    if (isset($parameters['page'])) {
+        $page = '/?page=' . $parameters['page'];
+    } else {
+        $page = $arr[0];
     }
     
+    // Loads the data file
     $xml = new SimpleXMLElement(file_get_contents('data.xml'));    
     
 ?>
@@ -29,15 +34,24 @@
         <script type="text/javascript">
             
             $.address.init(function(event) {
+
+                // Initializes plugin support for links
                 $('.nav a').address();
+
             }).change(function(event) {
+
+                // Identifies the page selection 
+                var page = event.parameters.page ? '/?page=' + event.parameters.page : event.path;
+
+                // Highlights the selected link
                 $('.nav a').each(function() {
-                    $(this).toggleClass('selected', $(this).attr('href') == '#!' + event.path);
+                    $(this).toggleClass('selected', $(this).attr('href') == '#!' + page);
                 });
+
+                // Loads the page content and inserts it into the content area
                 $.get(location.pathname + '?<?php echo(FRAGMENT); ?>=' + encodeURIComponent(event.value), function(data) {
                     $('.content')
-                        .show()
-                        .html($('.content', data).html());
+                        .show().html($('.content', data).html());
                 });
             });
 
@@ -51,44 +65,34 @@
             <h1>jQuery Address Crawling</h1>
             <ul class="nav">
                 <?php
-    
-                    $pages = $xml->xpath('//pages/page');
-                
-                    foreach ($pages as $page) {
-                        echo('<li><a href="#!' . $page['href'] . '"' 
-                            . ($fragment == $page['href'] ? ' class="selected"' : '') . '>' 
-                            . $page['title'] . '</a></li>');
-                    } 
+                    
+                    // Renders the navigation links
+                    $pages = $xml->xpath('/data/page');
+                    foreach ($pages as $p) {
+                        echo('<li><a href="#!' . $p['href'] . '"' 
+                            . ($page == $p['href'] ? ' class="selected"' : '') . '>' 
+                            . $p['title'] . '</a></li>');
+                    }
                 
                 ?>
 
             </ul>
             <div class="content">
                 <?php
-                
-                    $content = $xml->xpath('//pages/page[@href="' . $fragment . '"]');
-
-                    $more = isset($params['more']);
-                    $evenMore = isset($params['even-more']);
                     
+                    // Renders the content with support for a simple "More..." link
+                    $content = $xml->xpath('/data/page[@href="' . $page . '"]');
                     foreach($content[0]->children() as $child) {
                         $childAsXML = $child->asXML();
-                        if ($more) {
-                            if (!strstr($childAsXML, '>More<')) {
+                        if (isset($parameters['more'])) {
+                            if (!strstr($childAsXML, '>More...<')) {
                                 echo($childAsXML);
                             }
                         } else {
                             echo($childAsXML);
-                            if (strstr($childAsXML, '>More<')) {
+                            if (strstr($childAsXML, '>More...<')) {
                                 break;
                             }
-                        }
-                    }
-                    
-                    if (isset($params['source']) && count($content[0]->children()) > 1) {
-                        $source = $xml->xpath('//meta/source');
-                        foreach($source[0]->children() as $child) {
-                            echo($child->asXML());
                         }
                     }
                     
