@@ -65,7 +65,7 @@
             },
             _crawl = function(value, direction) {
                 if (_opts.crawlable && direction) {
-                    value = (value != '' ? '!' : '') + value;
+                    return (value != '' ? '!' : '') + value;
                 }
                 return value.replace(/^\!/, '');
             },
