@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>jQuery Address Form</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <link type="text/css" href="styles.css" rel="stylesheet">
+        <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="jquery.address-1.2.min.js"></script>
+        <script type="text/javascript" src="deserialize.js"></script>
+        <script type="text/javascript">
+        
+            $.address.init(function(event) {
+                $('form').address();
+            }).change(function(event) {
+                if (event.value != '/') {
+                    if (!$('pre').size()) {
+                        $('form').before('<pre />');
+                    }
+                    $.get('.' + event.value, function(data) {
+                        $('pre').html(data);
+                    });
+                } else {
+                    $('pre').remove();
+                }
+                $('form').deserialize(event.parameters);
+            });
+     
+        </script>
+    </head>
+    <body>
+        <div class="page">
+            <h1>jQuery Address Form</h1>
+            <form action="form.php" method="get"> 
+                <fieldset>
+                    <div>
+                        <label for="input">Input</label><br>
+                        <input id="input" name="input" type="text" value="" size="60">
+                    </div>
+                    <div>
+                        <label for="textarea">Textarea</label><br>
+                        <textarea id="textarea" name="textarea" rows="6" cols="60"></textarea>
+                    </div>
+                    <div>
+                        <label for="select">Select</label><br>
+                        <select id="select" name="select">
+                            <option value=""></option>
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                            <option value="option3">Option 3</option>
+                            <option value="option4">Option 4</option>
+                            <option value="option5">Option 5</option>
+                            <option value="option6">Option 6</option>
+                        </select>
+                    </div>
+                    <div>
+                        <input id="checkbox1" name="checkbox1" type="checkbox" value="true"><label for="checkbox1">Checkbox 1</label>
+                    </div>
+                    <div>
+                        <input id="checkbox2" name="checkbox2" type="checkbox" value="true"><label for="checkbox2">Checkbox 2</label>
+                    </div>
+                    <div>
+                        <input id="checkbox3" name="checkbox3" type="checkbox" value="true"><label for="checkbox3">Checkbox 3</label>
+                    </div>
+                    <div>
+                        <input id="radio1" name="group" type="radio" value="radio1"><label for="radio1">Radio 1</label>
+                    </div>
+                    <div>
+                        <input id="radio2" name="group" type="radio" value="radio2"><label for="radio2">Radio 2</label>
+                    </div>
+                    <div>
+                        <input id="radio3" name="group" type="radio" value="radio3"><label for="radio3">Radio 3</label>
+                    </div>
+                    <div>
+                        <input id="submit" name="submit" type="submit" value="Submit"> 
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </body>
+</html>
+ 

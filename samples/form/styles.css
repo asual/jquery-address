@@ -1,0 +1,33 @@
+body {
+    font: 14px "Helvetica Neue", Arial, sans-serif;
+    color: #fff;
+    background: #000;
+    margin: 20px;
+    padding: 0;
+}
+input, textarea, select, button {
+    font: 14px "Helvetica Neue", Arial, sans-serif;
+}
+fieldset {
+    padding: 20px;
+    border: 1px solid #fff;
+}
+fieldset div {
+    margin: 0 0 10px;
+}
+pre {
+    background: #ffdd57;
+    border: 1px solid #fff;
+    color: #000;
+    padding: 20px;
+}
+.page {
+    width: 760px;
+    margin: 0 auto;
+}
+.page h1 { 
+    font-size: 27px;
+    color: #fff;
+    margin: 0 3px 17px; 
+    padding: 0;
+}

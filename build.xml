@@ -110,13 +110,6 @@
         </delete>
         <copy file="${dist.dir}/${name}-${version}.min.js" todir="${dir}" overwrite="true" />
     </target>
-	
-    <target name="test">
-        <delete>
-            <fileset dir="${test.dir}" includes="${name}-\d.\d+.min.js" />
-        </delete>
-        <copy file="${dist.dir}/${name}-${version}.min.js" todir="${test.dir}" overwrite="true" />
-    </target>
     
     <target name="samples">
         <antcall target="sample">
@@ -132,8 +125,18 @@
             <param name="dir" value="${samples.dir}/events" />
         </antcall>
         <antcall target="sample">
+            <param name="dir" value="${samples.dir}/form" />
+        </antcall>
+        <antcall target="sample">
             <param name="dir" value="${samples.dir}/tabs" />
         </antcall>
+    </target>
+    
+    <target name="test">
+        <delete>
+            <fileset dir="${test.dir}" includes="${name}-\d.\d+.min.js" />
+        </delete>
+        <copy file="${dist.dir}/${name}-${version}.min.js" todir="${test.dir}" overwrite="true" />
     </target>
     
 </project>
