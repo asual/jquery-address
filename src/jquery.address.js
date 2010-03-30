@@ -576,14 +576,24 @@
     })();
     
     $.fn.address = function (fn) {
-        var f = function() {
-            var value = fn ? fn.call(this) : 
-                /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
-                $(this).attr('href').replace(/^#\!?/, '');
-            $.address.value(value);
-            return false;
-        };
-        $(this).click(f).live('click', f);
+        this.each(function() {
+            if (this.tagName.toLowerCase() == 'form') {
+                $('form').live('submit', function() {
+                    var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $(this).serialize();
+                    $.address.value(value);
+                    return false;
+                });
+            } else {
+                var f = function() {
+                    var value = fn ? fn.call(this) : 
+                        /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
+                        $(this).attr('href').replace(/^#\!?/, '');
+                    $.address.value(value);
+                    return false;
+                };
+                $(this).click(f).live('click', f);
+            }
+        });
     };
     
 }(jQuery));
