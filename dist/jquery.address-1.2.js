@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-03-29 09:48:18 +0300 (Mon, 29 Mar 2010)
+ * Date: 2010-03-31 00:10:36 +0300 (Wed, 31 Mar 2010)
  */
 (function ($) {
 
@@ -65,7 +65,7 @@
             },
             _crawl = function(value, direction) {
                 if (_opts.crawlable && direction) {
-                    value = (value != '' ? '!' : '') + value;
+                    return (value != '' ? '!' : '') + value;
                 }
                 return value.replace(/^\!/, '');
             },
@@ -576,14 +576,24 @@
     })();
     
     $.fn.address = function (fn) {
-        var f = function() {
-            var value = fn ? fn.call(this) : 
-                /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
-                $(this).attr('href').replace(/^#\!?/, '');
-            $.address.value(value);
-            return false;
-        };
-        $(this).click(f).live('click', f);
+        this.each(function() {
+            if (this.tagName.toLowerCase() == 'form') {
+                $('form').live('submit', function() {
+                    var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $(this).serialize();
+                    $.address.value(value);
+                    return false;
+                });
+            } else {
+                var f = function() {
+                    var value = fn ? fn.call(this) : 
+                        /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
+                        $(this).attr('href').replace(/^#\!?/, '');
+                    $.address.value(value);
+                    return false;
+                };
+                $(this).click(f).live('click', f);
+            }
+        });
     };
     
 }(jQuery));
