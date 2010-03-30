@@ -64,13 +64,23 @@ body {
     margin: 0;
     padding: 20px;
 }
+.content h1 { 
+    font-size: 23px;
+    color: #000;
+}
+.content h2 { 
+    font-size: 19px;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
 .content p { 
     margin: 0 0 20px;
     padding: 0;
     line-height: 20px;
 }
 .content ul { 
-    margin: 0 0 20px 40px;
+    margin: 20px 15px 20px 25px;
     padding: 0;
     line-height: 20px;
 }

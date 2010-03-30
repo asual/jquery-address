@@ -34,7 +34,7 @@
                 $('.nav a').each(function() {
                     $(this).toggleClass('selected', $(this).attr('href') == '#!' + event.path);
                 });
-                $.get(location.pathname + '?<?php echo(FRAGMENT); ?>=' + event.value, function(data) {
+                $.get(location.pathname + '?<?php echo(FRAGMENT); ?>=' + encodeURIComponent(event.value), function(data) {
                     $('.content')
                         .show()
                         .html($('.content', data).html());
@@ -68,20 +68,27 @@
                 
                     $content = $xml->xpath('//pages/page[@href="' . $fragment . '"]');
 
-                    $more = !isset($params['more']) && count($content[0]->children()) > 1;
-
+                    $more = isset($params['more']);
+                    $evenMore = isset($params['even-more']);
+                    
                     foreach($content[0]->children() as $child) {
-                        echo $child->asXML();
+                        $childAsXML = $child->asXML();
                         if ($more) {
-                            echo('<p><a href="#!' . $fragment . '?more=true">More</a></p>');
-                            break;
+                            if (!strstr($childAsXML, '>More<')) {
+                                echo($childAsXML);
+                            }
+                        } else {
+                            echo($childAsXML);
+                            if (strstr($childAsXML, '>More<')) {
+                                break;
+                            }
                         }
                     }
                     
                     if (isset($params['source']) && count($content[0]->children()) > 1) {
                         $source = $xml->xpath('//meta/source');
                         foreach($source[0]->children() as $child) {
-                            echo $child->asXML();
+                            echo($child->asXML());
                         }
                     }
                     

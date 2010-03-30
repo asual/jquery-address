@@ -7,38 +7,165 @@
     </meta>
     <pages>
         <page href="/" title="Home">
-            <p><strong>Ajax</strong> (shorthand for <a href="/wiki/Asynchronous_I/O" title="Asynchronous I/O">asynchronous</a> <a href="/wiki/JavaScript" title="JavaScript">JavaScript</a> and <a href="/wiki/XML" title="XML">XML</a>) is a group of interrelated <a href="/wiki/Web_development" title="Web development">web development</a> techniques used on the <a href="/wiki/Client-side" title="Client-side">client-side</a> to create interactive <a href="/wiki/Web_application" title="Web application">web applications</a>. With Ajax, <a href="/wiki/Web_application" title="Web application">web applications</a> can retrieve data from the <a href="/wiki/Web_server" title="Web server">server</a> asynchronously in the background without interfering with the display and behavior of the existing page. The use of Ajax techniques has led to an increase in interactive or dynamic interfaces on web pages. Data are usually retrieved using the <i><a href="/wiki/XMLHttpRequest" title="XMLHttpRequest">XMLHttpRequest</a></i> <a href="/wiki/Object_(computer_science)" title="Object (computer science)">object</a>. Despite the name, the use of <a href="/wiki/XML" title="XML">XML</a> is not actually required, nor do the requests need to be <a href="/wiki/Asynchrony" title="Asynchrony">asynchronous</a>.</p>
-            <p>Like <a href="/wiki/DHTML" title="DHTML">DHTML</a> and <a href="/wiki/LAMP_(software_bundle)" title="LAMP (software bundle)">LAMP</a>, Ajax is not a technology in itself, but a group of technologies. Ajax uses a combination of <a href="/wiki/HTML" title="HTML">HTML</a> and <a href="/wiki/Cascading_Style_Sheets" title="Cascading Style Sheets">CSS</a> to mark up and style information. The <a href="/wiki/Document_Object_Model" title="Document Object Model">DOM</a> is accessed with <a href="/wiki/JavaScript" title="JavaScript">JavaScript</a> to dynamically display, and to allow the user to interact with, the information presented. JavaScript and the XMLHttpRequest object provide a method for exchanging data asynchronously between browser and server to avoid full page reloads.</p>
+            <h1>Making AJAX Applications Crawlable</h1>
+            <p>If you're running an AJAX application with content that you'd like to appear in
+            search results, we have a new process that, when implemented, can help Google
+            (and potentially other search engines) crawl and index your content.
+            Historically, AJAX applications have been difficult for search engines to
+            process because AJAX content is produced dynamically by the browser and thus not
+            visible to crawlers. While there are existing methods for dealing with this
+            problem, they involve regular manual maintenance to keep the content up-to-date.</p>
+            <h2><a href="#!/learn-more">Learn more</a></h2> 
+            <p>Learn why search engines don't see the content you see and what needs to happen 
+            to fix this.</p>
+            <h2><a href="#!/getting-started">Getting started guide</a></h2> 
+            <p>Get started in making your AJAX application visible to search engines. If you are 
+            in a hurry, you can start here, but AJAX crawling is a complex topic, so we recommend 
+            reading all the documentation.</p>
+            <h2><a href="#!/html-snapshot">Creating HTML snapshots</a></h2> 
+            <p>Learn more about creating HTML snapshots, and which technique might be best suited 
+            for your application.</p>
+            <h2><a href="#!/faq">Frequently asked questions</a></h2> 
+            <p>Having trouble?  Check out the frequently asked questions.</p>
+            <h2><a href="#!/specification">Specification</a></h2> 
+            <p>Get the details.</p>
         </page>
-        <page href="/history" title="History">
-            <p>In the 1990s, web browsers and web sites lacked the sophistication to provide a quick and responsive user experience. Online form entry could be tedious, since all the requested information had to be entered and then submitted to the web server. The form data was validated and if there were problems, the same form was again presented to the user. The flow of information and the resulting experience was choppy and disconnected, reflecting the stateless nature of HTTP.</p> 
-            <p>Asynchronous loading of content really became practical when <a href="/wiki/Java_applet" title="Java applet">Java applets</a> were introduced in the first version of the Java language in 1995. These allow <a href="/wiki/Compiler" title="Compiler">compiled</a> client-side code to load data asynchronously from the web server after a web page is loaded. In 1996, <a href="/wiki/Internet_Explorer" title="Internet Explorer">Internet Explorer</a> introduced the <a href="/wiki/IFrame" title="IFrame">IFrame</a> element to <a href="/wiki/HTML" title="HTML">HTML</a>, which also enables this to be achieved. In 1999, Microsoft created the XMLHTTP <a href="/wiki/ActiveX" title="ActiveX">ActiveX</a> control in <a href="/wiki/Internet_Explorer_5" title="Internet Explorer 5">Internet Explorer 5</a>, which is now supported by <a href="/wiki/Mozilla" title="Mozilla">Mozilla</a>, <a href="/wiki/Safari_(web_browser)" title="Safari (web browser)">Safari</a>, <a href="/wiki/Opera_(web_browser)" title="Opera (web browser)">Opera</a> and other browsers as the native XMLHttpRequest object. The utility of background HTTP requests to the server and asynchronous web technologies remained fairly obscure until Google made a wide deployment of Ajax with <a href="/wiki/Gmail" title="Gmail">Gmail</a> (2004) and <a href="/wiki/Google_Maps" title="Google Maps">Google Maps</a> (2005).</p> 
-            <p>The term "Ajax" was coined in 2005. <a href="/wiki/Jesse_James_Garrett" title="Jesse James Garrett">Jesse James Garrett</a> thought of the term "Ajax" while in the shower, when he realized the need for a shorthand term to represent the suite of technologies he was proposing to a client.</p> 
-            <p>While the term "Ajax" is credited to Garrett, a patent application covering this type of user interface was filed on September 3, 2003, thus predating the term itself by two years. This application resulted in US Patent #7,523,401 being issued to Greg Aldridge of Kokomo, IN.</p> 
-            <p>On April 5, 2006 the <a href="/wiki/World_Wide_Web_Consortium" title="World Wide Web Consortium">World Wide Web Consortium</a> (W3C) released the first draft specification for the object in an attempt to create an official <a href="/wiki/Web_standard" title="Web standard">web standard</a>.</p> 
+        <page href="/learn-more" title="Learn More">
+            <h1>Learn More</h1>
+            <h2>What the user sees, what the crawler sees</h2>
+            <p>In recent years, more and more of the web has become populated with AJAX-based 
+            applications, replacing static HTML pages. This is a great development for users 
+            because it makes applications much faster and richer. But making your application more 
+            responsive has come at a huge cost: crawlers are not able to see any content that is 
+            created dynamically. As a result, the most modern applications are also the ones that 
+            are often the least searchable.</p>
+            <p class="more"><a href="http://code.google.com/web/ajaxcrawling/docs/learn-more.html">More at 
+            Google.com</a></p>        
         </page>
-        <page href="/technologies" title="Technologies">
-            <p>The term <em>Ajax</em> has come to represent a broad group of web technologies that can be used to implement a web application that communicates with a server in the background, without interfering with the current state of the page. In the article that coined the term Ajax, <a href="/wiki/Jesse_James_Garrett" title="Jesse James Garrett">Jesse James Garrett</a> explained that the following technologies are required:</p> 
+        <page href="/getting-started" title="Getting Started">
+            <h1>Getting Started</h1>
+            <p>This document outlines the steps that are necessary in order to make your AJAX 
+            application crawlable. Once you have fully understood each of these steps, it should 
+            not take you very long to actually make your application crawlable! However, you do 
+            need to understand each of the steps involved, so we recommend reading this guide in 
+            its entirety.</p>
+            <p class="more"><a href="#!/getting-started?more=true">More</a></p>
+            <h2>Overview of Solution</h2>
+            <p>Briefly, the solution works as follows: the crawler finds a pretty AJAX URL (that 
+            is, a URL containing a #! hash fragment). It then requests the content for this URL 
+            from your server in a slightly modified form. Your web server returns the content in 
+            the form of an HTML snapshot, which is then processed by the crawler.</p>
+        </page>
+        <page href="/html-snapshot" title="Creating HTML Snapshots">
+            <h1>How do I create an HTML snapshot?</h1>
+            <h2>Generating HTML snapshots</h2>
+            <p>As long as your app observes the URL mapping and HTML snapshot scheme described in the 
+            <a href="specification.html">Specification</a> section, your app is visible to the crawler. 
+            It <em>does not matter</em> whether</p>
             <ul> 
-                <li><a href="/wiki/HTML" title="HTML">HTML</a> or <a href="/wiki/XHTML" title="XHTML">XHTML</a> and <a href="/wiki/CSS" title="CSS">CSS</a> for presentation</li> 
-                <li>the <a href="/wiki/Document_Object_Model" title="Document Object Model">Document Object Model</a> for dynamic display of and interaction with data</li> 
-                <li><a href="/wiki/XML" title="XML">XML</a> and <a href="/wiki/XSLT" title="XSLT">XSLT</a> for the interchange, and manipulation and display, of data, respectively</li> 
-                <li>the <a href="/wiki/XMLHttpRequest" title="XMLHttpRequest">XMLHttpRequest</a> object for asynchronous communication</li> 
-                <li><a href="/wiki/JavaScript" title="JavaScript">JavaScript</a> to bring these technologies together</li> 
+                <li>your app uses any Google technology (for example, 
+                <a href="http://code.google.com/appengine/">Google App Engine</a>, 
+                <a href="http://code.google.com/webtoolkit/">Google Web Toolkit</a>, 
+                <a href="http://code.google.com/closure">Closure</a>)</li>
+                <li>your app uses a specific JavaScript library (for example, 
+                <a href="http://jquery.com/">jQuery</a>, <a href="http://script.aculo.us/">script.aculo.us</a>, 
+                <a href="http://www.prototypejs.org/">Prototype</a>)</li>
+                <li>your app uses a specific server-side technology (for example, 
+                <a href="http://php.net/index.php">PHP</a> or <a href="http://www.asp.net/">ASP.NET</a>)</li>
             </ul> 
-            <p>Since then, however, there have been a number of developments in the technologies used in an Ajax application, and the definition of the term Ajax. In particular, it has been noted that:</p> 
-            <ul> 
-                <li>JavaScript is not the only client-side scripting language that can be used for implementing an Ajax application. Other languages such as <a href="/wiki/VBScript" title="VBScript">VBScript</a> are also capable of the required functionality. However JavaScript is the most popular language for Ajax programming due to its inclusion in and compatibility with the majority of modern web browsers.</li> 
-                <li>XML is not required for data interchange and therefore XSLT is not required for the manipulation of data. <a href="/wiki/JSON" title="JSON">JavaScript Object Notation</a> (JSON) is often used as an alternative format for data interchange, although other formats such as preformatted HTML or plain text can also be used.</li> 
-            </ul> 
-            <p>Classic Ajax involves writing ad hoc JavaScript on the client. A simpler if cruder alternative is to use standard JavaScript libraries that can partially update a page, such as ASP.Net's UpdatePanel. Tools such as Echo2 and ZK enable fine grained control of a page from the server, using only standard JavaScript libraries.</p>
+            <p>The only requirement is that your app uses AJAX. But otherwise you wouldn't be reading this.</p> 
+            <p>It's impossible to document all the different ways web applications can be developed. There are 
+            too many web frameworks, libraries, and so forth to enumerate. Likewise, there are many ways to 
+            create HTML snapshots, and which way is best for your application depends entirely on how your web 
+            app is implemented. Let's discuss some common scenarios.</p>
         </page>
-        <page href="/rationale" title="Rationale">
+        <page href="/faq" title="FAQ">
+            <h1>Frequently Asked Questions</h1>
             <ul> 
-                <li>In many cases, related pages on a website consist of much content that is common between them. Using traditional methods, that content would have to be reloaded on every request. However, using Ajax, a web application can request only the content that needs to be updated, thus drastically reducing bandwidth usage and load time.</li> 
-                <li>The use of asynchronous requests allows the client's Web browser UI to be more interactive and to respond quickly to inputs, and sections of pages can also be reloaded individually. Users may perceive the application to be faster or more responsive, even if the application has not changed on the server side.</li> 
-                <li>The use of Ajax can reduce connections to the server, since scripts and <a href="/wiki/Style_sheet_(web_development)" title="Style sheet (web development)">style sheets</a> only have to be requested once.</li> 
-                <li>State can be maintained throughout a Web site. JavaScript variables will persist because the main container page need not be reloaded.</li> 
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#whentousewhich">When should I 
+                use <code>_escaped_fragment_</code> and when should I use <code>#!</code> in my AJAX URLs?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#inaction">Where can I see this 
+                scheme in action?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#whatifnot">What happens if I 
+                choose not to implement the AJAX crawling scheme (with <code>#!</code>) on my site?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#whereinresults">Where will my 
+                pages appear in the search results?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#howcurrent">How current should 
+                I keep my content?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#nohashfragments">What if my app 
+                doesn't use hash fragments?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#urlswithouthashfragments">What 
+                about URLs that don't have a hash fragment?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#uglyurlseverywhere">Will this 
+                approach lead to a proliferation of "ugly" _escaped_fragment_ URLs?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#cloaking">Does this scheme open 
+                the door to cloaking?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#excludesomeurls">What if my site 
+                has some hash fragment URLs that should not be crawled?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#searchforescpfr">Will I be able to 
+                search for <code>_escaped_fragment_</code> URLs?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#existing">What about existing uses 
+                of #! in hash fragments?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#accessibility">What about 
+                accessibility?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#linkrelcanonical">If using 
+                <code>rel="canonical"</code>, should webmasters use <code>&lt;link rel="canonical" 
+                href="http://example.com/ajax.html?_escaped_fragment_=foo=123" /></code> or <code>&lt;link 
+                rel="canonical" href="http://example.com/ajax.html#!foo=123" /></code>?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#sitemap">What URL should I put in 
+                my Sitemap?</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#productfeeds">How will the #! URLs 
+                affect product feeds that companies are submitting? They would like the same URLs for Product Search 
+                and general Web Search.</a></li>
+                <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#htmlunit">I'm using HtmlUnit as 
+                the headless browser, and it "doesn't work." Why not?</a></li>
+            </ul>
+        </page>
+        <page href="/specification" title="Full Specification">
+            <h1>Full Specification</h1>
+            <h2>Abstract</h2> 
+            <p>This document describes an agreement between web servers and search engine crawlers that allows for 
+            dynamically created content to be visible to crawlers. Google currently supports this agreement. The hope 
+            is that other search engines will also adopt this proposal.</p>
+            <h2>Basic definitions</h2>
+            <ul> 
+                <li><b>Web application:</b> In this document, a web application is an AJAX-enabled, interactive web 
+                application.</li>
+                <li><b>State:</b> While traditional static web sites consist of many pages, a more appropriate term for 
+                AJAX applications is "state". An application consists of a number of states, where each state constitutes 
+                a specific user experience or a response to user input.  Examples of states: For a mail application, 
+                states could be base state, inbox, compose, etc.  For a chess application, states could be base state, 
+                start new game, but also current state x of the chessboard, including information about past moves, whose 
+                player's turn it is, and so forth.  In an AJAX application, a state often corresponds to a URL with a hash 
+                fragment.</li>
+                <li><b>Hash fragments:</b> Traditionally, hash fragments (that is, everything after # in the URL) have been 
+                used to indicate one portion of a static HTML document.  By contrast, AJAX applications often use hash 
+                fragments in another function, namely to indicate state. For example, when a user navigates to the URL 
+                <code>http://www.example.com/ajax.html#mystate</code>, the AJAX application will parse the hash fragment 
+                and move the application to the "mystate" state.  This is similar in spirit to moving to a portion of a 
+                static document, that is, the traditional use of hash fragments.  History (the back button) in AJAX 
+                applications is generally handled with these hash fragments as well.  Why are hash fragments used in this 
+                way? While the same effect could often be achieved with query parameters (for example, <code>?s=mystate</code>), 
+                hash fragments have the advantage that in and of themselves, they do not incur an HTTP request and thus no 
+                round-trip from the browser to the server and back.  In other words, when navigating from 
+                <code>www.example.com/ajax.html</code> to <code>www.example.com/ajax.html#mystate</code>, the web application 
+                moves to the state <code>mystate</code> without a full page refresh.  As such, hash fragments are an important 
+                tool in making AJAX applications fast and responsive. Importantly, however, hash fragments are not part of HTTP 
+                requests (and as a result they are not sent to the server), which is why our approach must handle them in a new 
+                way. See <a href="http://tools.ietf.org/html/rfc3986#section-3.5">RFC 3986</a> for more details on hash 
+                fragments.</li>
+                <li><b>Query parameters:</b> Query parameters (for example, <code>?s=mystate</code> in the URL) are used by web 
+                sites and applications to post to or obtain information from the server.  They incur a server round-trip and full 
+                page reload. In other words, navigating from <code>www.example.com</code> to <code>www.example.com?s=mystate</code> 
+                is handled by an HTTP request to the server and a full page reload. See 
+                <a href="http://tools.ietf.org/html/rfc3986#section-3.4">RFC 3986</a> for more details. Query parameters are 
+                routinely used in AJAX applications as well.</li>
+                <li><b>HTML snapshot:</b> An HTML snapshot is the serialization of the DOM the browser will produce when loading 
+                the page, including executing any JavaScript that is needed to get the intial page.</li>
+                <li><b>Pretty URL:</b> Any URL containing a hash fragment beginning with <code>!</code>, for example, 
+                <code>www.example.com?myquery#!mystate</code></li>
+                <li><b>Ugly URL:</b> Any URL containing a query parameter with the key <code>_escaped_fragment_</code>, 
+                for example, <code>www.example.com?myquery&amp;_escaped_fragment_=mystate</code></li>
             </ul> 
         </page>
     </pages>
