@@ -1,15 +1,13 @@
-html, body {
-    background: #000;
-}
 body {
     font: 14px "Helvetica Neue", Arial, sans-serif;
+    background: #000;
 }
 .page { 
     width: 640px; 
     margin: 20px auto;
 }
 .page h1 { 
-	font-size: 27px;
+    font-size: 27px;
     margin: 0 3px 17px; 
     padding: 0;
     color: #FFF; 
@@ -43,10 +41,10 @@ body {
     padding: 0 4px;
     display: block;
     line-height: 20px;
-    color: #FFF;
+    color: #fff;
 }
 .nav a:hover {
-    background: #5DB0E6;
+    background: #5db0e6;
     text-decoration: none;
     color: #FFF;
 }
@@ -61,9 +59,9 @@ body {
     background: #176092;
 }
 .content {
-	color: #000;
-	background: #FFF;
-	margin: 0;
+    color: #000;
+    background: #fff;
+    margin: 0;
     padding: 20px;
 }
 .content p { 
@@ -72,7 +70,7 @@ body {
     line-height: 20px;
 }
 .content ul { 
-    margin: 0 0 20px 20px;
+    margin: 0 0 20px 40px;
     padding: 0;
     line-height: 20px;
 }

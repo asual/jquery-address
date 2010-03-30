@@ -1,8 +1,6 @@
-html, body {
-    background: #000;
-}
 body {
     font: 14px "Helvetica Neue", Arial, sans-serif;
+    background: #000;
     margin: 20px;
     padding: 0;
 }
@@ -14,7 +12,7 @@ body {
     font-size: 27px;
     margin: 0 3px 17px; 
     padding: 0;
-    color: #FFF; 
+    color: #fff; 
 }
 .nav {
     height: 20px;
@@ -39,10 +37,10 @@ body {
     padding: 0 4px;
     display: block;
     line-height: 20px;
-    color: #FFF;
+    color: #fff;
 }
 .nav a:hover {
-    background: #5DB0E6;
+    background: #5db0e6;
     text-decoration: none;
 }
 .nav a:focus {
@@ -58,7 +56,7 @@ body {
 .log {
     height: 399px;
     overflow: auto;
-    border: 1px solid #F3F3F3;
+    border: 1px solid #f3f3f3;
     background: #FFF;
 }
 .log p {
@@ -70,14 +68,14 @@ body {
     font-size: 12px;
 }
 .log .even {
-    background: #F3F3F3;
+    background: #f3f3f3;
 }
 .log .init {
-    color: #FF6600;
+    color: #ff6600;
 }
 .log .change {
     color: #176092;
 }
 .log .track {
-    color: #39414A;
+    color: #39414a;
 } 

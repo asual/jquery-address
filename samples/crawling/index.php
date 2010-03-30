@@ -52,9 +52,9 @@
             <ul class="nav">
                 <?php
     
-				    $pages = $xml->xpath('//pages/page');
+                    $pages = $xml->xpath('//pages/page');
                 
-	                foreach ($pages as $page) {
+                    foreach ($pages as $page) {
                         echo('<li><a href="#!' . $page['href'] . '"' 
                             . ($fragment == $page['href'] ? ' class="selected"' : '') . '>' 
                             . $page['title'] . '</a></li>');
@@ -72,17 +72,17 @@
 
                     foreach($content[0]->children() as $child) {
                         echo $child->asXML();
-                    	if ($more) {
-                    		echo('<p><a href="#!' . $fragment . '?more=true">More</a></p>');
-                    		break;
-                    	}
+                        if ($more) {
+                            echo('<p><a href="#!' . $fragment . '?more=true">More</a></p>');
+                            break;
+                        }
                     }
                     
                     if (isset($params['source']) && count($content[0]->children()) > 1) {
-                    	$source = $xml->xpath('//meta/source');
-						foreach($source[0]->children() as $child) {
-						    echo $child->asXML();
-						}
+                        $source = $xml->xpath('//meta/source');
+                        foreach($source[0]->children() as $child) {
+                            echo $child->asXML();
+                        }
                     }
                     
                 ?>

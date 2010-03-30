@@ -13,7 +13,7 @@
 
             // Simple log
             var log = function(msg) {
-                if (!$('.log').length) {
+                if (!$('.log').size()) {
                     $('<div class="log" />').appendTo('.page');
                 }
                 $('.log').append(msg.replace(/^([^:]*):(.*)$/, '<p><b>$1:</b> <span class="$1">$2</span></p>'))

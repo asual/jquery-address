@@ -21,7 +21,7 @@ asyncTest("History test", function() {
 
 asyncTest("Path names test", function() {
     setTimeout(function() {
-    	equals($.address.value(), '/test');
+        equals($.address.value(), '/test');
         same($.address.pathNames(), ['test']);
         start();
     }, 1000);
