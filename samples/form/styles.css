@@ -1,7 +1,9 @@
+html, body {
+    background: #000;
+}
 body {
     font: 14px "Helvetica Neue", Arial, sans-serif;
     color: #fff;
-    background: #000;
     margin: 20px;
     padding: 0;
 }

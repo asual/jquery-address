@@ -1,6 +1,8 @@
+html, body {
+    background: #000;
+}
 body {
     font: 14px "Helvetica Neue", Arial, sans-serif;
-    background: #000;
 }
 .page { 
     width: 640px; 

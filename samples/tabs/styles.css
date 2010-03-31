@@ -1,6 +1,8 @@
+html, body {
+    background: #000;
+}
 body {
     font: 13px "Helvetica Neue", Arial, sans-serif;
-    background: #000;
     margin: 0;
     padding: 0;
 }
