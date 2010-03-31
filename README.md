@@ -38,12 +38,13 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
-### 03/30/2010 - jQuery Address 1.2
+### 03/31/2010 - jQuery Address 1.2rc
 
 - New queryString, parameter and path setters.
 - New autoUpdate, crawling and wrap options.
 - New Accordion, Crawling and Form samples.
 - Support for hash fragments as a part of the value.
+- Basic support for forms.
 - Improved onhashchange support.
 - Switched samples to HTML5.
 - Switched to the Closure compiler.
