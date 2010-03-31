@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-03-31 11:35:36 +0300 (Wed, 31 Mar 2010)
+ * Date: 2010-04-01 01:08:57 +0300 (Thu, 01 Apr 2010)
  */
 (function ($) {
 
@@ -211,7 +211,7 @@
                     } else {
                         _si(_listen, 50);
                     }
-                    $('a[rel*=address:]').address();
+                    $('a').filter('[rel*=address:]').address();
                 }
             },
             _unload = function() {
