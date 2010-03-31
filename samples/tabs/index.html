@@ -22,7 +22,7 @@
                         load: function(event, ui) {
                             $(ui.panel).html($('#tabs div:first', ui.panel).html());
                         },
-                        selected: $('#tabs ul:first a').index($('a[rel=address:' + event.value + ']')),
+                        selected: $('#tabs ul:first a').index($('a').filter('[rel=address:' + event.value + ']')),
                         fx: { opacity: 'toggle' }
                     })
                     .css('display', 'block');
@@ -30,16 +30,16 @@
             }).change(function(event) {
 
                 // Sets the page title
-                $.address.title($.address.title().split(' | ')[0] + ' | ' + $('a[rel=address:' + event.value + ']').text());
+                $.address.title($.address.title().split(' | ')[0] + ' | ' + $('a').filter('[rel=address:' + event.value + ']').text());
 
             }).externalChange(function(event) {
 
                 // Select the proper tab
-                tabs.tabs('select', $('a[rel=address:' + event.value + ']').attr('href'));
+                tabs.tabs('select', $('a').filter('[rel=address:' + event.value + ']').attr('href'));
                 
             });
 
-            // Graceful FOUC
+            // Hides the tabs during initialization
             document.write('<style type="text/css"> #tabs { display: none; } </style>');
                
         </script>

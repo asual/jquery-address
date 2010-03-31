@@ -211,7 +211,7 @@
                     } else {
                         _si(_listen, 50);
                     }
-                    $('a[rel*=address:]').address();
+                    $('a').filter('[rel*=address:]').address();
                 }
             },
             _unload = function() {
