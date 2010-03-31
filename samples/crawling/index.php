@@ -20,7 +20,9 @@
     }
     
     // Loads the data file
-    $xml = new SimpleXMLElement(file_get_contents('data.xml'));    
+	$doc = new DOMDocument();
+	$doc->load('data.xml');
+	$xp = new DOMXPath($doc);
     
 ?>
 <!DOCTYPE html>
@@ -30,7 +32,7 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.2.min.js?crawlable=true"></script>
+        <script type="text/javascript" src="jquery.address-1.2rc.min.js?crawlable=true"></script>
         <script type="text/javascript">
             
             $.address.init(function(event) {
@@ -67,13 +69,13 @@
                 <?php
                     
                     // Renders the navigation links
-                    $pages = $xml->xpath('/data/page');
-                    foreach ($pages as $p) {
-                        echo('<li><a href="#!' . $p['href'] . '"' 
-                            . ($page == $p['href'] ? ' class="selected"' : '') . '>' 
-                            . $p['title'] . '</a></li>');
+                    $nodes = $xp->query('/data/page');
+                    foreach ($nodes as $node) {
+                        echo('<li><a href="#!' . $node->getAttribute('href') . '"' 
+                            . ($page == $node->getAttribute('href') ? ' class="selected"' : '') . '>' 
+                            . $node->getAttribute('title') . '</a></li>');
                     }
-                
+                    
                 ?>
 
             </ul>
@@ -81,19 +83,14 @@
                 <?php
                     
                     // Renders the content with support for a simple "More..." link
-                    $content = $xml->xpath('/data/page[@href="' . $page . '"]');
-                    foreach($content[0]->children() as $child) {
-                        $childAsXML = $child->asXML();
-                        if (isset($parameters['more'])) {
-                            if (!strstr($childAsXML, '>More...<')) {
-                                echo($childAsXML);
-                            }
-                        } else {
-                            echo($childAsXML);
-                            if (strstr($childAsXML, '>More...<')) {
-                                break;
-                            }
-                        }
+                    $nodes = $xp->query('/data/page[@href="' . $page . '"]');
+                    foreach ($nodes->item(0)->childNodes as $node) {
+                    	if (!isset($parameters['more']) && $node->nodeType == XML_COMMENT_NODE && $node->nodeValue == ' page break ') {
+                    		echo('<a href="#!' . $page . '&amp;more=true">More...</a>');
+                            break;
+                    	} else {
+	                        echo($doc->saveXML($node));
+                    	}
                     }
                     
                 ?>

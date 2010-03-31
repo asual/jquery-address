@@ -45,7 +45,7 @@
         not take you very long to actually make your application crawlable! However, you do 
         need to understand each of the steps involved, so we recommend reading this guide in 
         its entirety.</p>
-        <p><a href="#!/?page=/getting-started&amp;more=true">More...</a></p>
+        <!-- page break -->
         <h2>Overview of Solution</h2>
         <p>Briefly, the solution works as follows: the crawler finds a pretty AJAX URL (that 
         is, a URL containing a #! hash fragment). It then requests the content for this URL 
@@ -54,7 +54,7 @@
         <p><a href="http://code.google.com/web/ajaxcrawling/docs/getting-started.html">More at 
         Google.com</a></p>
     </page>
-    <page href="/html-snapshot" title="Creating HTML Snapshots">
+    <page href="/?page=/html-snapshot" title="Creating HTML Snapshots">
         <h1>How do I create an HTML snapshot?</h1>
         <h2>Generating HTML snapshots</h2>
         <p>As long as your app observes the URL mapping and HTML snapshot scheme described in the 
