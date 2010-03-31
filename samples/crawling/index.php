@@ -23,6 +23,36 @@
 	$doc = new DOMDocument();
 	$doc->load('data.xml');
 	$xp = new DOMXPath($doc);
+
+	$pageNodes = $xp->query('/data/page');
+    $pageNode = $xp->query('/data/page[@href="' . $page . '"]')->item(0);
+    $pageNav = '';
+    $pageContent = '';
+    
+    // Prepares the navigation links
+    foreach ($pageNodes as $node) {
+    	$pageHref = $node->getAttribute('href');
+        $pageTitle = $node->getAttribute('title');
+    	$pageNav .= '<li><a href="' . ($pageHref == '/' ? '' : '#!' . $pageHref) . '"' 
+            . ($page == $pageHref ? ' class="selected"' : '') . '>' 
+            . $pageTitle . '</a></li>';
+    }
+    
+    
+    // Prepares the content with support for a simple "More..." link
+    if (isset($pageNode)) {
+        foreach ($pageNode->childNodes as $node) {
+            if (!isset($parameters['more']) && $node->nodeType == XML_COMMENT_NODE && $node->nodeValue == ' page break ') {
+                $pageContent .= '<p><a href="' . ($page == '/' ? '' : '#!' . $page) . '&amp;more=true">More...</a></p>';
+                break;
+            } else {
+                $pageContent .= $doc->saveXML($node);
+            }
+        }       
+    } else {
+    	$pageContent .= '<p>Page not found.</p>';
+        header("HTTP/1.0 404 Not Found");
+    }
     
 ?>
 <!DOCTYPE html>
@@ -47,55 +77,36 @@
 
                 // Highlights the selected link
                 $('.nav a').each(function() {
-                    $(this).toggleClass('selected', $(this).attr('href') == '#!' + page);
+                    $(this).toggleClass('selected', $(this).attr('href') == (page == '/' ? '' : '#!' + page));
                 });
+
+                var handler = function(data) {
+                    $('.content').html($('.content', data).html()).parent().show();
+                };
 
                 // Loads the page content and inserts it into the content area
-                $.get(location.pathname + '?<?php echo(FRAGMENT); ?>=' + encodeURIComponent(event.value), function(data) {
-                    $('.content')
-                        .show().html($('.content', data).html());
+                $.ajax({
+                    url: location.pathname + '?<?php echo(FRAGMENT); ?>=' + encodeURIComponent(event.value),
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        handler($(XMLHttpRequest.responseText));
+                    },
+                    success: function(data, textStatus, XMLHttpRequest) {
+                    	handler(data);
+	                }
                 });
-            });
 
-            // Graceful FOUC
-            document.write('<style type="text/css"> .content { display: none; } </style>');
-                        
+            });
+            
+            // Hides the page during initialization
+            document.write('<style type="text/css"> .page { display: none; } </style>');
+
         </script>
     </head>
     <body>
         <div class="page">
             <h1>jQuery Address Crawling</h1>
-            <ul class="nav">
-                <?php
-                    
-                    // Renders the navigation links
-                    $nodes = $xp->query('/data/page');
-                    foreach ($nodes as $node) {
-                        echo('<li><a href="#!' . $node->getAttribute('href') . '"' 
-                            . ($page == $node->getAttribute('href') ? ' class="selected"' : '') . '>' 
-                            . $node->getAttribute('title') . '</a></li>');
-                    }
-                    
-                ?>
-
-            </ul>
-            <div class="content">
-                <?php
-                    
-                    // Renders the content with support for a simple "More..." link
-                    $nodes = $xp->query('/data/page[@href="' . $page . '"]');
-                    foreach ($nodes->item(0)->childNodes as $node) {
-                    	if (!isset($parameters['more']) && $node->nodeType == XML_COMMENT_NODE && $node->nodeValue == ' page break ') {
-                    		echo('<p><a href="#!' . $page . '&amp;more=true">More...</a></p>');
-                            break;
-                    	} else {
-	                        echo($doc->saveXML($node));
-                    	}
-                    }
-                    
-                ?>
-            
-            </div>
+            <ul class="nav"><?php echo($pageNav); ?></ul>
+            <div class="content"><?php echo($pageContent); ?></div>
         </div>
     </body>
 </html>

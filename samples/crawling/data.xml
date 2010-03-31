@@ -80,4 +80,57 @@
         <p><a href="http://code.google.com/web/ajaxcrawling/docs/html-snapshot.html">More at 
         Google.com</a></p>
     </page>
+    <page href="/faq" title="FAQ">
+        <h1>Frequently Asked Questions</h1>
+        <ul> 
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#whentousewhich">When should I 
+            use <code>_escaped_fragment_</code> and when should I use <code>#!</code> in my AJAX URLs?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#inaction">Where can I see this 
+            scheme in action?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#whatifnot">What happens if I 
+            choose not to implement the AJAX crawling scheme (with <code>#!</code>) on my site?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#whereinresults">Where will my 
+            pages appear in the search results?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#howcurrent">How current should 
+            I keep my content?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#nohashfragments">What if my app 
+            doesn't use hash fragments?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#urlswithouthashfragments">What 
+            about URLs that don't have a hash fragment?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#uglyurlseverywhere">Will this 
+            approach lead to a proliferation of "ugly" _escaped_fragment_ URLs?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#cloaking">Does this scheme open 
+            the door to cloaking?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#excludesomeurls">What if my site 
+            has some hash fragment URLs that should not be crawled?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#searchforescpfr">Will I be able to 
+            search for <code>_escaped_fragment_</code> URLs?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#existing">What about existing uses 
+            of #! in hash fragments?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#accessibility">What about 
+            accessibility?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#linkrelcanonical">If using 
+            <code>rel="canonical"</code>, should webmasters use <code>&lt;link rel="canonical" 
+            href="http://example.com/ajax.html?_escaped_fragment_=foo=123" /></code> or <code>&lt;link 
+            rel="canonical" href="http://example.com/ajax.html#!foo=123" /></code>?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#sitemap">What URL should I put in 
+            my Sitemap?</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#productfeeds">How will the #! URLs 
+            affect product feeds that companies are submitting? They would like the same URLs for Product Search 
+            and general Web Search.</a></li>
+            <li><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html#htmlunit">I'm using HtmlUnit as 
+            the headless browser, and it "doesn't work." Why not?</a></li>
+        </ul>
+        <p><a href="http://code.google.com/web/ajaxcrawling/docs/faq.html">More at 
+        Google.com</a></p>
+    </page>
+    <page href="/specification" title="Full Specification">
+        <h1>Full Specification</h1>
+        <h2>Abstract</h2> 
+        <p>This document describes an agreement between web servers and search engine crawlers that allows for 
+        dynamically created content to be visible to crawlers. Google currently supports this agreement. The hope 
+        is that other search engines will also adopt this proposal.</p>
+        <p><a href="http://code.google.com/web/ajaxcrawling/docs/specification.html">More at 
+        Google.com</a></p>
+    </page>
 </data>
