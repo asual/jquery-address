@@ -86,7 +86,7 @@
                     $nodes = $xp->query('/data/page[@href="' . $page . '"]');
                     foreach ($nodes->item(0)->childNodes as $node) {
                     	if (!isset($parameters['more']) && $node->nodeType == XML_COMMENT_NODE && $node->nodeValue == ' page break ') {
-                    		echo('<a href="#!' . $page . '&amp;more=true">More...</a>');
+                    		echo('<p><a href="#!' . $page . '&amp;more=true">More...</a></p>');
                             break;
                     	} else {
 	                        echo($doc->saveXML($node));
