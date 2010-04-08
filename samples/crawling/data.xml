@@ -12,11 +12,11 @@
         <h2><a href="#!/learn-more">Learn more</a></h2> 
         <p>Learn why search engines don't see the content you see and what needs to happen 
         to fix this.</p>
-        <h2><a href="#!/getting-started">Getting started guide</a></h2> 
+        <h2><a href="#!/?page=/getting-started">Getting started guide</a></h2> 
         <p>Get started in making your AJAX application visible to search engines. If you are 
         in a hurry, you can start here, but AJAX crawling is a complex topic, so we recommend 
         reading all the documentation.</p>
-        <h2><a href="#!/html-snapshot">Creating HTML snapshots</a></h2> 
+        <h2><a href="#!/?page=/html-snapshot">Creating HTML snapshots</a></h2> 
         <p>Learn more about creating HTML snapshots, and which technique might be best suited 
         for your application.</p>
         <h2><a href="#!/faq">Frequently asked questions</a></h2> 
