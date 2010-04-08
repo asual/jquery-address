@@ -27,28 +27,30 @@
 	$pageNodes = $xp->query('/data/page');
     $pageNode = $xp->query('/data/page[@href="' . $page . '"]')->item(0);
     $pageNav = '';
+    $pageTitle = '';
     $pageContent = '';
     
     // Prepares the navigation links
     foreach ($pageNodes as $node) {
-    	$pageHref = $node->getAttribute('href');
-        $pageTitle = $node->getAttribute('title');
-    	$pageNav .= '<li><a href="' . ($pageHref == '/' ? '' : '#!' . $pageHref) . '"' 
-            . ($page == $pageHref ? ' class="selected"' : '') . '>' 
-            . $pageTitle . '</a></li>';
+    	$href = $node->getAttribute('href');
+        $title = $node->getAttribute('title');
+    	$pageNav .= '<li><a href="' . ($href == '/' ? '#' : '#!' . $href) . '"' 
+            . ($page == $href ? ' class="selected"' : '') . '>' 
+            . $title . '</a></li>';
     }
     
     
     // Prepares the content with support for a simple "More..." link
     if (isset($pageNode)) {
+        $pageTitle = $pageNode->getAttribute('title');
         foreach ($pageNode->childNodes as $node) {
             if (!isset($parameters['more']) && $node->nodeType == XML_COMMENT_NODE && $node->nodeValue == ' page break ') {
-                $pageContent .= '<p><a href="' . ($page == '/' ? '' : '#!' . $page) . '&amp;more=true">More...</a></p>';
+                $pageContent .= '<p><a href="' . ($page == '/' ? '#' : '#!' . $page) . '&amp;more=true">More...</a></p>';
                 break;
             } else {
                 $pageContent .= $doc->saveXML($node);
             }
-        }       
+        }
     } else {
     	$pageContent .= '<p>Page not found.</p>';
         header("HTTP/1.0 404 Not Found");
@@ -58,7 +60,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>jQuery Address Crawling</title>
+        <title><?php echo($pageTitle); ?> | jQuery Address Crawling</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
@@ -77,11 +79,12 @@
 
                 // Highlights the selected link
                 $('.nav a').each(function() {
-                    $(this).toggleClass('selected', $(this).attr('href') == (page == '/' ? '' : '#!' + page));
+                    $(this).toggleClass('selected', $(this).attr('href') == (page == '/' ? '#' : '#!' + page));
                 });
 
                 var handler = function(data) {
                     $('.content').html($('.content', data).html()).parent().show();
+                    $.address.title(/>([^<]*)<\/title/.exec(data)[1]);
                 };
 
                 // Loads the page content and inserts it into the content area
