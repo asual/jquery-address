@@ -1,69 +1,90 @@
 <?php 
     
-    define('FRAGMENT', '_escaped_fragment_');
-    
-    // Initializes the fragment value
-    $fragment = (!isset($_REQUEST[FRAGMENT]) || $_REQUEST[FRAGMENT] == '') ? '/' : $_REQUEST[FRAGMENT];
- 
-    // Parses parameters if any
-    $arr = explode('?', $fragment);
-    $parameters = array();
-    if (count($arr) > 1) {
-        parse_str($arr[1], $parameters);
-    }
+	class Crawling { 
+	   
+		const fragment = '_escaped_fragment_';
+	    
+	    function Crawling(){ 
 
-    // Adds support for both /name and /?page=name
-    if (isset($parameters['page'])) {
-        $page = '/?page=' . $parameters['page'];
-    } else {
-        $page = $arr[0];
-    }
-    
-    // Loads the data file
-	$doc = new DOMDocument();
-	$doc->load('data.xml');
-	$xp = new DOMXPath($doc);
+		    // Initializes the fragment value
+		    $fragment = (!isset($_REQUEST[self::fragment]) || $_REQUEST[self::fragment] == '') ? '/' : $_REQUEST[self::fragment];
+		 
+		    // Parses parameters if any
+            $this->parameters = array();
+		    $arr = explode('?', $fragment);
+		    if (count($arr) > 1) {
+		        parse_str($arr[1], $this->parameters);
+		    }
+		
+		    // Adds support for both /name and /?page=name
+		    if (isset($this->parameters['page'])) {
+		        $this->page = '/?page=' . $this->parameters['page'];
+		    } else {
+		        $this->page = $arr[0];
+		    }
+		    
+		    // Loads the data file
+		    $this->doc = new DOMDocument();
+		    $this->doc->load('data.xml');
+		    $this->xp = new DOMXPath($this->doc);
+		    $this->pageNodes = $this->xp->query('/data/page');
+		    $this->pageNode = $this->xp->query('/data/page[@href="' . $this->page . '"]')->item(0);
+	    }
+	    
+	    function title() {
+	        if (isset($this->pageNode)) {
+	            $title = $this->pageNode->getAttribute('title');
+	        } else {
+	            $title = 'Page not found';
+	        }
+	        echo($title);
+	    }
+	    
+	    function nav() {
+	        $nav = '';
+	        
+	        // Prepares the navigation links
+	        foreach ($this->pageNodes as $node) {
+	            $href = $node->getAttribute('href');
+	            $title = $node->getAttribute('title');
+	            $nav .= '<li><a href="' . ($href == '/' ? '#' : '#!' . $href) . '"' 
+	                . ($this->page == $href ? ' class="selected"' : '') . '>' 
+	                . $title . '</a></li>';
+	        }
+	        echo($nav);
+	    }
+	
+	    function content() {
+	        $content = '';
+	        
+	        // Prepares the content with support for a simple "More..." link
+	        if (isset($this->pageNode)) {
+	            foreach ($this->pageNode->childNodes as $node) {
+	                if (!isset($this->parameters['more']) && $node->nodeType == XML_COMMENT_NODE && $node->nodeValue == ' page break ') {
+	                    $content .= '<p><a href="' . ($this->page == '/' ? '#' : '#!' . $this->page) . '&amp;more=true">More...</a></p>';
+	                    break;
+	                } else {
+	                    $content .= $this->doc->saveXML($node);
+	                }
+	            }
+	        } else {
+	            $content .= '<p>Page not found.</p>';
+	            header("HTTP/1.0 404 Not Found");
+	        }
+	        echo($content);
+	    }
+	} 
+	
+	$crawling = new Crawling();
 
-	$pageNodes = $xp->query('/data/page');
-    $pageNode = $xp->query('/data/page[@href="' . $page . '"]')->item(0);
-    $pageNav = '';
-    $pageTitle = '';
-    $pageContent = '';
-    
-    // Prepares the navigation links
-    foreach ($pageNodes as $node) {
-    	$href = $node->getAttribute('href');
-        $title = $node->getAttribute('title');
-    	$pageNav .= '<li><a href="' . ($href == '/' ? '#' : '#!' . $href) . '"' 
-            . ($page == $href ? ' class="selected"' : '') . '>' 
-            . $title . '</a></li>';
-    }
-    
-    
-    // Prepares the content with support for a simple "More..." link
-    if (isset($pageNode)) {
-        $pageTitle = $pageNode->getAttribute('title');
-        foreach ($pageNode->childNodes as $node) {
-            if (!isset($parameters['more']) && $node->nodeType == XML_COMMENT_NODE && $node->nodeValue == ' page break ') {
-                $pageContent .= '<p><a href="' . ($page == '/' ? '#' : '#!' . $page) . '&amp;more=true">More...</a></p>';
-                break;
-            } else {
-                $pageContent .= $doc->saveXML($node);
-            }
-        }
-    } else {
-    	$pageContent .= '<p>Page not found.</p>';
-        header("HTTP/1.0 404 Not Found");
-    }
-    
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title><?php echo($pageTitle); ?> | jQuery Address Crawling</title>
+        <title><?php $crawling->title(); ?> | jQuery Address Crawling</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
-        <script type="text/javascript"> 
+        <script type="text/javascript">
             if (/Android|iPad|iPhone/.test(navigator.platform)) 
                 document.write('<style type="text/css" media="screen">' + 
                         'body { -webkit-text-size-adjust: none; } ' +
@@ -86,8 +107,12 @@
 
                 // Highlights the selected link
                 $('.nav a').each(function() {
-                    $(this).toggleClass('selected', $(this).attr('href') == (page == '/' ? '#' : '#!' + page));
-                }).filter('.selected').focus();
+                    if ($(this).attr('href') == (page == '/' ? '#' : '#!' + page)) {
+                        $(this).addClass('selected').focus();
+                    } else {
+                        $(this).removeClass('selected');
+                    }
+                });
 
                 var handler = function(data) {
                     $('.content').html($('.content', data).html()).parent().show();
@@ -96,7 +121,7 @@
 
                 // Loads the page content and inserts it into the content area
                 $.ajax({
-                    url: location.pathname + '?<?php echo(FRAGMENT); ?>=' + encodeURIComponent(event.value),
+                    url: location.pathname + '?<?php echo(Crawling::fragment); ?>=' + encodeURIComponent(event.value),
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         handler($(XMLHttpRequest.responseText));
                     },
@@ -115,8 +140,8 @@
     <body>
         <div class="page">
             <h1>jQuery Address Crawling</h1>
-            <ul class="nav"><?php echo($pageNav); ?></ul>
-            <div class="content"><?php echo($pageContent); ?></div>
+            <ul class="nav"><?php $crawling->nav(); ?></ul>
+            <div class="content"><?php $crawling->content(); ?></div>
         </div>
     </body>
 </html>
