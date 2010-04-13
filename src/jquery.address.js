@@ -111,7 +111,8 @@
                 _st(_track, 10);
             },
             _track = function() {
-                var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + $.address.value()).replace(/\/\//, '/').replace(/^\/$/, ''),
+                var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + 
+                        _dc(_strict(_local(_value, FALSE), FALSE))).replace(/\/\//, '/').replace(/^\/$/, ''),
                     fn = window[_opts.tracker];
                 if (typeof fn == FUNCTION) {
                     fn(value);
