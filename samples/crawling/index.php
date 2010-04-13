@@ -63,6 +63,13 @@
         <title><?php echo($pageTitle); ?> | jQuery Address Crawling</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
+        <script type="text/javascript"> 
+            if (/Android|iPad|iPhone/.test(navigator.platform)) 
+                document.write('<style type="text/css" media="screen">' + 
+                        'body { -webkit-text-size-adjust: none; } ' +
+                        '.nav a:hover { background: none; text-decoration: underline; color: #fff; } ' + 
+                        '</style>');
+        </script> 
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="jquery.address-1.2rc.min.js?crawlable=true"></script>
         <script type="text/javascript">
@@ -80,7 +87,7 @@
                 // Highlights the selected link
                 $('.nav a').each(function() {
                     $(this).toggleClass('selected', $(this).attr('href') == (page == '/' ? '#' : '#!' + page));
-                });
+                }).filter('.selected').focus();
 
                 var handler = function(data) {
                     $('.content').html($('.content', data).html()).parent().show();

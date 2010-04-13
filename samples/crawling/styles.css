@@ -48,7 +48,7 @@ body {
 .nav a:hover {
     background: #5db0e6;
     text-decoration: none;
-    color: #FFF;
+    color: #fff;
 }
 .nav a:focus {
     outline: none;
