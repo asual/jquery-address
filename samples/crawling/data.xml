@@ -9,19 +9,19 @@
         process because AJAX content is produced dynamically by the browser and thus not
         visible to crawlers. While there are existing methods for dealing with this
         problem, they involve regular manual maintenance to keep the content up-to-date.</p>
-        <h2><a href="#!/learn-more">Learn more</a></h2> 
+        <h2><a href="/learn-more">Learn more</a></h2> 
         <p>Learn why search engines don't see the content you see and what needs to happen 
         to fix this.</p>
-        <h2><a href="#!/?page=/getting-started">Getting started guide</a></h2> 
+        <h2><a href="/?page=/getting-started">Getting started guide</a></h2> 
         <p>Get started in making your AJAX application visible to search engines. If you are 
         in a hurry, you can start here, but AJAX crawling is a complex topic, so we recommend 
         reading all the documentation.</p>
-        <h2><a href="#!/?page=/html-snapshot">Creating HTML snapshots</a></h2> 
+        <h2><a href="/?page=/html-snapshot">Creating HTML snapshots</a></h2> 
         <p>Learn more about creating HTML snapshots, and which technique might be best suited 
         for your application.</p>
-        <h2><a href="#!/faq">Frequently asked questions</a></h2> 
+        <h2><a href="/faq">Frequently asked questions</a></h2> 
         <p>Having trouble?  Check out the frequently asked questions.</p>
-        <h2><a href="#!/specification">Full Specification</a></h2> 
+        <h2><a href="/specification">Full Specification</a></h2> 
         <p>Get the details.</p>
         <p><a href="http://code.google.com/web/ajaxcrawling/index.html">More at 
         Google.com</a></p>
@@ -58,7 +58,7 @@
         <h1>How do I create an HTML snapshot?</h1>
         <h2>Generating HTML snapshots</h2>
         <p>As long as your app observes the URL mapping and HTML snapshot scheme described in the 
-        <a href="specification.html">Specification</a> section, your app is visible to the crawler. 
+        <a href="/specification">Specification</a> section, your app is visible to the crawler. 
         It <em>does not matter</em> whether</p>
         <ul> 
             <li>your app uses any Google technology (for example, 

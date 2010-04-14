@@ -1,88 +1,96 @@
 <?php 
     
-	class Crawling { 
-	   
-		const fragment = '_escaped_fragment_';
-	    
-	    function Crawling(){ 
+    class Crawling { 
+       
+        const fragment = '_escaped_fragment_';
+        
+        function Crawling(){ 
 
-		    // Initializes the fragment value
-		    $fragment = (!isset($_REQUEST[self::fragment]) || $_REQUEST[self::fragment] == '') ? '/' : $_REQUEST[self::fragment];
-		 
-		    // Parses parameters if any
+            // Initializes the fragment value
+            $fragment = (!isset($_REQUEST[self::fragment]) || $_REQUEST[self::fragment] == '') ? '/' : $_REQUEST[self::fragment];
+         
+            // Parses parameters if any
             $this->parameters = array();
-		    $arr = explode('?', $fragment);
-		    if (count($arr) > 1) {
-		        parse_str($arr[1], $this->parameters);
-		    }
-		
-		    // Adds support for both /name and /?page=name
-		    if (isset($this->parameters['page'])) {
-		        $this->page = '/?page=' . $this->parameters['page'];
-		    } else {
-		        $this->page = $arr[0];
-		    }
-		    
-		    // Loads the data file
-		    $this->doc = new DOMDocument();
-		    $this->doc->load('data.xml');
-		    $this->xp = new DOMXPath($this->doc);
-		    $this->pageNodes = $this->xp->query('/data/page');
-		    $this->pageNode = $this->xp->query('/data/page[@href="' . $this->page . '"]')->item(0);
-	    }
-	    
-	    function title() {
-	        if (isset($this->pageNode)) {
-	            $title = $this->pageNode->getAttribute('title');
-	        } else {
-	            $title = 'Page not found';
-	        }
-	        echo($title);
-	    }
-	    
-	    function nav() {
-	        $nav = '';
-	        
-	        // Prepares the navigation links
-	        foreach ($this->pageNodes as $node) {
-	            $href = $node->getAttribute('href');
-	            $title = $node->getAttribute('title');
-	            $nav .= '<li><a href="' . ($href == '/' ? '#' : '#!' . $href) . '"' 
-	                . ($this->page == $href ? ' class="selected"' : '') . '>' 
-	                . $title . '</a></li>';
-	        }
-	        echo($nav);
-	    }
-	
-	    function content() {
-	        $content = '';
-	        
-	        // Prepares the content with support for a simple "More..." link
-	        if (isset($this->pageNode)) {
-	            foreach ($this->pageNode->childNodes as $node) {
-	                if (!isset($this->parameters['more']) && $node->nodeType == XML_COMMENT_NODE && $node->nodeValue == ' page break ') {
-	                    $content .= '<p><a href="' . ($this->page == '/' ? '#' : '#!' . $this->page) . '&amp;more=true">More...</a></p>';
-	                    break;
-	                } else {
-	                    $content .= $this->doc->saveXML($node);
-	                }
-	            }
-	        } else {
-	            $content .= '<p>Page not found.</p>';
-	            header("HTTP/1.0 404 Not Found");
-	        }
-	        echo($content);
-	    }
-	} 
-	
-	$crawling = new Crawling();
+            $arr = explode('?', $fragment);
+            if (count($arr) > 1) {
+                parse_str($arr[1], $this->parameters);
+            }
+        
+            // Adds support for both /name and /?page=name
+            if (isset($this->parameters['page'])) {
+                $this->page = '/?page=' . $this->parameters['page'];
+            } else {
+                $this->page = $arr[0];
+            }
+            
+            // Loads the data file
+            $this->doc = new DOMDocument();
+            $this->doc->load('data.xml');
+            $this->xp = new DOMXPath($this->doc);
+            $this->nodes = $this->xp->query('/data/page');
+            $this->node = $this->xp->query('/data/page[@href="' . $this->page . '"]')->item(0);
+        }
+        
+        function title() {
+            if (isset($this->node)) {
+                $title = $this->node->getAttribute('title');
+            } else {
+                $title = 'Page not found';
+            }
+            echo($title);
+        }
+        
+        function nav() {
+            $str = '';
+            
+            // Prepares the navigation links
+            foreach ($this->nodes as $node) {
+                $href = $node->getAttribute('href');
+                $title = $node->getAttribute('title');
+                $str .= '<li><a href="' . $this->base() . ($href == '/' ? '' : '?' . self::fragment . '=' . urlencode(html_entity_decode($href))) . '"' 
+                    . ($this->page == $href ? ' class="selected"' : '') . '>' 
+                    . $title . '</a></li>';
+            }
+            echo($str);
+        }
+    
+        function content() {
+            $str = '';
+            
+            // Prepares the content with support for a simple "More..." link
+            if (isset($this->node)) {
+                foreach ($this->node->childNodes as $node) {
+                    if (!isset($this->parameters['more']) && $node->nodeType == XML_COMMENT_NODE && $node->nodeValue == ' page break ') {
+                        $str .= '<p><a href="?' . self::fragment . '=' . $this->page . 
+                            urlencode((count($this->parameters) == 0 ? '?' : '&') . 'more=true') . '">More...</a></p>';
+                        break;
+                    } else {
+                        $str .= $this->doc->saveXML($node);
+                    }
+                }
+            } else {
+                $str .= '<p>Page not found.</p>';
+                header("HTTP/1.0 404 Not Found");
+            }
+            $str = preg_replace('/href="(\/[^"]+)"/', 'href="' . $this->base() . '?' . self::fragment . '=$1"', $str);
+            $str = preg_replace('/href="(\/)"/', 'href="' . $this->base() . '"', $str);
+            echo($str);
+        }
+
+        function base() {
+            return substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
+        }
+    }
+    
+    $crawling = new Crawling();
 
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title><?php $crawling->title(); ?> | jQuery Address Crawling</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta name="fragment" content="!">
+        <title><?php $crawling->title(); ?> | jQuery Address Crawling</title>
         <link type="text/css" href="styles.css" rel="stylesheet">
         <script type="text/javascript">
             if (/Android|iPad|iPhone/.test(navigator.platform)) 
@@ -94,11 +102,11 @@
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="jquery.address-1.2rc.min.js?crawlable=true"></script>
         <script type="text/javascript">
-            
+        
             $.address.init(function(event) {
 
                 // Initializes plugin support for links
-                $('.nav a').address();
+                $('a').crawlable('<?php echo($crawling->base()); ?>').address();
 
             }).change(function(event) {
 
@@ -116,6 +124,7 @@
 
                 var handler = function(data) {
                     $('.content').html($('.content', data).html()).parent().show();
+                    $('.content a').crawlable('<?php echo($crawling->base()); ?>');
                     $.address.title(/>([^<]*)<\/title/.exec(data)[1]);
                 };
 
@@ -126,15 +135,15 @@
                         handler($(XMLHttpRequest.responseText));
                     },
                     success: function(data, textStatus, XMLHttpRequest) {
-                    	handler(data);
-	                }
+                        handler(data);
+                    }
                 });
 
             });
             
             // Hides the page during initialization
             document.write('<style type="text/css"> .page { display: none; } </style>');
-
+            
         </script>
     </head>
     <body>
