@@ -78,7 +78,8 @@
         }
 
         function base() {
-            return substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
+        	$arr = explode('?', $_SERVER['REQUEST_URI']);
+        	return $arr[0];
         }
     }
     
@@ -106,7 +107,7 @@
             $.address.init(function(event) {
 
                 // Initializes plugin support for links
-                $('a').crawlable('<?php echo($crawling->base()); ?>').address();
+                $('a:not([href^=http])').crawlable().address();
 
             }).change(function(event) {
 
@@ -124,7 +125,7 @@
 
                 var handler = function(data) {
                     $('.content').html($('.content', data).html()).parent().show();
-                    $('.content a').crawlable('<?php echo($crawling->base()); ?>');
+                    $('.content a:not([href^=http])').crawlable();
                     $.address.title(/>([^<]*)<\/title/.exec(data)[1]);
                 };
 

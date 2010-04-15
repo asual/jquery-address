@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-04-14 16:11:06 +0300 (Wed, 14 Apr 2010)
+ * Date: 2010-04-15 10:20:08 +0300 (Thu, 15 Apr 2010)
  */
 (function() {
 
