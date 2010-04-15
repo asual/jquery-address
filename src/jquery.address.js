@@ -578,24 +578,29 @@
     
     $.fn.address = function (fn) {
         var f = function() {
-            var value = fn ? fn.call(this) : 
-                /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
-                $(this).attr('href').replace(/^#\!?/, '');
-            $.address.value(value);
-            return false;
+            if ($(this).is('a')) {
+                var value = fn ? fn.call(this) : 
+                    /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
+                    $(this).attr('href').replace(/^#\!?/, '');
+                $.address.value(value);
+                return false;
+            }
         };
         $(this).click(f).live('click', f);
         $(this).live('submit', function() {
-            var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $(this).serialize();
-            $.address.value(value);
-            return false;
+            if ($(this).is('form')) {
+                var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $(this).serialize();
+                $.address.value(value);
+                return false;
+            }
         });
         return this;
     };
     
-    $.fn.crawlable = function(base) {
+    $.fn.crawlable = function() {
+        var base = top.location.pathname.replace(/\/$/, '');
         $(this).each(function() {
-            var href = $(this).attr('href').replace(base, '');
+            var href = $(this).attr('href').replace(new RegExp(base + '/?$'), '');
             $(this).attr('href', '#' + decodeURIComponent(href.replace(/(.*)\?_escaped_fragment_=(.*)$/, '!$2')));
         });
         return this;
