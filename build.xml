@@ -32,34 +32,20 @@
     </target>
     
     <target name="dist">
-        <echo message="Cleaning dist..." />
         <delete includeemptydirs="true">
             <fileset dir="${dist.dir}" includes="**/*" />
         </delete>
-        <echo message="Validating files..." />
         <antcall target="validate">
             <param name="file" value="${src.dir}/${name}" />
         </antcall>
-        <antcall target="validate">
-            <param name="file" value="${src.dir}/${optimizer}" />
-        </antcall>
-        <echo message="Copying files..." />
         <copy todir="${dist.dir}">
             <fileset dir="${src.dir}"/>
         </copy>
-        <echo message="Processing files..." />
         <antcall target="process">
             <param name="file" value="${dist.dir}/${name}" />
         </antcall>
-        <antcall target="process">
-            <param name="file" value="${dist.dir}/${optimizer}" />
-        </antcall>
-        <echo message="Compressing files..." />
         <antcall target="compress">
             <param name="file" value="${dist.dir}/${name}-${version}.min.js" />
-        </antcall>
-        <antcall target="compress">
-            <param name="file" value="${dist.dir}/${optimizer}-${version}.min.js" />
         </antcall>
     </target>
     

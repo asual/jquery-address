@@ -101,7 +101,7 @@
                         '</style>');
         </script> 
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.2rc.min.js?crawlable=true"></script>
+        <script type="text/javascript" src="jquery.address-1.2.min.js?crawlable=true"></script>
         <script type="text/javascript">
         
             $.address.init(function(event) {
