@@ -112,7 +112,7 @@
             },
             _track = function() {
                 var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + 
-                        _dc(_strict(_local(_value, FALSE), FALSE))).replace(/\/\//, '/').replace(/^\/$/, ''),
+                    ($.address ? $.address.value() : '')).replace(/\/\//, '/').replace(/^\/$/, ''),
                     fn = window[_opts.tracker];
                 if (typeof fn == FUNCTION) {
                     fn(value);

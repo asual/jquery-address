@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-04-15 13:11:51 +0300 (Thu, 15 Apr 2010)
+ * Date: 2010-04-15 13:41:16 +0300 (Thu, 15 Apr 2010)
  */
 (function ($) {
 
@@ -112,7 +112,7 @@
             },
             _track = function() {
                 var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + 
-                        _dc(_strict(_local(_value, FALSE), FALSE))).replace(/\/\//, '/').replace(/^\/$/, ''),
+                    ($.address ? $.address.value() : '')).replace(/\/\//, '/').replace(/^\/$/, ''),
                     fn = window[_opts.tracker];
                 if (typeof fn == FUNCTION) {
                     fn(value);
