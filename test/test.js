@@ -63,6 +63,7 @@ asyncTest("Query test", function() {
 
 asyncTest("Parameter test", function() {
     setTimeout(function() {
+        $.address.parameter('a', null);
         $.address.parameter('p', 1);
         equals($.address.value(), '/test?p=1');
         equals($.address.queryString(), 'p=1');

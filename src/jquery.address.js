@@ -518,7 +518,7 @@
                             params.push(n + '=' + v[j]);
                         }
                     }
-                    if ($.inArray(name, names) == -1) {
+                    if ($.inArray(name, names) == -1 && value !== null && value != '') {
                         params.push(name + '=' + value);
                     }
                     this.queryString(params.join('&'));

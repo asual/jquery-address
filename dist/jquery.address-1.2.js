@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-04-15 13:41:16 +0300 (Thu, 15 Apr 2010)
+ * Date: 2010-04-21 00:16:10 +0300 (Wed, 21 Apr 2010)
  */
 (function ($) {
 
@@ -518,7 +518,7 @@
                             params.push(n + '=' + v[j]);
                         }
                     }
-                    if ($.inArray(name, names) == -1) {
+                    if ($.inArray(name, names) == -1 && value !== null && value != '') {
                         params.push(name + '=' + value);
                     }
                     this.queryString(params.join('&'));
