@@ -29,6 +29,10 @@
             $this->xp = new DOMXPath($this->doc);
             $this->nodes = $this->xp->query('/data/page');
             $this->node = $this->xp->query('/data/page[@href="' . $this->page . '"]')->item(0);
+            
+            if (!isset($this->node)) {
+                header("HTTP/1.0 404 Not Found");
+            }
         }
         
         function title() {
@@ -70,7 +74,6 @@
                 }
             } else {
                 $str .= '<p>Page not found.</p>';
-                header("HTTP/1.0 404 Not Found");
             }
             $str = preg_replace('/href="(\/[^"]+)"/', 'href="' . $this->base() . '?' . self::fragment . '=$1"', $str);
             $str = preg_replace('/href="(\/)"/', 'href="' . $this->base() . '"', $str);
@@ -133,7 +136,7 @@
                 $.ajax({
                     url: location.pathname + '?<?php echo(Crawling::fragment); ?>=' + encodeURIComponent(event.value),
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
-                        handler($(XMLHttpRequest.responseText));
+                        handler(XMLHttpRequest.responseText);
                     },
                     success: function(data, textStatus, XMLHttpRequest) {
                         handler(data);
