@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-04-21 00:16:10 +0300 (Wed, 21 Apr 2010)
+ * Date: 2010-04-21 23:54:54 +0300 (Wed, 21 Apr 2010)
  */
 (function ($) {
 
@@ -114,14 +114,14 @@
                 var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + 
                     ($.address ? $.address.value() : '')).replace(/\/\//, '/').replace(/^\/$/, ''),
                     fn = window[_opts.tracker];
-                if (typeof fn == FUNCTION) {
-                    fn(value);
-                } else if (typeof _gaq != UNDEFINED && typeof _gaq.push == FUNCTION) {
-                    _gaq.push(['_trackPageview', value]);
-                } else if (typeof pageTracker != UNDEFINED && typeof pageTracker._trackPageview == FUNCTION) {
-                    pageTracker._trackPageview(value);
-                } else if (typeof urchinTracker == FUNCTION) {
-                    urchinTracker(value);
+                if (typeof _t[fn] == FUNCTION) {
+                    _t[fn](value);
+                } else if (typeof _t.urchinTracker == FUNCTION) {
+                    _t.urchinTracker(value);
+                } else if (typeof _t.pageTracker != UNDEFINED && typeof _t.pageTracker._trackPageview == FUNCTION) {
+                    _t.pageTracker._trackPageview(value);
+                } else if (typeof _t._gaq != UNDEFINED && typeof _t._gaq.push == FUNCTION) {
+                    _t._gaq.push(['_trackPageview', value]);
                 }
             },
             _html = function() {
