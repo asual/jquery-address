@@ -34,8 +34,8 @@
                 });
             }).internalChange(function(event) {
                 log('internalChange: "' + event.value + '"');
-            }).externalChange(function(event) {
-                log('externalChange: "' + event.value + '"');
+            }).bind('externalChange', {msg: 'The value of the event is "{value}".'}, function(event) {
+                log('externalChange: ' + event.data.msg.replace(/\{value\}/, event.value));
             });
             
         </script>
