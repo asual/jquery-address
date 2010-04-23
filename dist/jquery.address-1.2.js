@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-04-22 00:15:17 +0300 (Thu, 22 Apr 2010)
+ * Date: 2010-04-24 00:15:14 +0300 (Sat, 24 Apr 2010)
  */
 (function ($) {
 
@@ -34,9 +34,7 @@
                 );
             },
             _bind = function(value, data, fn) {
-                if (fn || data) {
-                    $($.address).bind(value, fn || data, fn && data);
-                }
+                $($.address).bind(value, data, fn);
                 return $.address;
             },
             _hash = function() {
@@ -334,17 +332,20 @@
         }
 
         return {
-            init: function(data, fn) {
-                return _bind(INIT, data, fn);
+            bind: function(type, data, fn) {
+                return _bind(type, data, fn);
             },
-            change: function(data, fn) {
-                return _bind(CHANGE, data, fn);
+            init: function(fn) {
+                return _bind(INIT, fn);
             },
-            internalChange: function(data, fn) {
-                return _bind(INTERNAL_CHANGE, data, fn);
+            change: function(fn) {
+                return _bind(CHANGE, fn);
             },
-            externalChange: function(data, fn) {
-                return _bind(EXTERNAL_CHANGE, data, fn);
+            internalChange: function(fn) {
+                return _bind(INTERNAL_CHANGE, fn);
+            },
+            externalChange: function(fn) {
+                return _bind(EXTERNAL_CHANGE, fn);
             },
             baseURL: function() {
                 var url = _l.href;
@@ -576,7 +577,7 @@
         
     })();
     
-    $.fn.address = function (fn) {
+    $.fn.address = function(fn) {
         var f = function() {
             if ($(this).is('a')) {
                 var value = fn ? fn.call(this) : 
