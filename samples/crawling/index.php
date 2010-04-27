@@ -99,13 +99,6 @@
         <meta name="fragment" content="!">
         <title><?php $crawling->title(); ?> | jQuery Address Crawling</title>
         <link type="text/css" href="styles.css" rel="stylesheet">
-        <script type="text/javascript">
-            if (/Android|iPad|iPhone/.test(navigator.platform)) 
-                document.write('<style type="text/css" media="screen">' + 
-                        'body { -webkit-text-size-adjust: none; } ' +
-                        '.nav a:hover { background: none; text-decoration: underline; color: #fff; } ' + 
-                        '</style>');
-        </script> 
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="jquery.address-1.2.min.js?crawlable=true"></script>
         <script type="text/javascript">
@@ -114,6 +107,8 @@
 
                 // Initializes plugin support for links
                 $('a:not([href^=http])').address();
+
+                // Adds a simple hover effect
                 $('.nav a').hover(function() {
                     $(this).addClass('hover');
                 }, function() {
