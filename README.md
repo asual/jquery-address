@@ -42,8 +42,7 @@ link that has a rel attribute in the following format:
 
 - New queryString, parameter and path setters.
 - New autoUpdate, crawling and wrap options.
-- New bind method.
-- New crawlable function.
+- New generic bind method.
 - New Accordion, Crawling and Form samples.
 - Support for hash fragments as a part of the value.
 - Basic support for forms.
