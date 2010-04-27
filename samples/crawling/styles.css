@@ -14,12 +14,6 @@ body {
     padding: 0;
     color: #FFF; 
 }
-.page a {
-    color: #176092;
-}
-.page a:hover {
-    color: #000;
-}
 .nav {
     height: 20px;
     margin: 0 0 10px;
@@ -45,13 +39,13 @@ body {
     line-height: 20px;
     color: #fff;
 }
-.nav a:hover {
+.nav a:focus {
+    outline: none;
+}
+.nav a.hover {
     background: #5db0e6;
     text-decoration: none;
     color: #fff;
-}
-.nav a:focus {
-    outline: none;
 }
 .nav .selected {
     background: #176092;
@@ -89,4 +83,10 @@ body {
 }
 .content li { 
     margin: 0 0 10px;
+}
+.content a {
+    color: #176092;
+}
+.content a:hover {
+    color: #000;
 }

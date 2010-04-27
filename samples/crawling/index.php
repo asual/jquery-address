@@ -35,6 +35,11 @@
             }
         }
         
+        function base() {
+            $arr = explode('?', $_SERVER['REQUEST_URI']);
+            return preg_replace('/\/$/', '', $arr[0]);
+        }
+        
         function title() {
             if (isset($this->node)) {
                 $title = $this->node->getAttribute('title');
@@ -51,7 +56,7 @@
             foreach ($this->nodes as $node) {
                 $href = $node->getAttribute('href');
                 $title = $node->getAttribute('title');
-                $str .= '<li><a href="' . $this->base() . ($href == '/' ? '' : '?' . self::fragment . '=' . urlencode(html_entity_decode($href))) . '"' 
+                $str .= '<li><a href="' . $this->base() . ($href == '/' ? '' : '/?' . self::fragment . '=' . urlencode(html_entity_decode($href))) . '"' 
                     . ($this->page == $href ? ' class="selected"' : '') . '>' 
                     . $title . '</a></li>';
             }
@@ -65,8 +70,8 @@
             if (isset($this->node)) {
                 foreach ($this->node->childNodes as $node) {
                     if (!isset($this->parameters['more']) && $node->nodeType == XML_COMMENT_NODE && $node->nodeValue == ' page break ') {
-                        $str .= '<p><a href="?' . self::fragment . '=' . $this->page . 
-                            urlencode((count($this->parameters) == 0 ? '?' : '&') . 'more=true') . '">More...</a></p>';
+                        $str .= '<p><a href="' . $this->page . 
+                            (count($this->parameters) == 0 ? '?' : '&') . 'more=true' . '">More...</a></p>';
                         break;
                     } else {
                         $str .= $this->doc->saveXML($node);
@@ -75,14 +80,12 @@
             } else {
                 $str .= '<p>Page not found.</p>';
             }
-            $str = preg_replace('/href="(\/[^"]+)"/', 'href="' . $this->base() . '?' . self::fragment . '=$1"', $str);
-            $str = preg_replace('/href="(\/)"/', 'href="' . $this->base() . '"', $str);
-            echo($str);
+            
+            echo(preg_replace_callback('/href="(\/[^"]+|\/)"/', 'self::callback', $str));
         }
-
-        function base() {
-        	$arr = explode('?', $_SERVER['REQUEST_URI']);
-        	return $arr[0];
+        
+        private function callback($m) {
+        	return 'href="' . ($m[1] == '/' ? $this->base() : ($this->base() . '/?' . self::fragment . '=' . urlencode($m[1]))) . '"';
         }
     }
     
@@ -110,7 +113,12 @@
             $.address.init(function(event) {
 
                 // Initializes plugin support for links
-                $('a:not([href^=http])').crawlable().address();
+                $('a:not([href^=http])').address();
+                $('.nav a').hover(function() {
+                    $(this).addClass('hover');
+                }, function() {
+                    $(this).removeClass('hover');
+                });
 
             }).change(function(event) {
 
@@ -128,7 +136,6 @@
 
                 var handler = function(data) {
                     $('.content').html($('.content', data).html()).parent().show();
-                    $('.content a:not([href^=http])').crawlable();
                     $.address.title(/>([^<]*)<\/title/.exec(data)[1]);
                 };
 
