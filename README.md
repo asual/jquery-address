@@ -38,7 +38,7 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
-### 04/24/2010 - jQuery Address 1.2
+### 05/05/2010 - jQuery Address 1.2
 
 - New queryString, parameter and path setters.
 - New autoUpdate, crawling and wrap options.
