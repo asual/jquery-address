@@ -81,7 +81,7 @@
                 $str .= '<p>Page not found.</p>';
             }
             
-            echo(preg_replace_callback('/href="(\/[^"]+|\/)"/', 'self::callback', $str));
+            echo(preg_replace_callback('/href="(\/[^"]+|\/)"/', array(get_class($this), 'callback'), $str));
         }
         
         private function callback($m) {
