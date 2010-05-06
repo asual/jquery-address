@@ -226,7 +226,7 @@
             _unescape = function() {
                 var base = _l.pathname.replace(/\/$/, ''),
                     fragment = '_escaped_fragment_';
-                $('a:not([href^=http])', this).each(function() {
+                $('a[href]:not([href^=http])', this).each(function() {
                     var href = $(this).attr('href').replace(new RegExp(base + '/?$'), '');
                     if (href == '' || href.indexOf(fragment) != -1) {
                         $(this).attr('href', '#' + decodeURIComponent(href.replace(new RegExp('/(.*)\\?' + fragment + '=(.*)$'), '!$2')));
