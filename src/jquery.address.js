@@ -525,14 +525,14 @@
                             v = [v];
                         }
                         if (n == name) {
-                            v = (value === null || value == '') ? [] : 
+                            v = (value === null || value === '') ? [] : 
                                 (append ? v.concat([value]) : [value]);
                         }
                         for (var j = 0; j < v.length; j++) {
                             params.push(n + '=' + v[j]);
                         }
                     }
-                    if ($.inArray(name, names) == -1 && value !== null && value != '') {
+                    if ($.inArray(name, names) == -1 && value !== null && value !== '') {
                         params.push(name + '=' + value);
                     }
                     this.queryString(params.join('&'));
