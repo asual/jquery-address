@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-05-05 08:15:54 +0300 (Wed, 05 May 2010)
+ * Date: 2010-05-06 11:17:07 +0300 (Thu, 06 May 2010)
  */
 (function ($) {
 
@@ -226,7 +226,7 @@
             _unescape = function() {
                 var base = _l.pathname.replace(/\/$/, ''),
                     fragment = '_escaped_fragment_';
-                $('a:not([href^=http])', this).each(function() {
+                $('a[href]:not([href^=http])', this).each(function() {
                     var href = $(this).attr('href').replace(new RegExp(base + '/?$'), '');
                     if (href == '' || href.indexOf(fragment) != -1) {
                         $(this).attr('href', '#' + decodeURIComponent(href.replace(new RegExp('/(.*)\\?' + fragment + '=(.*)$'), '!$2')));
@@ -525,14 +525,14 @@
                             v = [v];
                         }
                         if (n == name) {
-                            v = (value === null || value == '') ? [] : 
+                            v = (value === null || value === '') ? [] : 
                                 (append ? v.concat([value]) : [value]);
                         }
                         for (var j = 0; j < v.length; j++) {
                             params.push(n + '=' + v[j]);
                         }
                     }
-                    if ($.inArray(name, names) == -1 && value !== null && value != '') {
+                    if ($.inArray(name, names) == -1 && value !== null && value !== '') {
                         params.push(name + '=' + value);
                     }
                     this.queryString(params.join('&'));
