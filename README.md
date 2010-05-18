@@ -38,6 +38,11 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
+### 05/18/2010 - jQuery Address 1.2.1
+
+- Issue 6: Using <a> without href attr causes error.
+- Issue 5: Setting parameter = 0 removes it from address.
+
 ### 05/05/2010 - jQuery Address 1.2
 
 - New queryString, parameter and path setters.
