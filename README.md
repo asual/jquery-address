@@ -40,7 +40,7 @@ link that has a rel attribute in the following format:
 
 ### 05/18/2010 - jQuery Address 1.2.1
 
-- Issue 6: Using <a> without href attr causes error.
+- Issue 6: Using links without a href attribute causes an error.
 - Issue 5: Setting parameter = 0 removes it from address.
 
 ### 05/05/2010 - jQuery Address 1.2
