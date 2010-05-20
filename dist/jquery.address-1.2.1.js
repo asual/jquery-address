@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-05-18 15:32:26 +0300 (Tue, 18 May 2010)
+ * Date: 2010-05-20 09:39:26 +0300 (Thu, 20 May 2010)
  */
 (function ($) {
 
@@ -226,12 +226,14 @@
             _unescape = function() {
                 var base = _l.pathname.replace(/\/$/, ''),
                     fragment = '_escaped_fragment_';
-                $('a[href]:not([href^=http])', this).each(function() {
-                    var href = $(this).attr('href').replace(new RegExp(base + '/?$'), '');
-                    if (href == '' || href.indexOf(fragment) != -1) {
-                        $(this).attr('href', '#' + decodeURIComponent(href.replace(new RegExp('/(.*)\\?' + fragment + '=(.*)$'), '!$2')));
-                    }
-                });
+                if ($('body').html().indexOf(fragment) != -1) {
+                    $('a[href]:not([href^=http])', this).each(function() {
+                        var href = $(this).attr('href').replace(new RegExp(base + '/?$'), '');
+                        if (href == '' || href.indexOf(fragment) != -1) {
+                            $(this).attr('href', '#' + decodeURIComponent(href.replace(new RegExp('/(.*)\\?' + fragment + '=(.*)$'), '!$2')));
+                        }
+                    });
+                }
             },
             ID = 'jQueryAddress',
             FUNCTION = 'function',

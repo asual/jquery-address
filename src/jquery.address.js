@@ -224,9 +224,9 @@
                 }
             },
             _unescape = function() {
-                if ($('body').html().indexOf(fragment) != -1) {
-                    var base = _l.pathname.replace(/\/$/, ''),
+                var base = _l.pathname.replace(/\/$/, ''),
                     fragment = '_escaped_fragment_';
+                if ($('body').html().indexOf(fragment) != -1) {
                     $('a[href]:not([href^=http])', this).each(function() {
                         var href = $(this).attr('href').replace(new RegExp(base + '/?$'), '');
                         if (href == '' || href.indexOf(fragment) != -1) {
