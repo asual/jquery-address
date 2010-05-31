@@ -2,7 +2,7 @@
     
     function form($name) {
     	if (isset($_REQUEST[$name])) {
-            echo($name . ': ' . $_REQUEST[$name] . PHP_EOL);
+            echo($name . ': ' . $_REQUEST[$name] . '<br>');
     	}
     }
     
