@@ -603,7 +603,7 @@
             }
         };
         $(this).click(f).live('click', f);
-        $(this).live('submit', function() {
+        $(this).submit(function() {
             if ($(this).is('form')) {
                 var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $(this).serialize();
                 $.address.value(value);
