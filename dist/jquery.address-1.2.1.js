@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-05-20 09:39:26 +0300 (Thu, 20 May 2010)
+ * Date: 2010-05-31 17:11:11 +0300 (Mon, 31 May 2010)
  */
 (function ($) {
 
@@ -603,7 +603,7 @@
             }
         };
         $(this).click(f).live('click', f);
-        $(this).live('submit', function() {
+        $(this).submit(function() {
             if ($(this).is('form')) {
                 var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $(this).serialize();
                 $.address.value(value);
