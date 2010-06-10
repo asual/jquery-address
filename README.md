@@ -38,6 +38,11 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
+### 06/10/2010 - jQuery Address 1.2.2
+
+- Fixed lazy loading support.
+- Fixed form submission support in IE.
+
 ### 05/18/2010 - jQuery Address 1.2.1
 
 - Issue 6: Using links without a href attribute causes an error.
