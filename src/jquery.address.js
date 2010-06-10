@@ -131,6 +131,18 @@
             _load = function() {
                 if (!_loaded) {
                     _loaded = TRUE;
+                    if (_url && _qi != -1) {
+                        var param, params = _url.substr(_qi + 1).split('&');
+                        for (i = 0; i < params.length; i++) {
+                            param = params[i].split('=');
+                            if (/^(autoUpdate|crawlable|history|strict|wrap)$/.test(param[0])) {
+                                _opts[param[0]] = (isNaN(param[1]) ? /^(true|yes)$/i.test(param[1]) : (parseInt(param[1], 10) !== 0));
+                            }
+                            if (/^tracker$/.test(param[0])) {
+                                _opts[param[0]] = param[1];
+                            }
+                        }
+                    }
                     var body = $('body').ajaxComplete(function() {
                         _unescape.call(this);
                     }).trigger('ajaxComplete');
@@ -317,23 +329,17 @@
                 history.navigationMode = 'compatible'; 
             }
             
-            if (_url && _qi != -1) {
-                var param, params = _url.substr(_qi + 1).split('&');
-                for (i = 0; i < params.length; i++) {
-                    param = params[i].split('=');
-                    if (/^(autoUpdate|crawlable|history|strict|wrap)$/.test(param[0])) {
-                        _opts[param[0]] = (isNaN(param[1]) ? /^(true|yes)$/i.test(param[1]) : (parseInt(param[1], 10) !== 0));
-                    }
-                    if (/^tracker$/.test(param[0])) {
-                        _opts[param[0]] = param[1];
-                    }
-                }
-            }
-
             if (document.readyState == 'complete') {
-                _load();
+                var interval = setInterval(function() {
+                    if ($.address) {
+                        _load();
+                        clearInterval(interval);
+                    }
+                }, 50);
+            } else {
+                $(_load);
             }
-            $(_load);
+            
             $(window).bind('unload', _unload);
             
         } else if ((!_supported && _hash() != '') || 
