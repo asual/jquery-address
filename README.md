@@ -42,6 +42,7 @@ link that has a rel attribute in the following format:
 
 - Fixed lazy loading support.
 - Fixed form submission support in IE.
+- Fixed issue with the href attribute in older versions of IE.
 
 ### 05/18/2010 - jQuery Address 1.2.1
 

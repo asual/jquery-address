@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-06-10 10:21:35 +0300 (Thu, 10 Jun 2010)
+ * Date: 2010-06-15 19:59:10 +0300 (Tue, 15 Jun 2010)
  */
 (function ($) {
 
@@ -239,8 +239,8 @@
                 var base = _l.pathname.replace(/\/$/, ''),
                     fragment = '_escaped_fragment_';
                 if ($('body').html().indexOf(fragment) != -1) {
-                    $('a[href]:not([href^=http])', this).each(function() {
-                        var href = $(this).attr('href').replace(new RegExp(base + '/?$'), '');
+                    $('a[href]:not([href^=http]), , a[href*=' + document.domain + ']', this).each(function() {
+                        var href = $(this).attr('href').replace(/^http:/, '').replace(new RegExp(base + '/?$'), '');
                         if (href == '' || href.indexOf(fragment) != -1) {
                             $(this).attr('href', '#' + decodeURIComponent(href.replace(new RegExp('/(.*)\\?' + fragment + '=(.*)$'), '!$2')));
                         }
