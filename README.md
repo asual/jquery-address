@@ -40,6 +40,7 @@ link that has a rel attribute in the following format:
 
 ### 06/10/2010 - jQuery Address 1.2.2
 
+- Issue 10: Cannot turn off google analytics page tracking
 - Fixed lazy loading support.
 - Fixed form submission support in IE.
 - Fixed issue with the href attribute in older versions of IE.
