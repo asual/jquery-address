@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-06-15 19:59:10 +0300 (Tue, 15 Jun 2010)
+ * Date: 2010-06-16 17:56:58 +0300 (Wed, 16 Jun 2010)
  */
 (function ($) {
 
@@ -109,17 +109,19 @@
                 _st(_track, 10);
             },
             _track = function() {
-                var value = (_l.pathname + (/\/$/.test(_l.pathname) ? '' : '/') + 
-                    ($.address ? $.address.value() : '')).replace(/\/\//, '/').replace(/^\/$/, ''),
-                    fn = _t[_opts.tracker];
-                if (typeof fn == FUNCTION) {
-                    fn(value);
-                } else if (typeof urchinTracker == FUNCTION) {
-                    urchinTracker(value);
-                } else if (typeof pageTracker != UNDEFINED && typeof pageTracker._trackPageview == FUNCTION) {
-                    pageTracker._trackPageview(value);
-                } else if (typeof _gaq != UNDEFINED && typeof _gaq.push == FUNCTION) {
-                    _gaq.push(['_trackPageview', value]);
+                if (_opts.tracker !== 'null' && _opts.tracker !== null) {
+                    var fn = _t[_opts.tracker],
+                        value = (_l.pathname + ($.address ? $.address.value() : ''))
+                            .replace(/\/\//, '/').replace(/^\/$/, '');
+                    if (typeof fn == FUNCTION) {
+                        fn(value);
+                    } else if (typeof urchinTracker == FUNCTION) {
+                        urchinTracker(value);
+                    } else if (typeof pageTracker != UNDEFINED && typeof pageTracker._trackPageview == FUNCTION) {
+                        pageTracker._trackPageview(value);
+                    } else if (typeof _gaq != UNDEFINED && typeof _gaq.push == FUNCTION) {
+                        _gaq.push(['_trackPageview', value]);
+                    }
                 }
             },
             _html = function() {
