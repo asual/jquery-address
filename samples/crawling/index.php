@@ -37,7 +37,7 @@
         
         function base() {
             $arr = explode('?', $_SERVER['REQUEST_URI']);
-            return preg_replace('/\/$/', '', $arr[0]);
+            return $arr[0] != '/' ? preg_replace('/\/$/', '', $arr[0]) : $arr[0];
         }
         
         function title() {
