@@ -146,6 +146,7 @@
                         }
                     }
                     var body = $('body').ajaxComplete(function() {
+                        _enable.call(this);
                         _unescape.call(this);
                     }).trigger('ajaxComplete');
                     if (_opts.wrap) {
@@ -227,8 +228,11 @@
                         _si(_listen, 50);
                     }
                     
-                    $('a').filter('[rel*=address:]').address();
+                    _enable();
                 }
+            },
+            _enable = function() {
+                $('a').filter('[rel*=address:]').address();
             },
             _unload = function() {
                 if (_t.removeEventListener) {
@@ -597,27 +601,28 @@
                 return arr.slice(1, arr.length).join('#');
             }            
         };
-        
+      
     })();
     
     $.fn.address = function(fn) {
-        var f = function() {
-            if ($(this).is('a')) {
-                var value = fn ? fn.call(this) : 
-                    /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
-                    $(this).attr('href').replace(/^#\!?/, '');
-                $.address.value(value);
-                return false;
-            }
-        };
-        $(this).click(f).live('click', f);
-        $(this).submit(function() {
-            if ($(this).is('form')) {
-                var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $(this).serialize();
-                $.address.value(value);
-                return false;
-            }
-        });
+        if (!$(this).attr('address')) {
+	        var f = function() {
+	            if ($(this).is('a')) {
+	                var value = fn ? fn.call(this) : 
+	                    /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
+	                    $(this).attr('href').replace(/^#\!?/, '');
+	                $.address.value(value);
+	                return false;
+	            }
+	        };
+	    	$(this).click(f).live('click', f).submit(function() {
+	            if ($(this).is('form')) {
+	                var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $(this).serialize();
+	                $.address.value(value);
+	                return false;
+	            }
+	        }).attr('address', true);
+        }
         return this;
     };
     
