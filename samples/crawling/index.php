@@ -56,7 +56,7 @@
             foreach ($this->nodes as $node) {
                 $href = $node->getAttribute('href');
                 $title = $node->getAttribute('title');
-                $str .= '<li><a href="' . $this->base() . ($href == '/' ? '' : '/?' . self::fragment . '=' . urlencode(html_entity_decode($href))) . '"' 
+                $str .= '<li><a href="' . $this->base() . ($href == '/' ? '' : '?' . self::fragment . '=' . urlencode(html_entity_decode($href))) . '"' 
                     . ($this->page == $href ? ' class="selected"' : '') . '>' 
                     . $title . '</a></li>';
             }
@@ -85,7 +85,7 @@
         }
         
         private function callback($m) {
-        	return 'href="' . ($m[1] == '/' ? $this->base() : ($this->base() . '/?' . self::fragment . '=' . urlencode($m[1]))) . '"';
+        	return 'href="' . ($m[1] == '/' ? $this->base() : ($this->base() . '?' . self::fragment . '=' . urlencode($m[1]))) . '"';
         }
     }
     
