@@ -606,22 +606,22 @@
     
     $.fn.address = function(fn) {
         if (!$(this).attr('address')) {
-	        var f = function() {
-	            if ($(this).is('a')) {
-	                var value = fn ? fn.call(this) : 
-	                    /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
-	                    $(this).attr('href').replace(/^#\!?/, '');
-	                $.address.value(value);
-	                return false;
-	            }
-	        };
-	    	$(this).click(f).live('click', f).submit(function() {
-	            if ($(this).is('form')) {
-	                var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $(this).serialize();
-	                $.address.value(value);
-	                return false;
-	            }
-	        }).attr('address', true);
+            var f = function() {
+                if ($(this).is('a')) {
+                    var value = fn ? fn.call(this) : 
+                        /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
+                        $(this).attr('href').replace(/^#\!?/, '');
+                    $.address.value(value);
+                    return false;
+                }
+            };
+            $(this).click(f).live('click', f).submit(function() {
+                if ($(this).is('form')) {
+                    var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $(this).serialize();
+                    $.address.value(value);
+                    return false;
+                }
+            }).attr('address', true);
         }
         return this;
     };
