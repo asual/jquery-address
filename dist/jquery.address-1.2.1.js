@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-07-05 00:08:08 +0300 (Mon, 05 Jul 2010)
+ * Date: 2010-07-16 08:53:19 +0300 (Fri, 16 Jul 2010)
  */
 (function ($) {
 
@@ -130,21 +130,25 @@
                 doc.write('<html><head><title>' + _d.title + '</title><script>var ' + ID + ' = "' + _hash() + '";</' + 'script></head></html>');
                 doc.close();
             },
+            _options = function() {
+                if (_url && _qi != -1) {
+                    var param, params = _url.substr(_qi + 1).split('&');
+                    for (i = 0; i < params.length; i++) {
+                        param = params[i].split('=');
+                        if (/^(autoUpdate|crawlable|history|strict|wrap)$/.test(param[0])) {
+                            _opts[param[0]] = (isNaN(param[1]) ? /^(true|yes)$/i.test(param[1]) : (parseInt(param[1], 10) !== 0));
+                        }
+                        if (/^tracker$/.test(param[0])) {
+                            _opts[param[0]] = param[1];
+                        }
+                    }
+                    _url = null;
+                }
+            },
             _load = function() {
                 if (!_loaded) {
                     _loaded = TRUE;
-                    if (_url && _qi != -1) {
-                        var param, params = _url.substr(_qi + 1).split('&');
-                        for (i = 0; i < params.length; i++) {
-                            param = params[i].split('=');
-                            if (/^(autoUpdate|crawlable|history|strict|wrap)$/.test(param[0])) {
-                                _opts[param[0]] = (isNaN(param[1]) ? /^(true|yes)$/i.test(param[1]) : (parseInt(param[1], 10) !== 0));
-                            }
-                            if (/^tracker$/.test(param[0])) {
-                                _opts[param[0]] = param[1];
-                            }
-                        }
-                    }
+                    _options();
                     var body = $('body').ajaxComplete(function() {
                         _enable.call(this);
                         _unescape.call(this);
@@ -343,6 +347,7 @@
                     }
                 }, 50);
             } else {
+                _options();
                 $(_load);
             }
             
