@@ -330,10 +330,6 @@
             }
             
             _stack.push(_value);
-        
-            if (_msie && _l.hash != _value) {
-                _l.hash = '#' + _local(_crawl(_value, TRUE), TRUE);
-            }
             
             if (_opera) {
                 history.navigationMode = 'compatible'; 
@@ -349,6 +345,10 @@
             } else {
                 _options();
                 $(_load);
+            }
+            
+            if (_msie && _l.hash != _value) {
+                _l.hash = '#' + _local(_crawl(_value, TRUE), TRUE);
             }
             
             $(window).bind('unload', _unload);
