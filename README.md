@@ -38,9 +38,11 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
-### 06/10/2010 - jQuery Address 1.2.2
+### 07/17/2010 - jQuery Address 1.2.2
 
-- Issue 10: Cannot turn off google analytics page tracking
+- Issue 12: Fixes the opening of tab links in a new browser tab.
+- Issue 11: Fixes the rel attr handling for Ajax loaded links.
+- Issue 10: Cannot turn off Google Analytics page tracking.
 - Fixed lazy loading support.
 - Fixed form submission support in IE.
 - Fixed issue with the href attribute in older versions of IE.

@@ -1,12 +1,12 @@
 /*
- * jQuery Address Plugin v1.2.1
+ * jQuery Address Plugin v1.2.2
  * http://www.asual.com/jquery/address/
  *
  * Copyright (c) 2009-2010 Rostislav Hristov
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-07-16 08:53:19 +0300 (Fri, 16 Jul 2010)
+ * Date: 2010-07-17 18:26:18 +0300 (Sat, 17 Jul 2010)
  */
 (function ($) {
 
@@ -330,10 +330,6 @@
             }
             
             _stack.push(_value);
-        
-            if (_msie && _l.hash != _value) {
-                _l.hash = '#' + _local(_crawl(_value, TRUE), TRUE);
-            }
             
             if (_opera) {
                 history.navigationMode = 'compatible'; 
@@ -349,6 +345,10 @@
             } else {
                 _options();
                 $(_load);
+            }
+            
+            if (_msie && _l.hash != _value) {
+                _l.hash = '#' + _local(_crawl(_value, TRUE), TRUE);
             }
             
             $(window).bind('unload', _unload);
