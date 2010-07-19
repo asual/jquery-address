@@ -38,7 +38,7 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
-### 07/17/2010 - jQuery Address 1.2.2
+### 07/19/2010 - jQuery Address 1.2.2
 
 - Issue 12: Fixes the opening of tab links in a new browser tab.
 - Issue 11: Fixes the rel attr handling for Ajax loaded links.
@@ -46,6 +46,7 @@ link that has a rel attribute in the following format:
 - Fixed lazy loading support.
 - Fixed form submission support in IE.
 - Fixed issue with the href attribute in older versions of IE.
+- Tabs sample improvements.
 
 ### 05/18/2010 - jQuery Address 1.2.1
 
