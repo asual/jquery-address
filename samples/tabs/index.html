@@ -12,6 +12,11 @@
             
             var tabs,
                 overview = 'Overview';
+                linkSelector = '#tabs ul:first a',
+                contentSelector = '#tabs div:first',
+                currentSelector = function(value) {
+                    return 'a[href=#' + value + ']';
+                };
             
             if ($.address.value() == '') {
                 $.address.value(overview);
@@ -20,32 +25,34 @@
             // Address handler
             $.address.init(function(event) {
 
-                // Add the ID in a lazy manner to prevent scrolling
-                $('#tabs div:first').attr('id', overview);
+                // Adds the ID in a lazy manner to prevent scrolling
+                $(contentSelector).attr('id', overview);
                 
                 // Tabs setup
                 tabs = $('#tabs')
                     .tabs({
                         // Content filter
                         load: function(event, ui) {
-                            $(ui.panel).html($('#tabs div:first', ui.panel).html());
+                            $(ui.panel).html($(contentSelector, ui.panel).html());
                         },
-                        selected: $('#tabs ul:first a').index($('a').filter('[rel=address:' + 
-                        	    event.value + ']')),
+                        selected: $(linkSelector).index($(currentSelector(event.value))),
                         fx: { opacity: 'toggle' }
                     })
                     .css('display', 'block');
+
+                // Enables the plugin for all the tab links
+                $(linkSelector).address();
             
             }).change(function(event) {
 
                 // Sets the page title
                 $.address.title($.address.title().split(' | ')[0] + ' | ' + 
-                        $('a').filter('[rel=address:' + event.value + ']').text());
+                        $(currentSelector(event.value)).text());
 
             }).externalChange(function(event) {
 
                 // Select the proper tab
-                tabs.tabs('select', $('a').filter('[rel=address:' + event.value + ']').attr('href'));
+                tabs.tabs('select', $(currentSelector(event.value)).attr('href'));
                 
             }).history(true);
 
@@ -59,9 +66,9 @@
             <h1>jQuery Address Tabs</h1>
             <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
                 <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-                    <li class="ui-corner-top ui-tabs-selected ui-state-active"><a href="#Overview" title="Overview" rel="address:Overview">Overview</a></li>
-                    <li class="ui-corner-top ui-state-default"><a href="./features.html" title="Features" rel="address:Features">Features</a></li>
-                    <li class="ui-corner-top ui-state-default"><a href="./extras.html" title="Extras" rel="address:Extras">Extras</a></li>
+                    <li class="ui-corner-top ui-tabs-selected ui-state-active"><a href="#Overview" title="Overview">Overview</a></li>
+                    <li class="ui-corner-top ui-state-default"><a href="./features.html" title="Features">Features</a></li>
+                    <li class="ui-corner-top ui-state-default"><a href="./extras.html" title="Extras">Extras</a></li>
                 </ul>
                 <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
                     <p>
