@@ -95,11 +95,16 @@
                             }
                             _update(FALSE);
                         }
-                    } else if (_msie && _version < 7 && diff) {
-                        _l.reload();
                     } else if (diff) {
-                        _value = hash;
-                        _update(FALSE);
+                    	if (_msie && _version < 7) {
+                            _l.reload();
+                    	} else {
+                    		if (_msie && _version < 8 && _opts.history) {
+                    			_st(_html, 50);
+                    		}
+                            _value = hash;
+                            _update(FALSE);
+                    	}
                     }
                 }
             },
@@ -188,6 +193,8 @@
                         } else {
                             _frame.src = _js() + ':' + FALSE;
                             _frame.style.display = 'none';
+                            _frame.style.width = _frame.style.height = 0;
+                            _frame.style.tabIndex = -1;
                             _d.body.insertAdjacentElement('afterBegin', _frame);
                         }
                         _st(function() {
