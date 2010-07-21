@@ -194,7 +194,7 @@
                             _frame.src = _js() + ':' + FALSE;
                             _frame.style.display = 'none';
                             _frame.style.width = _frame.style.height = 0;
-                            _frame.style.tabIndex = -1;
+                            _frame.tabIndex = -1;
                             _d.body.insertAdjacentElement('afterBegin', _frame);
                         }
                         _st(function() {
