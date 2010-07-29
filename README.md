@@ -38,6 +38,11 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
+### 07/28/2010 - jQuery Address 1.3
+
+- Support for document.domain in IE6/7.
+- Fixes an issue with manual address changes in IE7.
+
 ### 07/19/2010 - jQuery Address 1.2.2
 
 - Issue 12: Fixes the opening of tab links in a new browser tab.

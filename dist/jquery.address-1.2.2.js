@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-07-17 18:26:18 +0300 (Sat, 17 Jul 2010)
+ * Date: 2010-07-29 11:39:53 +0300 (Thu, 29 Jul 2010)
  */
 (function ($) {
 
@@ -95,11 +95,16 @@
                             }
                             _update(FALSE);
                         }
-                    } else if (_msie && _version < 7 && diff) {
-                        _l.reload();
                     } else if (diff) {
-                        _value = hash;
-                        _update(FALSE);
+                        if (_msie && _version < 7) {
+                            _l.reload();
+                        } else {
+                            if (_msie && _version < 8 && _opts.history) {
+                                _st(_html, 50);
+                            }
+                            _value = hash;
+                            _update(FALSE);
+                        }
                     }
                 }
             },
@@ -125,10 +130,15 @@
                 }
             },
             _html = function() {
-                var doc = _frame.contentWindow.document;
-                doc.open();
-                doc.write('<html><head><title>' + _d.title + '</title><script>var ' + ID + ' = "' + _hash() + '";</' + 'script></head></html>');
-                doc.close();
+                var src = _js() + ':' + FALSE + ';document.open();document.writeln(\'<html><head><title>' + 
+                    _d.title + '</title><script>var ' + ID + ' = "' + _hash() + 
+                    (_d.domain != _l.host ? '";document.domain="' + _d.domain : '') + 
+                    '";</' + 'script></head></html>\');document.close();';
+                if (_version < 7) {
+                    _frame.src = src;
+                } else {
+                    _frame.contentWindow.location.replace(src);
+                }
             },
             _options = function() {
                 if (_url && _qi != -1) {
@@ -182,12 +192,12 @@
                         if (frameset) {
                             frameset.insertAdjacentElement('beforeEnd', _frame);
                             frameset[frameset.cols ? 'cols' : 'rows'] += ',0';
-                            _frame.src = _js() + ':' + FALSE;
                             _frame.noResize = TRUE;
                             _frame.frameBorder = _frame.frameSpacing = 0;
                         } else {
-                            _frame.src = _js() + ':' + FALSE;
                             _frame.style.display = 'none';
+                            _frame.style.width = _frame.style.height = 0;
+                            _frame.tabIndex = -1;
                             _d.body.insertAdjacentElement('afterBegin', _frame);
                         }
                         _st(function() {
