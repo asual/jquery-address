@@ -42,6 +42,7 @@ link that has a rel attribute in the following format:
 
 - Support for document.domain in IE6/7.
 - Fixes an issue with manual address changes in IE7.
+- Removes old IE code for local testing.
 
 ### 07/19/2010 - jQuery Address 1.2.2
 

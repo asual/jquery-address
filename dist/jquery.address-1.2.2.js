@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-07-29 11:39:53 +0300 (Thu, 29 Jul 2010)
+ * Date: 2010-08-04 08:55:59 +0300 (Wed, 04 Aug 2010)
  */
 (function ($) {
 
@@ -56,10 +56,6 @@
                     value = force ? (value.substr(0, 1) != '/' ? '/' + value : value) : (value == '' ? '/' : value);
                 }
                 return value;
-            },
-            _local = function(value, direction) {
-                return (_msie && _l.protocol == 'file:') ? 
-                    (direction ? _value.replace(/\?/, '%3F') : _value.replace(/%253F/, '?')) : value;
             },
             _crawl = function(value, direction) {
                 if (_opts.crawlable && direction) {
@@ -207,7 +203,7 @@
                                 _value = (typeof win[ID] != UNDEFINED ? win[ID] : '');
                                 if (_value != _hash()) {
                                     _update(FALSE);
-                                    _l.hash = _local(_crawl(_value, TRUE), TRUE);
+                                    _l.hash = _crawl(_value, TRUE);
                                 }
                             });
                             if (typeof _frame.contentWindow[ID] == UNDEFINED) {
@@ -357,10 +353,6 @@
                 $(_load);
             }
             
-            if (_msie && _l.hash != _value) {
-                _l.hash = '#' + _local(_crawl(_value, TRUE), TRUE);
-            }
-            
             $(window).bind('unload', _unload);
             
         } else if ((!_supported && _hash() != '') || 
@@ -503,7 +495,7 @@
                             }
                         } else if (_value != _hash()) {
                             if (_opts.history) {
-                                _l.hash = '#' + _local(_crawl(_value, TRUE), TRUE);
+                                _l.hash = '#' + _crawl(_value, TRUE);
                             } else {
                                 _l.replace('#' + _crawl(_value, TRUE));
                             }
@@ -522,7 +514,7 @@
                 if (!_supported) {
                     return null;
                 }
-                return _dc(_strict(_local(_value, FALSE), FALSE));
+                return _dc(_strict(_value, FALSE));
             },
             path: function(value) {
                 if (value !== undefined) {
