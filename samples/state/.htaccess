@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+
+# Enables mod_rewrite
+RewriteEngine on
+
+# Sets the base folder of the State sample
+RewriteBase  /jquery/address/samples/state
+
+RewriteCond  %{REQUEST_FILENAME}    !-f
+RewriteCond  %{REQUEST_FILENAME}    !-d
+RewriteRule  .*                     index.php
+
+</IfModule>
