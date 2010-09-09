@@ -1,4 +1,4 @@
-asyncTest("Value test", function() {
+asyncTest('Value test', function() {
     setTimeout(function() {
         $.address.value('/test');
         equals($.address.value(), '/test');
@@ -9,7 +9,7 @@ asyncTest("Value test", function() {
     }, 1000);
 });
 
-asyncTest("History test", function() {
+asyncTest('History test', function() {
     setTimeout(function() {
         equals($.address.value(), '/');
         setTimeout(function() {
@@ -19,7 +19,7 @@ asyncTest("History test", function() {
     }, 1000);
 });
 
-asyncTest("Path names test", function() {
+asyncTest('Path names test', function() {
     setTimeout(function() {
         equals($.address.value(), '/test');
         same($.address.pathNames(), ['test']);
@@ -27,7 +27,7 @@ asyncTest("Path names test", function() {
     }, 1000);
 });
 
-asyncTest("Path names test", function() {
+asyncTest('Path names test', function() {
     setTimeout(function() {
         $.address.value('/test/1/2/');
         same($.address.pathNames(), ['test', '1', '2']);
@@ -35,7 +35,7 @@ asyncTest("Path names test", function() {
     }, 1000);
 });
 
-asyncTest("Path names test", function() {
+asyncTest('Path names test', function() {
     setTimeout(function() {
         $.address.value('/');
         same($.address.pathNames(), []);
@@ -43,7 +43,7 @@ asyncTest("Path names test", function() {
     }, 1000);
 });
 
-asyncTest("Path names test", function() {
+asyncTest('Path names test', function() {
     setTimeout(function() {
         $.address.value('/test');
         same($.address.pathNames(), ['test']);
@@ -51,7 +51,7 @@ asyncTest("Path names test", function() {
     }, 1000);
 });
 
-asyncTest("Query test", function() {
+asyncTest('Query test', function() {
     setTimeout(function() {
         $.address.queryString('p=0');
         equals($.address.value(), '/test?p=0');
@@ -61,7 +61,7 @@ asyncTest("Query test", function() {
     }, 1000);
 });
 
-asyncTest("Parameter test", function() {
+asyncTest('Parameter test', function() {
     setTimeout(function() {
         $.address.parameter('a', null);
         $.address.parameter('p', 1);
@@ -72,7 +72,7 @@ asyncTest("Parameter test", function() {
     }, 1000);
 });
 
-asyncTest("Parameter test", function() {
+asyncTest('Parameter test', function() {
     setTimeout(function() {
         $.address.path('/test');
         $.address.parameter('p', 2, true);
@@ -84,7 +84,7 @@ asyncTest("Parameter test", function() {
     }, 1000);
 });
 
-asyncTest("Parameter test", function() {
+asyncTest('Parameter test', function() {
     setTimeout(function() {
         $.address.autoUpdate(false)
             .queryString('')
@@ -106,7 +106,7 @@ asyncTest("Parameter test", function() {
     }, 1000);
 });
 
-asyncTest("Hash test with parameters", function() {
+asyncTest('Hash test with parameters', function() {
     setTimeout(function() {
         $.address.path('/test');
         $.address.queryString('p=2&p=3&s=3');
@@ -121,13 +121,26 @@ asyncTest("Hash test with parameters", function() {
     }, 1000);
 });
 
-asyncTest("Hash test", function() {
+asyncTest('Hash test', function() {
     setTimeout(function() {
         $.address.value('/test');
         $.address.hash('comment-1');
         equals($.address.value(), '/test#comment-1');
         equals($.address.path(), '/test');
         equals($.address.hash(), 'comment-1');
+        start();
+    }, 1000);
+});
+
+asyncTest('Character test', function() {
+    setTimeout(function() {
+    	var str = 'Test mit Sonderzeichen + - / = ÖÄÜ und Leerzeichen';
+        $.address.value(str);
+        $.address.queryString('str=' + str);
+        equals($.address.value(), '/' + str + '?str=' + str);
+        equals($.address.path(), '/' + str);
+        equals($.address.queryString(), 'str=' + str);
+        equals($.address.parameter('str'), str);        
         start();
     }, 1000);
 });

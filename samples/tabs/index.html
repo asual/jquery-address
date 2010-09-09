@@ -7,7 +7,7 @@
         <link type="text/css" href="styles.css" rel="stylesheet">
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="jquery-ui-1.8.custom.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.2.2.min.js?history=false&strict=false&wrap=true"></script>
+        <script type="text/javascript" src="jquery.address-1.3.min.js?history=false&strict=false&wrap=true"></script>
         <script type="text/javascript">
             
             var tabs,
@@ -50,7 +50,7 @@
                         $(currentSelector(event.value)).text());
 
             }).externalChange(function(event) {
-
+                
                 // Select the proper tab
                 tabs.tabs('select', $(currentSelector(event.value)).attr('href'));
                 

@@ -114,6 +114,9 @@
             <param name="dir" value="${samples.dir}/form" />
         </antcall>
         <antcall target="sample">
+            <param name="dir" value="${samples.dir}/state" />
+        </antcall>
+        <antcall target="sample">
             <param name="dir" value="${samples.dir}/tabs" />
         </antcall>
     </target>
