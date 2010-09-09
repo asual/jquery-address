@@ -8,20 +8,18 @@
         <script type="text/javascript" src="jquery.address-1.3.min.js?state=<?php echo(substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'))); ?>"></script>
         <script type="text/javascript">
             
-            $.address.change(function(e) {
-                console.info('change: ' + e.value);
-            });
+            var title = document.title,
+                home = 'Home';
             
-            $(function () {
-            /*
-                $('a').click(function(event) {
-                $.address.value($(this).attr('href'));
-                    //window.history.pushState({ooo: 'aaa'}, 'Title', $(this).attr('href') + '?x=' + $(this).attr('href'));
-                    //$.address.value('/Test mit Sonderzeichen + - / = ÖÄÜ und Leerzeichen?opa=1&c=/Test mit Sonderzeichen + - / = ÖÄÜ und Leerzeichen#yes');
-                    return false;
-                });
-                */
+            $.address.init(function() {
                 $('a').address();
+            }).change(function(event) {
+                $('a').each(function() {
+                    var selection = event.pathNames.length ? 
+                        event.pathNames[0].substr(0, 1).toUpperCase() + event.pathNames[0].substr(1) : home;
+                    $(this).toggleClass('selected', $(this).text() == selection);
+                    $.address.title(selection + ' | ' + title);
+                });
             });
             
         </script> 
