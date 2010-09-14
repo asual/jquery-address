@@ -11,48 +11,71 @@
         <script type="text/javascript">
             
             var tabs,
-                overview = 'Overview';
-                linkSelector = '#tabs ul:first a',
-                contentSelector = '#tabs div:first',
-                currentSelector = function(value) {
-                    return 'a[href=#' + value + ']';
+                tabulation = false,
+                initialTab = 'Overview';
+                navSelector = '#tabs .ui-tabs-nav',
+                navFilter = function(el) {
+                    return $(el).attr('href').replace(/^#/, '');
+                },
+                panelSelector = '#tabs .ui-tabs-panel',
+                panelFilter = function() {
+                    $(panelSelector + ' a').filter(function() {
+                        return $(navSelector + ' a[title=' + $(this).attr('title') + ']').size() != 0;
+                    }).each(function(event) {
+                        $(this).attr('href', '#' + $(this).attr('title').replace(/ /g, '_'));
+                    });
                 };
             
             if ($.address.value() == '') {
-                $.address.value(overview);
+                $.address.value(initialTab);
             }
             
             // Address handler
             $.address.init(function(event) {
 
                 // Adds the ID in a lazy manner to prevent scrolling
-                $(contentSelector).attr('id', overview);
+                $(panelSelector).attr('id', initialTab);
+
+                // Enables the plugin for all the content links
+                $(panelSelector + ' a').address(function() {
+                    return navFilter(this);
+                });
                 
+                panelFilter();
+
                 // Tabs setup
                 tabs = $('#tabs')
                     .tabs({
+                        select: function(event, ui) {
+                        },
                         // Content filter
                         load: function(event, ui) {
-                            $(ui.panel).html($(contentSelector, ui.panel).html());
+                            $(ui.panel).html($(panelSelector, ui.panel).html());
+                            panelFilter();
                         },
-                        selected: $(linkSelector).index($(currentSelector(event.value))),
                         fx: { opacity: 'toggle' }
                     })
                     .css('display', 'block');
 
-                // Enables the plugin for all the tab links
-                $(linkSelector).address();
+                // Enables the plugin for all the nav links
+                $(navSelector + ' a').click(function(event) {
+                	tabulation = true;
+                    $.address.value(navFilter(event.target));
+                    tabulation = false;
+                    return false;
+                });
             
             }).change(function(event) {
 
-                // Sets the page title
-                $.address.title($.address.title().split(' | ')[0] + ' | ' + 
-                        $(currentSelector(event.value)).text());
-
-            }).externalChange(function(event) {
+                var current = $('a[href=#' + event.value + ']:first');
                 
-                // Select the proper tab
-                tabs.tabs('select', $(currentSelector(event.value)).attr('href'));
+                // Sets the page title
+                $.address.title($.address.title().split(' | ')[0] + ' | ' + current.text());
+
+                // Selects the proper tab
+                if (!tabulation) {
+                    tabs.tabs('select', current.attr('href'));
+                }
                 
             }).history(true);
 
@@ -74,6 +97,9 @@
                     <p>
                         This demo utilizes the jQuery UI tabs widget. 
                         The content is loaded using Ajax and each tab has it's own unique link.
+                    </p>
+                    <p>
+                        Next: <a href="./features.html" title="Features">Features &raquo;</a>
                     </p>
                 </div>
             </div>
