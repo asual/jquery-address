@@ -6,7 +6,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * Date: 2010-09-09 09:10:46 +0300 (Thu, 09 Sep 2010)
+ * Date: 2010-09-14 19:15:56 +0300 (Tue, 14 Sep 2010)
  */
 (function ($) {
 
@@ -90,7 +90,7 @@
                 if (!_silent) {
                     var hash = _href(),
                         diff = _value != hash;
-                    if (_safari && _version < 523) {
+                    if (_webkit && _version < 523) {
                         if (_length != _h.length) {
                             _length = _h.length;
                             if (typeof _stack[_length - 1] != UNDEFINED) {
@@ -176,7 +176,7 @@
                                 (_cssint(body, 'marginLeft') + _cssint(body, 'paddingLeft')) + 'px;" />')
                             .parent()
                             .wrap('<div id="' + ID + '" style="height:100%; overflow:auto;' + 
-                                (_safari ? (window.statusbar.visible && !/chrome/i.test(_agent) ? '' : ' resize:both;') : '') + '" />');
+                                (_webkit ? (window.statusbar.visible && !/chrome/i.test(_agent) ? '' : ' resize:both;') : '') + '" />');
                         $('html, body')
                             .css({
                                 height: '100%',
@@ -184,7 +184,7 @@
                                 padding: 0,
                                 overflow: 'hidden'
                             });
-                        if (_safari) {
+                        if (_webkit) {
                             $('<style type="text/css" />')
                                 .appendTo('head')
                                 .text('#' + ID + '::-webkit-resizer { background-color: #fff; }');
@@ -218,7 +218,7 @@
                                 _html();
                             }
                         }, 50);
-                    } else if (_safari) {
+                    } else if (_webkit) {
                         if (_version < 418) {
                             $(_d.body).append('<form id="' + ID + '" style="position:absolute;top:-9999px;" method="get"></form>');
                             _form = _d.getElementById(ID);
@@ -351,7 +351,7 @@
             _mozilla = _browser.mozilla,
             _msie = _browser.msie,
             _opera = _browser.opera,
-            _safari = _browser.safari,
+            _webkit = _browser.webkit,
             _supported = FALSE,
             _t = _window(),
             _d = _t.document,
@@ -391,7 +391,7 @@
             (_mozilla && _version >= 1) || 
             (_msie && _version >= 6) ||
             (_opera && _version >= 9.5) ||
-            (_safari && _version >= 312);
+            (_webkit && _version >= 312);
             
         if (_supported) {
             for (var i = 1; i < _length; i++) {
@@ -399,7 +399,7 @@
             }
             _stack.push(_value);
             if (_opera) {
-                history.navigationMode = 'compatible'; 
+                history.navigationMode = 'compatible';
             }
             if (document.readyState == 'complete') {
                 var interval = setInterval(function() {
@@ -419,7 +419,7 @@
             }
             $(window).bind('popstate', _popstate).bind('unload', _unload);
         } else if ((!_supported && _hrefHash() != '') || 
-            (_safari && _version < 418 && _hrefHash() != '' && _l.search != '')) {
+            (_webkit && _version < 418 && _hrefHash() != '' && _l.search != '')) {
             _l.replace(_l.href.substr(0, _l.href.indexOf('#')));
         } else {
             _track();
@@ -585,7 +585,7 @@
                         } else {
                             _silent = TRUE;
                             _stack[_h.length] = _value;
-                            if (_safari) {
+                            if (_webkit) {
                                 if (_opts.history) {
                                     _l[ID][_l.pathname] = _stack.toString();
                                     _length = _h.length + 1;
@@ -616,7 +616,7 @@
                             if ((_msie && _version < 8) && _opts.history) {
                                 _st(_html, 50);
                             }
-                            if (_safari) {
+                            if (_webkit) {
                                 _st(function(){ _silent = FALSE; }, 1);
                             } else {
                                 _silent = FALSE;

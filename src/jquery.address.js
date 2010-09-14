@@ -399,7 +399,7 @@
             }
             _stack.push(_value);
             if (_opera) {
-                history.navigationMode = 'compatible'; 
+                history.navigationMode = 'compatible';
             }
             if (document.readyState == 'complete') {
                 var interval = setInterval(function() {
