@@ -12,7 +12,7 @@
             
             var tabs,
                 tabulation = false,
-                initialTab = 'Overview';
+                initialTab = 'Overview',
                 navSelector = '#tabs .ui-tabs-nav',
                 navFilter = function(el) {
                     return $(el).attr('href').replace(/^#/, '');
@@ -46,18 +46,19 @@
                 // Tabs setup
                 tabs = $('#tabs')
                     .tabs({
-                        select: function(event, ui) {
-                        },
-                        // Content filter
                         load: function(event, ui) {
+                            // Filters the content and applies the plugin if needed
                             $(ui.panel).html($(panelSelector, ui.panel).html());
                             panelFilter();
                         },
-                        fx: { opacity: 'toggle' }
+                        fx: {
+                            opacity: 'toggle', 
+                            duration: 'fast'
+                        }
                     })
                     .css('display', 'block');
 
-                // Enables the plugin for all the nav links
+                // Enables the plugin for all the tabs
                 $(navSelector + ' a').click(function(event) {
                 	tabulation = true;
                     $.address.value(navFilter(event.target));
