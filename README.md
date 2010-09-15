@@ -45,6 +45,7 @@ link that has a rel attribute in the following format:
 - Support for document.domain in IE6/7.
 - Improved value encoding scheme.
 - New State sample.
+- Once again improved Tabs sample.
 - GA tracker function lookup is performed only against the top window.
 - Fixes an issue with manual address changes in IE7.
 - Removes IE specific code applicable only for local testing.
