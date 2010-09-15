@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <page href="/" title="Home">
+        <p>Home content.</p>
+    </page>
+    <page href="/about" title="About">
+        <p>About content.</p>
+    </page>
+    <page href="/portfolio" title="Portfolio">
+        <p>Portfolio content.</p>
+    </page>
+    <page href="/contact" title="Contact">
+        <p>Contact content.</p>
+    </page>
+</data>

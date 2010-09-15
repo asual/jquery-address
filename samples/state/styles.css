@@ -56,3 +56,14 @@ body {
 .nav .selected:hover {
     background: #176092;
 }
+.content {
+    padding: 10px;
+    height: 300px;
+    overflow: auto;
+    border: 1px solid #f3f3f3;
+    background: #FFF;
+    color: #000;
+}
+.content p {
+    margin: 0 0 10px;
+}
