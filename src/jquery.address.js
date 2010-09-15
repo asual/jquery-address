@@ -245,12 +245,23 @@
                     } else {
                         _si(_listen, 50);
                     }
-                    
-                    _enable();
                 }
             },
             _enable = function() {
-                $('a').filter('[rel*=address:]').address();
+                var el, 
+                    elements = $('a'), 
+                    length = elements.size(),
+                    delay = 1,
+                    index = -1;
+                _st(function() {
+                    if (++index != length) {
+                        el = $(elements.get(index));
+                        if (el.is('[rel*=address:]')) {
+                            el.address();
+                        }
+                        _st(arguments.callee, delay);
+                    }
+                }, delay);
             },
             _popstate = function() {
                 _value = _href();
