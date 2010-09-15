@@ -3,6 +3,8 @@
     class Data { 
 
         function Data($file) { 
+        	
+        	// Loads a data file and prepares it for usage
             $this->doc = new DOMDocument();
             $this->doc->load($file);
             $this->xp = new DOMXPath($this->doc);
@@ -11,10 +13,14 @@
         }
         
         function state() {
+        	
+        	// Returns the base state
             return substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
         }
         
         function value() {
+        	
+        	// Returns the state value
             return str_replace($this->state(), '', $_SERVER['REQUEST_URI']);
         }
         
@@ -34,7 +40,7 @@
         function content() {
             $str = '';
             
-            // Prepares the content with support for a simple "More..." link
+            // Prepares the content
             if (isset($this->node)) {
                 foreach ($this->node->childNodes as $node) {
                     $str .= $this->doc->saveXML($node);
