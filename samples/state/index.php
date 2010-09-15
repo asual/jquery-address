@@ -2,14 +2,14 @@
     
     class Data { 
 
-    	function Data($file) { 
+        function Data($file) { 
             $this->doc = new DOMDocument();
             $this->doc->load($file);
             $this->xp = new DOMXPath($this->doc);
             $this->nodes = $this->xp->query('/data/page');
             $this->node = $this->xp->query('/data/page[@href="' . $this->value() . '"]')->item(0);
-    	}
-    	
+        }
+        
         function state() {
             return substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
         }
@@ -17,7 +17,7 @@
         function value() {
             return str_replace($this->state(), '', $_SERVER['REQUEST_URI']);
         }
-                            	
+        
         function nav() {
             $str = '';
             
@@ -28,7 +28,7 @@
                 $str .= '<li><a href="' . $this->state() . $href . '"' 
                     . ($this->value() == $href ? ' class="selected"' : '') . '>' . $title . '</a></li>';
             }
-            return $str;
+            return trim($str);
         }
         
         function content() {
@@ -43,7 +43,7 @@
                 $str .= '<p>Page not found.</p>';
             }
             
-            return $str;
+            return trim($str);
         }
     }
     
