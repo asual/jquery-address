@@ -51,9 +51,9 @@
         <div class="page"> 
             <h1>jQuery Address State</h1>
             <ul class="nav">           
-                <% for (var key in data) { %>
-                    <li><a href="<%= data[key].href %>" <%- selected && selected == data[key] ? ' class="selected"' : '' %>><%= data[key].title %></a></li>
-                <% } %>
+            <% for (var key in data) { %>
+                <li><a href="<%= data[key].href %>"<%- selected && selected == data[key] ? ' class="selected"' : '' %>><%= data[key].title %></a></li>
+            <% } %>
             </ul>
             <div class="content"><%- selected ? selected.content : 'Page not found.' %></div>
         </div>
