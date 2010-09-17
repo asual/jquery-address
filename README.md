@@ -44,7 +44,7 @@ link that has a rel attribute in the following format:
 - Support for tracker function reference.
 - Support for document.domain in IE6/7.
 - Improved value encoding scheme.
-- New State sample.
+- New State and Express samples.
 - Once again improved Tabs sample.
 - GA tracker function lookup is performed only against the top window.
 - Fixes an issue with manual address changes in IE7.

@@ -111,6 +111,9 @@
             <param name="dir" value="${samples.dir}/events" />
         </antcall>
         <antcall target="sample">
+            <param name="dir" value="${samples.dir}/express/public" />
+        </antcall>
+        <antcall target="sample">
             <param name="dir" value="${samples.dir}/form" />
         </antcall>
         <antcall target="sample">
