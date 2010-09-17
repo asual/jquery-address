@@ -38,7 +38,11 @@
                 return $.address;
             },
             _hrefState = function() {
-                return _l.href.replace(new RegExp('^.*' + _opts.state + '(/$)?'), '');
+                if (_opts.state != '/') {
+                    return _l.href.replace(new RegExp('^.*' + _opts.state + '(/$)?'), '');
+                } else {
+                    return _l.pathname + (_l.search ? '?' + _l.search : '');
+                }
             },
             _hrefHash = function() {
                 var index = _l.href.indexOf('#');
@@ -426,7 +430,7 @@
             var hrefState = _hrefState();
             if (!_h.pushState && typeof _opts.state !== UNDEFINED && 
                 hrefState != '/' && hrefState.replace(/^\/#/, '') != _hrefHash()) {
-                _l.replace(_opts.state + '/#' + hrefState);
+                _l.replace(_opts.state.replace(/^\/$/, '') + '/#' + hrefState);
             }
             $(window).bind('popstate', _popstate).bind('unload', _unload);
         } else if ((!_supported && _hrefHash() != '') || 
@@ -592,7 +596,7 @@
                         _update(TRUE);
                         if (_h.pushState && typeof _opts.state !== UNDEFINED) {
                             _h[_opts.history ? 'pushState' : 'replaceState']({}, '', 
-                                    _opts.state + (_value == '' ? '/' : _value));
+                                    _opts.state.replace(/\/$/, '') + (_value == '' ? '/' : _value));
                         } else {
                             _silent = TRUE;
                             _stack[_h.length] = _value;
@@ -708,7 +712,7 @@
                 if ($(this).is('a')) {
                     var value = fn ? fn.call(this) : 
                         /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
-                        typeof $.address.state() !== 'undefined' ? 
+                        typeof $.address.state() !== 'undefined' && $.address.state() != '/' ? 
                                 $(this).attr('href').replace(new RegExp('^(.*' + $.address.state() + '|\\.)'), '') : 
                                 $(this).attr('href').replace(/^(#\!?|\.)/, '');
                     $.address.value(value);
