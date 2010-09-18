@@ -37,11 +37,14 @@
                 $($.address).bind(value, data, fn);
                 return $.address;
             },
+            _supportsState = function() {
+                return (_h.pushState && typeof _opts.state !== UNDEFINED);
+            },
             _hrefState = function() {
                 if (_opts.state != '/') {
                     return _l.href.replace(new RegExp('^.*' + _opts.state + '(/$)?'), '');
                 } else {
-                    return _l.pathname + (_l.search ? '?' + _l.search : '');
+                    return _l.pathname + _l.search;
                 }
             },
             _hrefHash = function() {
@@ -49,8 +52,7 @@
                 return index != -1 ? _crawl(_l.href.substr(index + 1), FALSE) : '';
             },
             _href = function() {
-                return _h.pushState && typeof _opts.state !== UNDEFINED ? 
-                    _hrefState() : _hrefHash();
+                return _supportsState() ? _hrefState() : _hrefHash();
             },
             _window = function() {
                 try {
@@ -123,8 +125,9 @@
             _track = function() {
                 if (_opts.tracker !== 'null' && _opts.tracker !== null) {
                     var fn = $.isFunction(_opts.tracker) ? _opts.tracker : _t[_opts.tracker],
-                        value = (_l.pathname + ($.address ? $.address.value() : ''))
-                            .replace(/\/\//, '/').replace(/^\/$/, '');
+                        value = (_l.pathname + _l.search + 
+                                ($.address && !_supportsState() ? $.address.value() : ''))
+                                .replace(/\/\//, '/').replace(/^\/$/, '');
                     if ($.isFunction(fn)) {
                         fn(value);
                     } else if ($.isFunction(_t.urchinTracker)) {
@@ -239,15 +242,17 @@
                         _trigger('init');
                         _update(FALSE);
                     }, 1);
-                    
-                    if ((_msie && _version > 7) || (!_msie && ('on' + HASH_CHANGE) in _t)) {
-                        if (_t.addEventListener) {
-                            _t.addEventListener(HASH_CHANGE, _listen, false);
-                        } else if (_t.attachEvent) {
-                            _t.attachEvent('on' + HASH_CHANGE, _listen);
+
+                    if (!_supportsState()) {
+                        if ((_msie && _version > 7) || (!_msie && ('on' + HASH_CHANGE) in _t)) {
+                            if (_t.addEventListener) {
+                                _t.addEventListener(HASH_CHANGE, _listen, false);
+                            } else if (_t.attachEvent) {
+                                _t.attachEvent('on' + HASH_CHANGE, _listen);
+                            }
+                        } else {
+                            _si(_listen, 50);
                         }
-                    } else {
-                        _si(_listen, 50);
                     }
                 }
             },
@@ -268,8 +273,10 @@
                 }, delay);
             },
             _popstate = function() {
-                _value = _href();
-                _update(FALSE);
+                if (_value != _href()) {
+                    _value = _href();
+                    _update(FALSE);
+                }
             },
             _unload = function() {
                 if (_t.removeEventListener) {
@@ -594,7 +601,7 @@
                     _value = value;
                     if (_opts.autoUpdate || _updating) {
                         _update(TRUE);
-                        if (_h.pushState && typeof _opts.state !== UNDEFINED) {
+                        if (_supportsState()) {
                             _h[_opts.history ? 'pushState' : 'replaceState']({}, '', 
                                     _opts.state.replace(/\/$/, '') + (_value == '' ? '/' : _value));
                         } else {
