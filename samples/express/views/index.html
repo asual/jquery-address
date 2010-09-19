@@ -28,6 +28,7 @@
 
                 // Loads and populates the page data
                 $.ajax({
+                    cache: false,
                     complete: function(XMLHttpRequest, textStatus) {
                         var data = $.parseJSON(XMLHttpRequest.responseText);
                         $.address.title(data.title);

@@ -1,8 +1,9 @@
 var fs = require('fs'),
     connect = require('connect'),
     express = require('express'),
-    path = require('path'),    
+    path = require('path'),
     sys = require('sys'),
+    url = require('url'),
     data = JSON.parse(fs.readFileSync(__dirname + '/data.js', 'utf8')),
     app = express.createServer();
         
@@ -14,16 +15,17 @@ app.register('.html', require('ejs'));
 
 app.get('*', function(req, res) {
 
-    var selected = {title: "Page not found.", content: "Page not found.", status: 404 };
+    var pathname = url.parse(req.url).pathname,
+        selected = {title: "Page not found.", content: "Page not found.", status: 404 };
     
     for (var key in data) {
-        if (req.url == data[key].href) {
+        if (data[key].href == pathname) {
         	status = 200;
             selected = data[key];
             break;
         }
     }
-
+    
 	if (req.isXMLHttpRequest && req.accepts('application/json')) {
 		res.send(selected, selected.status);
 	} else {
