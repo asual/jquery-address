@@ -5,7 +5,7 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.3.min.js?state=<%= state %>"></script>
+        <script type="text/javascript" src="jquery.address-1.3.min.js?state=/"></script>
         <script type="text/javascript">
 
             $.address.init(function() {
@@ -52,8 +52,8 @@
     </head> 
     <body> 
         <div class="page"> 
-            <h1>jQuery Address State</h1>
-            <ul class="nav">           
+            <h1>jQuery Address Express</h1>
+            <ul class="nav">
             <% for (var key in data) { %>
                 <li><a href="<%= data[key].href %>"<%- selected == data[key] ? ' class="selected"' : '' %>><%= data[key].title %></a></li>
             <% } %>

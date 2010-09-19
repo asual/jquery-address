@@ -14,8 +14,7 @@ app.register('.html', require('ejs'));
 
 app.get('*', function(req, res) {
 
-    var selected = '{"title": "Page not found.", "content": "Page not found." }',
-    	state = '/';
+    var selected = '{"title": "Page not found.", "content": "Page not found." }';
     
     for (var key in data) {
         if (req.url == data[key].href) {
@@ -31,8 +30,7 @@ app.get('*', function(req, res) {
 	        layout: false,
 	        locals: {
 	            data: data,
-	            selected: selected,
-	            state: state
+	            selected: selected
 	        }
 	    });
 	}
