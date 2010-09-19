@@ -1,7 +1,7 @@
 <!DOCTYPE html> 
 <html> 
     <head> 
-        <title>jQuery Address Express</title> 
+        <title><%- selected.title %></title> 
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
@@ -14,10 +14,12 @@
                 $('.nav a').address();
                 
             }).change(function(event) {
-            
+
+                var value = $.address.state().replace(/^\/$/, '') + event.value;
+                
                 // Selects the proper navigation link
                 $('.nav a').each(function() {
-                    if ($(this).attr('href') == event.path) {
+                    if ($(this).attr('href') == value) {
                         $(this).addClass('selected').focus();
                     } else {
                         $(this).removeClass('selected');
@@ -26,19 +28,20 @@
 
                 // Handles response
                 var handler = function(data) {
-                    $('.content').html($('.content', data).html()).show();
-                    $.address.title(/>([^<]*)<\/title/.exec(data)[1]);
+                    $.address.title(data.title);
+                    $('.content').html(data.content).show();
                 };
 
                 // Loads the page content and inserts it into the content area
                 $.ajax({
-                    url: event.path,
+                	dataType: 'json',
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         handler(XMLHttpRequest.responseText);
                     },
                     success: function(data, textStatus, XMLHttpRequest) {
                         handler(data);
-                    }
+                    },
+                    url: value
                 });
             });
 
@@ -52,10 +55,10 @@
             <h1>jQuery Address State</h1>
             <ul class="nav">           
             <% for (var key in data) { %>
-                <li><a href="<%= data[key].href %>"<%- selected && selected == data[key] ? ' class="selected"' : '' %>><%= data[key].title %></a></li>
+                <li><a href="<%= data[key].href %>"<%- selected == data[key] ? ' class="selected"' : '' %>><%= data[key].title %></a></li>
             <% } %>
             </ul>
-            <div class="content"><%- selected ? selected.content : 'Page not found.' %></div>
+            <div class="content"><%- selected.content %></div>
         </div>
     </body> 
 </html>
