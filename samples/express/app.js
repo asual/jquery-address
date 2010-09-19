@@ -14,17 +14,18 @@ app.register('.html', require('ejs'));
 
 app.get('*', function(req, res) {
 
-    var selected = '{"title": "Page not found.", "content": "Page not found." }';
+    var selected = {title: "Page not found.", content: "Page not found.", status: 404 };
     
     for (var key in data) {
         if (req.url == data[key].href) {
+        	status = 200;
             selected = data[key];
             break;
         }
     }
 
 	if (req.isXMLHttpRequest && req.accepts('application/json')) {
-		res.send(selected);
+		res.send(selected, selected.status);
 	} else {
 	    res.render(path.dirname(__filename) + '/views/index.html', {
 	        layout: false,
@@ -32,6 +33,8 @@ app.get('*', function(req, res) {
 	            data: data,
 	            selected: selected
 	        }
+	    }, function(err, content) { 
+	        res.send(content, selected.status);
 	    });
 	}
 

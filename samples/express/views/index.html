@@ -8,7 +8,7 @@
         <script type="text/javascript" src="jquery.address-1.3.min.js?state=/"></script>
         <script type="text/javascript">
 
-            $.address.init(function() {
+            $.address.init(function(event) {
 
                 // Initializes the plugin
                 $('.nav a').address();
@@ -26,27 +26,20 @@
                     }
                 });
 
-                // Handles response
-                var handler = function(data) {
-                    $.address.title(data.title);
-                    $('.content').html(data.content).show();
-                };
-
-                // Loads the page content and inserts it into the content area
+                // Loads and populates the page data
                 $.ajax({
-                	dataType: 'json',
-                    error: function(XMLHttpRequest, textStatus, errorThrown) {
-                        handler(XMLHttpRequest.responseText);
-                    },
-                    success: function(data, textStatus, XMLHttpRequest) {
-                        handler(data);
+                    complete: function(XMLHttpRequest, textStatus) {
+                        var data = $.parseJSON(XMLHttpRequest.responseText);
+                        $.address.title(data.title);
+                        $('.content').html(data.content);
+                        $('.page').show();
                     },
                     url: value
                 });
             });
 
-            // Hides the tabs during initialization
-            document.write('<style type="text/css"> .content { display: none; } </style>');
+            // Hides the page during initialization
+            document.write('<style type="text/css"> .page { display: none; } </style>');
             
         </script> 
     </head> 
