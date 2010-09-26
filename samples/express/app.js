@@ -16,7 +16,12 @@ app.register('.html', require('ejs'));
 app.get('*', function(req, res) {
 
     var pathname = url.parse(req.url).pathname,
-        selected = {title: "Page not found.", content: "Page not found.", status: 404 };
+        pageNotFound = "Page not found.",
+        selected = {
+            title: pageNotFound, 
+            content: pageNotFound, 
+            status: 404 
+        };
     
     for (var key in data) {
         if (data[key].href == pathname) {
