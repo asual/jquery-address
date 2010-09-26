@@ -41,11 +41,8 @@
                 return (_h.pushState && typeof _opts.state !== UNDEFINED);
             },
             _hrefState = function() {
-                if (_opts.state != '/') {
-                    return _l.href.replace(new RegExp('^.*' + _opts.state + '(/$)?'), '');
-                } else {
-                    return _l.pathname + _l.search;
-                }
+                return '/' + _l.pathname.replace(new RegExp(_opts.state), '') + 
+                    _l.search + (_hrefHash() ? '#' + _hrefHash() : '');
             },
             _hrefHash = function() {
                 var index = _l.href.indexOf('#');
@@ -435,9 +432,14 @@
                 $(_load);
             }
             var hrefState = _hrefState();
-            if (!_h.pushState && typeof _opts.state !== UNDEFINED && 
-                hrefState != '/' && hrefState.replace(/^\/#/, '') != _hrefHash()) {
-                _l.replace(_opts.state.replace(/^\/$/, '') + '/#' + hrefState);
+            if (typeof _opts.state !== UNDEFINED) {
+                if (_h.pushState) {
+                    if (hrefState.substr(0, 3) == '/#/') {
+                        _l.replace(_opts.state.replace(/^\/$/, '') + hrefState.substr(2));
+                    }
+                } else if (hrefState != '/' && hrefState.replace(/^\/#/, '') != _hrefHash()) {
+                    _l.replace(_opts.state.replace(/^\/$/, '') + '/#' + hrefState);
+                }
             }
             $(window).bind('popstate', _popstate).bind('unload', _unload);
         } else if ((!_supported && _hrefHash() != '') || 
@@ -715,7 +717,7 @@
     
     $.fn.address = function(fn) {
         if (!$(this).attr('address')) {
-            var f = function() {
+            var f = function(e) {
                 if ($(this).is('a')) {
                     var value = fn ? fn.call(this) : 
                         /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
@@ -723,14 +725,14 @@
                                 $(this).attr('href').replace(new RegExp('^(.*' + $.address.state() + '|\\.)'), '') : 
                                 $(this).attr('href').replace(/^(#\!?|\.)/, '');
                     $.address.value(value);
-                    return false;
+                    e.preventDefault();
                 }
             };
-            $(this).click(f).live('click', f).submit(function() {
+            $(this).click(f).live('click', f).submit(function(e) {
                 if ($(this).is('form')) {
                     var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $.address.decode($(this).serialize());
                     $.address.value(value);
-                    return false;
+                    e.preventDefault();
                 }
             }).attr('address', true);
         }
