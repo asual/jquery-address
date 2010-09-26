@@ -38,14 +38,15 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
-### 09/09/2010 - jQuery Address 1.3
+### 09/26/2010 - jQuery Address 1.3
 
 - Support for the HTML5 onpopstate/pushState/replaceState API.
 - Support for tracker function reference.
 - Support for document.domain in IE6/7.
 - Improved value encoding scheme.
 - New State and Express samples.
-- Once again improved Tabs sample.
+- Improved jQuery UI Tabs sample.
+- Improved event cancellation.
 - GA tracker function lookup is performed only against the top window.
 - Fixes an issue with manual address changes in IE7.
 - Removes IE specific code applicable only for local testing.
