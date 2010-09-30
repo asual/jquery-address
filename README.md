@@ -38,6 +38,11 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
+### 09/29/2010 - jQuery Address 1.3.1
+
+- Fixed issue with state value detection.
+- Fixed issue with the global ajaxComplete event.
+
 ### 09/26/2010 - jQuery Address 1.3
 
 - Support for the HTML5 onpopstate/pushState/replaceState API.
