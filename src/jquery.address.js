@@ -41,8 +41,8 @@
                 return (_h.pushState && typeof _opts.state !== UNDEFINED);
             },
             _hrefState = function() {
-                return '/' + _l.pathname.replace(new RegExp(_opts.state), '') + 
-                    _l.search + (_hrefHash() ? '#' + _hrefHash() : '');
+                return ('/' + _l.pathname.replace(new RegExp(_opts.state), '') + 
+                    _l.search + (_hrefHash() ? '#' + _hrefHash() : '')).replace(_re, '/');
             },
             _hrefHash = function() {
                 var index = _l.href.indexOf('#');
@@ -167,10 +167,12 @@
                 if (!_loaded) {
                     _loaded = TRUE;
                     _options();
-                    var body = $('body').ajaxComplete(function() {
-                        _enable.call(this);
-                        _unescape.call(this);
-                    }).trigger('ajaxComplete');
+                    var complete = function() {
+                            _enable.call(this);
+                            _unescape.call(this);
+                        },
+                        body = $('body').ajaxComplete(complete);
+                    complete();
                     if (_opts.wrap) {
                         var wrap = $('body > *')
                             .wrapAll('<div style="padding:' + 
@@ -302,7 +304,7 @@
             },
             _pathNames = function(value) {
                 var path = _path(value),
-                    names = path.replace(/\/{2,9}/g, '/').split('/');
+                    names = path.replace(_re, '/').split('/');
                 if (path.substr(0, 1) == '/' || path.length === 0) {
                     names.splice(0, 1);
                 }
@@ -378,6 +380,7 @@
             _l = _t.location,
             _si = setInterval,
             _st = setTimeout, 
+            _re = /\/{2,9}/g,
             _agent = navigator.userAgent,            
             _frame,
             _form,

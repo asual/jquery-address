@@ -63,7 +63,7 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.3.min.js?state=<?php echo($data->state()); ?>"></script>
+        <script type="text/javascript" src="jquery.address-1.3.1.min.js?state=<?php echo($data->state()); ?>"></script>
         <script type="text/javascript">
 
             $.address.init(function() {
@@ -84,7 +84,8 @@
 
                 // Handles response
                 var handler = function(data) {
-                    $('.content').html($('.content', data).html()).show();
+                    $('.content').html($('.content', data).html());
+                    $('.page').show();
                     $.address.title(/>([^<]*)<\/title/.exec(data)[1]);
                 };
 
@@ -101,7 +102,7 @@
             });
 
             // Hides the tabs during initialization
-            document.write('<style type="text/css"> .content { display: none; } </style>');
+            document.write('<style type="text/css"> .page { display: none; } </style>');
             
         </script> 
     </head> 
