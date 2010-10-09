@@ -106,6 +106,21 @@ asyncTest('Parameter test', function() {
     }, 1000);
 });
 
+asyncTest('Parameter test', function() {
+    setTimeout(function() {
+    	$.address.autoUpdate(false)
+        	.value('/')
+        	.parameter('p1', 'a#b')
+        	.parameter('p2', 'a&b')
+            .autoUpdate(true)
+            .update();
+        	
+        equals($.address.parameter('p1'), 'a#b');
+        equals($.address.parameter('p2'), 'a&b');
+        start();
+    }, 1000);
+});
+
 asyncTest('Hash test with parameters', function() {
     setTimeout(function() {
         $.address.path('/test');
@@ -128,6 +143,14 @@ asyncTest('Hash test', function() {
         equals($.address.value(), '/test#comment-1');
         equals($.address.path(), '/test');
         equals($.address.hash(), 'comment-1');
+        start();
+    }, 1000);
+});
+
+asyncTest('Character test', function() {
+    setTimeout(function() {
+        $.address.value('/Test%20Encoding');
+        equals($.address.value(), '/Test Encoding');
         start();
     }, 1000);
 });
