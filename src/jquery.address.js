@@ -297,7 +297,7 @@
                 }
             },
             _encode = function(value) {
-                return encodeURIComponent(value).replace(/%20/g, '+');
+                return encodeURIComponent(decodeURIComponent(value)).replace(/%20/g, '+');
             }, 
             _path = function(value) {
                 return value.split('#')[0].split('?')[0];
@@ -675,13 +675,14 @@
                     this.value(this.path() + (value ? '?' + value : '') + (hash ? '#' + hash : ''));
                     return this;
                 }
-                return _queryString(this.value());
+                return this.decode(_queryString(_strict(_value, FALSE)));
             },
             parameter: function(name, value, append) {
                 var i, params;
                 if (value !== undefined) {
                     var names = this.parameterNames();
                     params = [];
+                    value = value ? encodeURIComponent(value) : '';
                     for (i = 0; i < names.length; i++) {
                         var n = names[i],
                             v = this.parameter(n);
@@ -693,16 +694,26 @@
                                 (append ? v.concat([value]) : [value]);
                         }
                         for (var j = 0; j < v.length; j++) {
-                            params.push(n + '=' + v[j]);
+                            params.push(n + '=' + _encode(v[j]));
                         }
                     }
                     if ($.inArray(name, names) == -1 && value !== null && value !== '') {
-                        params.push(name + '=' + value);
+                        params.push(name + '=' + _encode(value));
                     }
                     this.queryString(params.join('&'));
                     return this;
                 }
-                return _parameter(name, this.value());
+                var p = _parameter(name, _strict(_value, FALSE));
+                if (p !== undefined) {
+                    if (typeof p == 'string') {
+                        p = this.decode(p);
+                    } else {
+                        for (var k = 0; k < p.length; k++) {
+                            p[k] = this.decode(p[k]);
+                        }
+                    }
+                }
+                return p;
             },
             parameterNames: function() {
                 return _parameterNames(this.value());
