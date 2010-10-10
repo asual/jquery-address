@@ -38,7 +38,7 @@
                 return $.address;
             },
             _supportsState = function() {
-                return (_h.pushState && typeof _opts.state !== UNDEFINED);
+                return (_h.pushState && _opts.state !== UNDEFINED);
             },
             _hrefState = function() {
                 return ('/' + _l.pathname.replace(new RegExp(_opts.state), '') + 
@@ -53,7 +53,7 @@
             },
             _window = function() {
                 try {
-                    return top.document !== undefined ? top : window;
+                    return top.document !== UNDEFINED ? top : window;
                 } catch (e) { 
                     return window;
                 }
@@ -96,7 +96,7 @@
                     if (_webkit && _version < 523) {
                         if (_length != _h.length) {
                             _length = _h.length;
-                            if (typeof _stack[_length - 1] != UNDEFINED) {
+                            if (_stack[_length - 1] !== UNDEFINED) {
                                 _value = _stack[_length - 1];
                             }
                             _update(FALSE);
@@ -129,9 +129,9 @@
                         fn(value);
                     } else if ($.isFunction(_t.urchinTracker)) {
                         _t.urchinTracker(value);
-                    } else if (typeof _t.pageTracker != UNDEFINED && $.isFunction(_t.pageTracker._trackPageview)) {
+                    } else if (_t.pageTracker !== UNDEFINED && $.isFunction(_t.pageTracker._trackPageview)) {
                         _t.pageTracker._trackPageview(value);
-                    } else if (typeof _t._gaq != UNDEFINED && $.isFunction(_t._gaq.push)) {
+                    } else if (_t._gaq !== UNDEFINED && $.isFunction(_t._gaq.push)) {
                         _t._gaq.push(['_trackPageview', value]);
                     }
                 }
@@ -214,13 +214,13 @@
                             $(_frame).bind('load', function() {
                                 var win = _frame.contentWindow;
                                 var src = win.location.href;
-                                _value = (typeof win[ID] != UNDEFINED ? win[ID] : '');
+                                _value = win[ID] !== UNDEFINED ? win[ID] : '';
                                 if (_value != _href()) {
                                     _update(FALSE);
                                     _l.hash = _crawl(_value, TRUE);
                                 }
                             });
-                            if (typeof _frame.contentWindow[ID] == UNDEFINED) {
+                            if (_frame.contentWindow[ID] === UNDEFINED) {
                                 _html();
                             }
                         }, 50);
@@ -229,10 +229,10 @@
                             $(_d.body).append('<form id="' + ID + '" style="position:absolute;top:-9999px;" method="get"></form>');
                             _form = _d.getElementById(ID);
                         }
-                        if (typeof _l[ID] == UNDEFINED) {
+                        if (_l[ID] === UNDEFINED) {
                             _l[ID] = {};
                         }
-                        if (typeof _l[ID][_l.pathname] != UNDEFINED) {
+                        if (_l[ID][_l.pathname] !== UNDEFINED) {
                             _stack = _l[ID][_l.pathname].split(',');
                         }
                     }
@@ -297,7 +297,7 @@
                 }
             },
             _encode = function(value) {
-                return encodeURIComponent(decodeURIComponent(value)).replace(/%20/g, '+');
+                return _ec(_dc(value)).replace(/%20/g, '+');
             }, 
             _path = function(value) {
                 return value.split('#')[0].split('?')[0];
@@ -351,8 +351,9 @@
                 var arr = value.split('#');
                 return arr.slice(1, arr.length).join('#');
             },
+            UNDEFINED,
             ID = 'jQueryAddress',
-            UNDEFINED = 'undefined',
+            STRING = 'string',
             HASH_CHANGE = 'hashchange',
             INIT = 'init',
             CHANGE = 'change',
@@ -379,7 +380,9 @@
             _h = _t.history, 
             _l = _t.location,
             _si = setInterval,
-            _st = setTimeout, 
+            _st = setTimeout,
+            _ec = encodeURIComponent,
+            _dc = decodeURIComponent,
             _re = /\/{2,9}/g,
             _agent = navigator.userAgent,            
             _frame,
@@ -435,7 +438,7 @@
                 $(_load);
             }
             var hrefState = _hrefState();
-            if (typeof _opts.state !== UNDEFINED) {
+            if (_opts.state !== UNDEFINED) {
                 if (_h.pushState) {
                     if (hrefState.substr(0, 3) == '/#/') {
                         _l.replace(_opts.state.replace(/^\/$/, '') + hrefState.substr(2));
@@ -479,49 +482,49 @@
                 return url;
             },
             autoUpdate: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     _opts.autoUpdate = value;
                     return this;
                 }
                 return _opts.autoUpdate;
             },
             crawlable: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     _opts.crawlable = value;
                     return this;
                 }
                 return _opts.crawlable;
             },
             history: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     _opts.history = value;
                     return this;
                 }
                 return _opts.history;
             },
             state: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     _opts.state = value;
                     return this;
                 }
                 return _opts.state;
             },
             strict: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     _opts.strict = value;
                     return this;
                 }
                 return _opts.strict;
             },
             tracker: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     _opts.tracker = value;
                     return this;
                 }
                 return _opts.tracker;
             },
             wrap: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     _opts.wrap = value;
                     return this;
                 }
@@ -551,7 +554,7 @@
                     } else {
                         $.each(parameterNames, function(i, v) {
                             var pv = _parameter(v, value);
-                            if (typeof pv !== 'string') {
+                            if (typeof pv !== STRING) {
                                 $.each(pv, function(ni, nv) {
                                     encoded += _encode(v) + '=' + _encode(nv) + '&';
                                 });
@@ -574,10 +577,10 @@
                 return encoded;
             },
             decode: function(value) {
-                return decodeURIComponent(value.replace(/\+/g, '%20'));
+                return _dc(value.replace(/\+/g, '%20'));
             },
             title: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     _st(function() {
                         _title = _d.title = value;
                         if (_juststart && _frame && _frame.contentWindow && _frame.contentWindow.document) {
@@ -594,7 +597,7 @@
                 return _d.title;
             },
             value: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     value = _strict(this.encode(value), TRUE);
                     if (value == '/') {
                         value = '';
@@ -658,7 +661,7 @@
                 return _strict(this.decode(_value), FALSE);
             },
             path: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     var qs = this.queryString(),
                         hash = this.hash();
                     this.value(value + (qs ? '?' + qs : '') + (hash ? '#' + hash : ''));
@@ -670,7 +673,7 @@
                 return _pathNames(this.value());
             },
             queryString: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     var hash = this.hash();
                     this.value(this.path() + (value ? '?' + value : '') + (hash ? '#' + hash : ''));
                     return this;
@@ -679,14 +682,14 @@
             },
             parameter: function(name, value, append) {
                 var i, params;
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     var names = this.parameterNames();
                     params = [];
-                    value = value ? encodeURIComponent(value) : '';
+                    value = value ? _ec(value) : '';
                     for (i = 0; i < names.length; i++) {
                         var n = names[i],
                             v = this.parameter(n);
-                        if (typeof v == 'string') {
+                        if (typeof v == STRING) {
                             v = [v];
                         }
                         if (n == name) {
@@ -704,8 +707,8 @@
                     return this;
                 }
                 var p = _parameter(name, _strict(_value, FALSE));
-                if (p !== undefined) {
-                    if (typeof p == 'string') {
+                if (p !== UNDEFINED) {
+                    if (typeof p == STRING) {
                         p = this.decode(p);
                     } else {
                         for (var k = 0; k < p.length; k++) {
@@ -719,7 +722,7 @@
                 return _parameterNames(this.value());
             },
             hash: function(value) {
-                if (value !== undefined) {
+                if (value !== UNDEFINED) {
                     this.value(this.value().split('#')[0] + (value ? '#' + value : ''));
                     return this;
                 }
@@ -735,7 +738,7 @@
                 if ($(this).is('a')) {
                     var value = fn ? fn.call(this) : 
                         /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
-                        typeof $.address.state() !== 'undefined' && $.address.state() != '/' ? 
+                        $.address.state() !== undefined && $.address.state() != '/' ? 
                                 $(this).attr('href').replace(new RegExp('^(.*' + $.address.state() + '|\\.)'), '') : 
                                 $(this).attr('href').replace(/^(#\!?|\.)/, '');
                     $.address.value(value);
