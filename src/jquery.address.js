@@ -61,11 +61,8 @@
             _js = function() {
                 return 'javascript';
             },
-            _strict = function(value, force) {
-                if (_opts.strict) {
-                    value = force ? (value.substr(0, 1) != '/' ? '/' + value : value) : (value == '' ? '/' : value);
-                }
-                return value;
+            _strict = function(value) {
+                return value == '' ? '/' : value;
             },
             _crawl = function(value, direction) {
                 if (_opts.crawlable && direction) {
@@ -245,7 +242,7 @@
                     if (!_supportsState()) {
                         if ((_msie && _version > 7) || (!_msie && ('on' + HASH_CHANGE) in _t)) {
                             if (_t.addEventListener) {
-                                _t.addEventListener(HASH_CHANGE, _listen, false);
+                                _t.addEventListener(HASH_CHANGE, _listen, FALSE);
                             } else if (_t.attachEvent) {
                                 _t.attachEvent('on' + HASH_CHANGE, _listen);
                             }
@@ -279,7 +276,7 @@
             },
             _unload = function() {
                 if (_t.removeEventListener) {
-                    _t.removeEventListener(HASH_CHANGE, _listen, false);
+                    _t.removeEventListener(HASH_CHANGE, _listen, FALSE);
                 } else if (_t.detachEvent) {
                     _t.detachEvent('on' + HASH_CHANGE, _listen);
                 }
@@ -579,7 +576,20 @@
                 return encoded;
             },
             decode: function(value) {
-                return _dc(value.replace(/\+/g, '%20'));
+                if (value !== UNDEFINED) {
+                    var result = [],
+                        replace = function(value) {
+                            return _dc(value.toString().replace(/\+/g, '%20'));
+                        };
+                    if (typeof value == 'object' && value.length !== UNDEFINED) {
+                        for (var i = 0, l = value.length; i < l; i++) {
+                            result[i] = replace(value[i]);
+                        }
+                        return result;
+                    } else {
+                        return replace(value);
+                    }
+                }
             },
             title: function(value) {
                 if (value !== UNDEFINED) {
@@ -600,7 +610,7 @@
             },
             value: function(value) {
                 if (value !== UNDEFINED) {
-                    value = _strict(this.encode(value), TRUE);
+                    value = (value.substr(0, 1) != '/' ? '/' : '') + this.encode(value);
                     if (value == '/') {
                         value = '';
                     }
@@ -660,27 +670,27 @@
                 if (!_supported) {
                     return null;
                 }
-                return _strict(this.decode(_value), FALSE);
+                return this.decode(_strict(_value));
             },
             path: function(value) {
                 if (value !== UNDEFINED) {
-                    var qs = this.queryString(),
-                        hash = this.hash();
+                    var qs = _queryString(_strict(_value)),
+                        hash = _hash(_strict(_value));
                     this.value(value + (qs ? '?' + qs : '') + (hash ? '#' + hash : ''));
                     return this;
                 }
-                return _path(this.value());
+                return this.decode(_path(_strict(_value)));
             },
             pathNames: function() {
-                return _pathNames(this.value());
+                return this.decode(_pathNames(_strict(_value)));
             },
             queryString: function(value) {
                 if (value !== UNDEFINED) {
-                    var hash = this.hash();
+                    var hash = _hash(_strict(_value));
                     this.value(this.path() + (value ? '?' + value : '') + (hash ? '#' + hash : ''));
                     return this;
                 }
-                return this.decode(_queryString(_strict(_value, FALSE)));
+                return this.decode(_queryString(_strict(_value)));
             },
             parameter: function(name, value, append) {
                 var i, params;
@@ -708,27 +718,17 @@
                     this.queryString(params.join('&'));
                     return this;
                 }
-                var p = _parameter(name, _strict(_value, FALSE));
-                if (p !== UNDEFINED) {
-                    if (typeof p == STRING) {
-                        p = this.decode(p);
-                    } else {
-                        for (var k = 0; k < p.length; k++) {
-                            p[k] = this.decode(p[k]);
-                        }
-                    }
-                }
-                return p;
+                return this.decode(_parameter(name, _strict(_value)));
             },
             parameterNames: function() {
-                return _parameterNames(this.value());
+                return this.decode(_parameterNames(_strict(_value)));
             },
             hash: function(value) {
                 if (value !== UNDEFINED) {
-                    this.value(this.value().split('#')[0] + (value ? '#' + value : ''));
+                    this.value(_strict(_value).split('#')[0] + (value ? '#' + value : ''));
                     return this;
                 }
-                return _hash(this.value());
+                return this.decode(_hash(_strict(_value)));
             }
         };
       
