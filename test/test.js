@@ -108,15 +108,39 @@ asyncTest('Parameter test', function() {
 
 asyncTest('Parameter test', function() {
     setTimeout(function() {
-    	$.address.autoUpdate(false)
-        	.value('/')
-        	.parameter('p1', 'a#b')
-        	.parameter('p2', 'a&b')
+        $.address.autoUpdate(false)
+            .value('/')
+            .parameter('p1', 'a#b')
+            .parameter('p2', 'a&b')
             .autoUpdate(true)
             .update();
-        	
+            
         equals($.address.parameter('p1'), 'a#b');
         equals($.address.parameter('p2'), 'a&b');
+        start();
+    }, 1000);
+});
+
+asyncTest('Parameter test', function() {
+    setTimeout(function() {
+        $.address.autoUpdate(false)
+            .value('/')
+            .queryString($.param({start: 0, order: 'index0'}))
+            .autoUpdate(true)
+            .update();
+        equals($.address.parameter('start'), 0);
+        equals($.address.parameter('order'), 'index0');
+        start();
+    }, 1000);
+});
+
+asyncTest('Parameter test', function() {
+    setTimeout(function() {
+        $.address.autoUpdate(false)
+            .parameter('data', $.param({start: 1, order: 'index1'}))
+            .autoUpdate(true)
+            .update();
+        equals($.address.parameter('data'), $.param({start: 1, order:'index1'}));
         start();
     }, 1000);
 });
@@ -157,7 +181,7 @@ asyncTest('Character test', function() {
 
 asyncTest('Character test', function() {
     setTimeout(function() {
-    	var str = 'Test mit Sonderzeichen + - / = ÖÄÜ und Leerzeichen';
+        var str = 'Test mit Sonderzeichen + - / = ÖÄÜ und Leerzeichen';
         $.address.value(str);
         $.address.queryString('str=' + str);
         equals($.address.value(), '/' + str + '?str=' + str);
