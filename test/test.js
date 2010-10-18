@@ -114,7 +114,7 @@ asyncTest('Parameter test', function() {
             .parameter('p2', 'a&b')
             .autoUpdate(true)
             .update();
-            
+        equals($.address.value(), '/?p1=a#b&p2=a&b');            
         equals($.address.parameter('p1'), 'a#b');
         equals($.address.parameter('p2'), 'a&b');
         start();
@@ -175,6 +175,15 @@ asyncTest('Hash test', function() {
 
 asyncTest('Character test', function() {
     setTimeout(function() {
+        $.address.value('/børn?тест=символ');
+        equals($.address.path(), '/børn');
+        equals($.address.parameter('тест'), 'символ');
+        start();
+    }, 1000);
+});
+
+asyncTest('Character test', function() {
+    setTimeout(function() {
         $.address.value('/Test%20Encoding');
         equals($.address.value(), '/Test Encoding');
         start();
@@ -196,4 +205,4 @@ asyncTest('Character test', function() {
 
 setTimeout(function() {
     $.address.value('/');
-}, 20000);
+}, 30000);
