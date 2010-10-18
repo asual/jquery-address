@@ -135,7 +135,7 @@
             },
             _html = function() {
                 var src = _js() + ':' + FALSE + ';document.open();document.writeln(\'<html><head><title>' + 
-                    _d.title.replace('\'', '\\\'') + '</title><script>var ' + ID + ' = "' + _href() + 
+                    _d.title.replace('\'', '\\\'') + '</title><script>var ' + ID + ' = "' + $.address.encode(_href()) + 
                     (_d.domain != _l.host ? '";document.domain="' + _d.domain : '') + 
                     '";</' + 'script></head></html>\');document.close();';
                 if (_version < 7) {
@@ -323,7 +323,7 @@
                     var r = [];
                     for (i = 0; i < params.length; i++) {
                         var p = params[i].split('=');
-                        if (p[0] == name) {
+                        if ($.address.decode(p[0]) == name) {
                             r.push(p.slice(1).join('='));
                         }
                     }
@@ -569,6 +569,9 @@
                 }
                 if (first != '/' && encoded.substr(0, 1) == '/') {
                     encoded = encoded.substr(1);
+                }
+                if (first == '/' && encoded.substr(0, 1) != '/') {
+                    encoded = '/' + encoded;
                 }
                 if (/#|&|\?/.test(last)) {
                     encoded += last;
