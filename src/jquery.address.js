@@ -62,7 +62,7 @@
                 return 'javascript';
             },
             _strict = function(value) {
-                return value == '' ? '/' : value;
+                return _opts.strict && value == '' ? '/' : value;
             },
             _crawl = function(value, direction) {
                 if (_opts.crawlable && direction) {
