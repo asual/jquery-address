@@ -135,7 +135,7 @@
             },
             _html = function() {
                 var src = _js() + ':' + FALSE + ';document.open();document.writeln(\'<html><head><title>' + 
-                    _d.title.replace('\'', '\\\'') + '</title><script>var ' + ID + ' = "' + $.address.encode(_href()) + 
+                    _d.title.replace('\'', '\\\'') + '</title><script>var ' + ID + ' = "' + encodeURIComponent(_href()) + 
                     (_d.domain != _l.host ? '";document.domain="' + _d.domain : '') + 
                     '";</' + 'script></head></html>\');document.close();';
                 if (_version < 7) {
@@ -210,7 +210,7 @@
                         _st(function() {
                             $(_frame).bind('load', function() {
                                 var win = _frame.contentWindow;
-                                _value = win[ID] !== UNDEFINED ? $.address.encode($.address.decode(win[ID])) : '';
+                                _value = win[ID] !== UNDEFINED ? win[ID] : '';
                                 if (_value != _href()) {
                                     _update(FALSE);
                                     _l.hash = _crawl(_value, TRUE);
@@ -322,7 +322,7 @@
                     var r = [];
                     for (i = 0; i < params.length; i++) {
                         var p = params[i].split('=');
-                        if ($.address.decode(p[0]) == name) {
+                        if (p[0] == name || $.address.decode(p[0]) == name) {
                             r.push(p.slice(1).join('='));
                         }
                     }
@@ -733,7 +733,6 @@
                 return this.decode(_hash(_strict(_value)));
             }
         };
-      
     })();
     
     $.fn.address = function(fn) {
