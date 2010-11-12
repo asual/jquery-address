@@ -371,7 +371,7 @@
             _mozilla = _browser.mozilla,
             _msie = _browser.msie,
             _opera = _browser.opera,
-            _webkit = _browser.webkit,
+            _webkit = _browser.webkit || _browser.safari,
             _supported = FALSE,
             _t = _window(),
             _d = _t.document,
