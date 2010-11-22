@@ -62,7 +62,7 @@
                 return 'javascript';
             },
             _strict = function(value) {
-                return _opts.strict && value == '' ? '/' : value;
+                return _opts.strict && value == '' ? '/' : value.toString();
             },
             _crawl = function(value, direction) {
                 if (_opts.crawlable && direction) {
@@ -612,7 +612,7 @@
             },
             value: function(value) {
                 if (value !== UNDEFINED) {
-                    value = (value.substr(0, 1) != '/' ? '/' : '') + this.encode(value);
+                    value = this.encode(_strict(value));
                     if (value == '/') {
                         value = '';
                     }
