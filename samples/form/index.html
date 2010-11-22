@@ -16,7 +16,7 @@
                     if (!$('pre').size()) {
                         $('form').before('<pre />');
                     }
-                    $.get('.' + $.address.encode(event.value), function(data) {
+                    $.get('./' + $.address.encode(event.value), function(data) {
                         $('pre').html(data);
                     });
                 } else {
