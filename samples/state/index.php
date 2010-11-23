@@ -51,6 +51,17 @@
             
             return trim($str);
         }
+        
+        function title(){
+            $str='';
+            // Prepares the title
+            foreach($this->nodes as $node){
+                $href=$node->getAttribute('href');
+                $title=$node->getAttribute('title');
+                $str.=($this->value()==$href?$title:'');
+            }
+            return trim($str);
+        }
     }
     
     $data = new Data('data.xml');
@@ -59,7 +70,7 @@
 <!DOCTYPE html> 
 <html> 
     <head> 
-        <title>jQuery Address State</title> 
+        <title><?php echo($data->title()); ?> - jQuery Address State</title> 
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
         <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
@@ -84,6 +95,7 @@
 
                 // Handles response
                 var handler = function(data) {
+                    $('title').html($('title', data).html());
                     $('.content').html($('.content', data).html());
                     $('.page').show();
                     $.address.title(/>([^<]*)<\/title/.exec(data)[1]);
