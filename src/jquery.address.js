@@ -62,7 +62,8 @@
                 return 'javascript';
             },
             _strict = function(value) {
-                return _opts.strict && value == '' ? '/' : value.toString();
+                value = value.toString();
+                return (_opts.strict && value.substr(0, 1) != '/' ? '/' : '') + value;
             },
             _crawl = function(value, direction) {
                 if (_opts.crawlable && direction) {
