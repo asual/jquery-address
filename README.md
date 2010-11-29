@@ -38,8 +38,10 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
-### 09/29/2010 - jQuery Address 1.3.1
+### 11/29/2010 - jQuery Address 1.3.1
 
+- Issue 26: Values should no longer be only strings.
+- Issue 20: Improves the encoding of special characters.
 - Fixed issue with state value detection.
 - Fixed issue with the global ajaxComplete event.
 
