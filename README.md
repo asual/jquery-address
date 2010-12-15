@@ -38,6 +38,11 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
+### 12/14/2010 - jQuery Address 1.3.2
+
+- Issue 38: Issue when form actions containing query variables.
+- Issue 37: Using live events for form submissions.
+
 ### 11/29/2010 - jQuery Address 1.3.1
 
 - Issue 26: Values should no longer be only strings.
