@@ -749,9 +749,11 @@
                     e.preventDefault();
                 }
             };
-            $(this).click(f).live('click', f).submit(function(e) {
+            $(this).click(f).live('click', f).live('submit', function(e) {
                 if ($(this).is('form')) {
-                    var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $.address.decode($(this).serialize());
+                    var action = $(this).attr('action'),
+                        value = fn ? fn.call(this) : (action.indexOf('?') != -1 ? action.replace(/&$/, '') : action + '?') + 
+                            $.address.decode($(this).serialize());
                     $.address.value(value);
                     e.preventDefault();
                 }
