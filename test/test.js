@@ -125,6 +125,32 @@ asyncTest('Parameter test', function() {
     setTimeout(function() {
         $.address.autoUpdate(false)
             .value('/')
+            .parameter('p', 'a b +ċ')
+            .autoUpdate(true)
+            .update();
+        equals($.address.value(), '/?p=a b +ċ');
+        equals($.address.parameter('p'), 'a b +ċ');
+        start();
+    }, 1000);
+});
+
+asyncTest('Parameter test', function() {
+    setTimeout(function() {
+        $.address.autoUpdate(false)
+            .value('/')
+            .parameter('p', 'a+b ç=2')
+            .autoUpdate(true)
+            .update();
+        equals($.address.value(), '/?p=a+b ç=2');
+        equals($.address.parameter('p'), 'a+b ç=2');
+        start();
+    }, 1000);
+});
+
+asyncTest('Parameter test', function() {
+    setTimeout(function() {
+        $.address.autoUpdate(false)
+            .value('/')
             .queryString($.param({start: 0, order: 'index0'}))
             .autoUpdate(true)
             .update();
