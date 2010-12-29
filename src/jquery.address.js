@@ -295,6 +295,9 @@
                     }
                 }
             },
+            _decode = function(value) {
+                return value.replace(/\+/g, ' ');
+            }, 
             _encode = function(value) {
                 return _ec(_dc(value)).replace(/%20/g, '+');
             }, 
@@ -613,7 +616,10 @@
             },
             value: function(value) {
                 if (value !== UNDEFINED) {
-                    value = this.encode(_strict(value));
+                    value = _strict(value);
+                    if (_opts.autoUpdate) {
+                        value = this.encode(value);
+                    }
                     if (value == '/') {
                         value = '';
                     }
@@ -712,11 +718,11 @@
                                 (append ? v.concat([value]) : [value]);
                         }
                         for (var j = 0; j < v.length; j++) {
-                            params.push(n + '=' + _encode(v[j]));
+                            params.push(n + '=' + _decode(_encode(v[j])));
                         }
                     }
                     if ($.inArray(name, names) == -1 && value !== null && value !== '') {
-                        params.push(name + '=' + _encode(value));
+                        params.push(name + '=' + _decode(_encode(value)));
                     }
                     this.queryString(params.join('&'));
                     return this;
