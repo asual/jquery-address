@@ -54,6 +54,7 @@
         
         function title(){
             $str='';
+            
             // Prepares the title
             foreach($this->nodes as $node){
                 $href=$node->getAttribute('href');
@@ -70,11 +71,11 @@
 <!DOCTYPE html> 
 <html> 
     <head> 
-        <title><?php echo($data->title()); ?> - jQuery Address State</title> 
+        <title><?php echo($data->title()); ?></title> 
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
         <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.3.1.min.js?state=<?php echo($data->state()); ?>"></script>
+        <script type="text/javascript" src="jquery.address-1.3.2.min.js?state=<?php echo($data->state()); ?>"></script>
         <script type="text/javascript">
 
             $.address.init(function() {
