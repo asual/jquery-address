@@ -62,7 +62,8 @@
                 return 'javascript';
             },
             _strict = function(value) {
-                return _opts.strict && value == '' ? '/' : value.toString();
+                value = value.toString();
+                return (_opts.strict && value.substr(0, 1) != '/' ? '/' : '') + value;
             },
             _crawl = function(value, direction) {
                 if (_opts.crawlable && direction) {
@@ -294,6 +295,9 @@
                     }
                 }
             },
+            _decode = function(value) {
+                return value.replace(/\+/g, ' ');
+            }, 
             _encode = function(value) {
                 return _ec(_dc(value)).replace(/%20/g, '+');
             }, 
@@ -612,7 +616,10 @@
             },
             value: function(value) {
                 if (value !== UNDEFINED) {
-                    value = this.encode(_strict(value));
+                    value = _strict(value);
+                    if (_opts.autoUpdate) {
+                        value = this.encode(value);
+                    }
                     if (value == '/') {
                         value = '';
                     }
@@ -711,11 +718,11 @@
                                 (append ? v.concat([value]) : [value]);
                         }
                         for (var j = 0; j < v.length; j++) {
-                            params.push(n + '=' + _encode(v[j]));
+                            params.push(n + '=' + _decode(_encode(v[j])));
                         }
                     }
                     if ($.inArray(name, names) == -1 && value !== null && value !== '') {
-                        params.push(name + '=' + _encode(value));
+                        params.push(name + '=' + _decode(_encode(value)));
                     }
                     this.queryString(params.join('&'));
                     return this;
@@ -748,9 +755,11 @@
                     e.preventDefault();
                 }
             };
-            $(this).click(f).live('click', f).submit(function(e) {
+            $(this).click(f).live('click', f).live('submit', function(e) {
                 if ($(this).is('form')) {
-                    var value = fn ? fn.call(this) : $(this).attr('action') + '?' + $.address.decode($(this).serialize());
+                    var action = $(this).attr('action'),
+                        value = fn ? fn.call(this) : (action.indexOf('?') != -1 ? action.replace(/&$/, '') : action + '?') + 
+                            $.address.decode($(this).serialize());
                     $.address.value(value);
                     e.preventDefault();
                 }

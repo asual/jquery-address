@@ -125,6 +125,32 @@ asyncTest('Parameter test', function() {
     setTimeout(function() {
         $.address.autoUpdate(false)
             .value('/')
+            .parameter('p', 'a b +ċ')
+            .autoUpdate(true)
+            .update();
+        equals($.address.value(), '/?p=a b +ċ');
+        equals($.address.parameter('p'), 'a b +ċ');
+        start();
+    }, 1000);
+});
+
+asyncTest('Parameter test', function() {
+    setTimeout(function() {
+        $.address.autoUpdate(false)
+            .value('/')
+            .parameter('p', 'a+b ç=2')
+            .autoUpdate(true)
+            .update();
+        equals($.address.value(), '/?p=a+b ç=2');
+        equals($.address.parameter('p'), 'a+b ç=2');
+        start();
+    }, 1000);
+});
+
+asyncTest('Parameter test', function() {
+    setTimeout(function() {
+        $.address.autoUpdate(false)
+            .value('/')
             .queryString($.param({start: 0, order: 'index0'}))
             .autoUpdate(true)
             .update();
@@ -198,7 +224,55 @@ asyncTest('Character test', function() {
         equals($.address.value(), '/' + str + '?str=' + str);
         equals($.address.path(), '/' + str);
         equals($.address.queryString(), 'str=' + str);
-        equals($.address.parameter('str'), str);        
+        equals($.address.parameter('str'), str);
+        start();
+    }, 1000);
+});
+
+asyncTest('Value test', function() {
+    setTimeout(function() {
+        $.address.value(1);
+        equals($.address.value(), '/1');
+        start();
+    }, 1000);
+});
+
+asyncTest('Strict test', function() {
+    setTimeout(function() {
+        $.address.value('test');
+        equals($.address.value(), '/test');
+        start();
+    }, 1000);
+});
+
+asyncTest('Strict test', function() {
+    setTimeout(function() {
+        $.address.value('?p=1&p=2');
+        equals($.address.value(), '/?p=1&p=2');
+        equals($.address.path(), '/');
+        equals($.address.queryString(), 'p=1&p=2');
+        equals($.address.parameter('p').toString(), '1,2');
+        start();
+    }, 1000);
+});
+
+asyncTest('Strict test', function() {
+    setTimeout(function() {
+        $.address.strict(false);
+        $.address.value('test');
+        equals($.address.value(), 'test');
+        start();
+    }, 1000);
+});
+
+asyncTest('Strict test', function() {
+    setTimeout(function() {
+        $.address.strict(false);
+        $.address.value('?p=1&p=2');
+        equals($.address.value(), '?p=1&p=2');
+        equals($.address.path(), '');
+        equals($.address.queryString(), 'p=1&p=2');
+        equals($.address.parameter('p').toString(), '1,2');
         start();
     }, 1000);
 });
