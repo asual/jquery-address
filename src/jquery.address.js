@@ -130,7 +130,7 @@
                     } else if (_t.pageTracker !== UNDEFINED && $.isFunction(_t.pageTracker._trackPageview)) {
                         _t.pageTracker._trackPageview(value);
                     } else if (_t._gaq !== UNDEFINED && $.isFunction(_t._gaq.push)) {
-                        _t._gaq.push(['_trackPageview', value]);
+                        _t._gaq.push(['_trackPageview', decodeURI(value)]);
                     }
                 }
             },
