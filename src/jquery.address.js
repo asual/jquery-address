@@ -104,7 +104,7 @@
                             _l.reload();
                         } else {
                             if (_msie && _version < 8 && _opts.history) {
-                                _st(_html, 50);
+                                _st(decodeURI(_html), 50);
                             }
                             _value = hash;
                             _update(FALSE);
@@ -130,7 +130,7 @@
                     } else if (_t.pageTracker !== UNDEFINED && $.isFunction(_t.pageTracker._trackPageview)) {
                         _t.pageTracker._trackPageview(value);
                     } else if (_t._gaq !== UNDEFINED && $.isFunction(_t._gaq.push)) {
-                        _t._gaq.push(['_trackPageview', value]);
+                        _t._gaq.push(['_trackPageview', decodeURI(value)]);
                     }
                 }
             },
@@ -659,13 +659,13 @@
                                 }
                             } else if (_value != _href()) {
                                 if (_opts.history) {
-                                    _l.hash = '#' + _crawl(_value, TRUE);
+                                    _l.hash = '#' + _crawl(decodeURI(_value), TRUE);
                                 } else {
                                     _l.replace('#' + _crawl(_value, TRUE));
                                 }
                             }
                             if ((_msie && _version < 8) && _opts.history) {
-                                _st(_html, 50);
+                                _st(decodeURI(_html), 50);
                             }
                             if (_webkit) {
                                 _st(function(){ _silent = FALSE; }, 1);
@@ -768,4 +768,4 @@
         return this;
     };
     
-}(jQuery));
+})(jQuery);
