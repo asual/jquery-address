@@ -449,7 +449,10 @@
                     _l.replace(_opts.state.replace(/^\/$/, '') + '/#' + hrefState);
                 }
             }
-            $(window).bind('popstate', _popstate).bind('unload', _unload);
+            $(window).bind({
+                'popstate': _popstate,
+                'unload': _unload
+            });
         } else if ((!_supported && _hrefHash() != '') || 
             (_webkit && _version < 418 && _hrefHash() != '' && _l.search != '')) {
             _l.replace(_l.href.substr(0, _l.href.indexOf('#')));

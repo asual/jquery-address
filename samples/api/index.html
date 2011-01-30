@@ -13,11 +13,12 @@
 
             // Simple log
             var log = function(msg) {
-                if (!$('.log').size()) {
+                var log = $('.log');
+                if (!log.size()) {
                     $('<div class="log" />').appendTo('.page');
                 }
-                $('.log').append(msg.replace(/^([^:]*):(.*)$/, '<p><b>$1:</b> <span class="$1">$2</span></p>'))
-                    .attr({scrollTop: $('.log').attr('scrollHeight')})
+                log.append(msg.replace(/^([^:]*):(.*)$/, '<p><b>$1:</b> <span class="$1">$2</span></p>'))
+                    .attr({scrollTop: log.attr('scrollHeight')})
                     .find('p:nth-child(even)').addClass('even');
             };
             
