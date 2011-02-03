@@ -15,7 +15,7 @@
             var log = function(msg) {
                 var log = $('.log');
                 if (!log.size()) {
-                    $('<div class="log" />').appendTo('.page');
+                    log = $('<div class="log" />').appendTo('.page');
                 }
                 log.append(msg.replace(/^([^:]*):(.*)$/, '<p><b>$1:</b> <span class="$1">$2</span></p>'))
                     .attr({scrollTop: log.attr('scrollHeight')})
