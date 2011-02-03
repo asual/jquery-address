@@ -211,7 +211,7 @@
                         _st(function() {
                             $(_frame).bind('load', function() {
                                 var win = _frame.contentWindow;
-                                this.decode(_strict(_value)) = win[ID] !== UNDEFINED ? win[ID] : '';
+                                _value = win[ID] !== UNDEFINED ? decode(win[ID]) : '';
                                 if (_value != _href()) {
                                     _update(FALSE);
                                     _l.hash = _crawl(_value, TRUE);
