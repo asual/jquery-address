@@ -38,8 +38,12 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
-### 12/14/2010 - jQuery Address 1.3.2
+### 02/04/2010 - jQuery Address 1.3.2
 
+- Support for jQuery 1.5.
+- Issue 48: IE7 "Permission Denied" error.
+- Issue 47: Issues for non-Latin urls and State update to change title on click event.
+- Issue 40: Encoding problem in parameter().
 - Issue 38: Issue when form actions containing query variables.
 - Issue 37: Using live events for form submissions.
 
