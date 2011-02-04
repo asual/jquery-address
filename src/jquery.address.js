@@ -211,7 +211,7 @@
                         _st(function() {
                             $(_frame).bind('load', function() {
                                 var win = _frame.contentWindow;
-                                _value = win[ID] !== UNDEFINED ? win[ID] : '';
+                                _value = win[ID] !== UNDEFINED ? decode(win[ID]) : '';
                                 if (_value != _href()) {
                                     _update(FALSE);
                                     _l.hash = _crawl(_value, TRUE);
@@ -261,7 +261,7 @@
                 _st(function() {
                     if (++index != length) {
                         el = $(elements.get(index));
-                        if (el.is('[rel*=address:]')) {
+                        if (el.is('[rel*="address:"]')) {
                             el.address();
                         }
                         _st(arguments.callee, delay);
@@ -450,7 +450,7 @@
                 }
             }
             $(window).bind({
-                'popstate': _popstate, 
+                'popstate': _popstate,
                 'unload': _unload
             });
         } else if ((!_supported && _hrefHash() != '') || 
