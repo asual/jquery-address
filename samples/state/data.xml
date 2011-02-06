@@ -12,4 +12,7 @@
     <page href="/contact" title="Contact">
         <p>Contact content.</p>
     </page>
+    <page href="/контакты" title="Контакты">
+        <p>Содержание контактом.</p>
+    </page>
 </data>
