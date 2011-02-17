@@ -322,8 +322,8 @@
             _parameter = function(name, value) {
                 value = _queryString(value);
                 if (value) {
-                    params = value.split('&');
-                    var r = [];
+                    var params = value.split('&'),
+                        r = [];
                     for (i = 0; i < params.length; i++) {
                         var p = params[i].split('=');
                         if (p[0] == name || $.address.decode(p[0]) == name) {
