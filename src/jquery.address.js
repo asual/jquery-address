@@ -67,7 +67,7 @@
             },
             _crawl = function(value, direction) {
                 if (_opts.crawlable && direction) {
-                    return (value != '' ? '!' : '') + value;
+                    return (value !== '' ? '!' : '') + value;
                 }
                 return value.replace(/^\!/, '');
             },
@@ -288,7 +288,7 @@
                     if ($('body').html().indexOf(fragment) != -1) {
                         $('a[href]:not([href^=http]), a[href*="' + document.domain + '"]').each(function() {
                             var href = $(this).attr('href').replace(/^http:/, '').replace(new RegExp(base + '/?$'), '');
-                            if (href == '' || href.indexOf(fragment) != -1) {
+                            if (href === '' || href.indexOf(fragment) != -1) {
                                 $(this).attr('href', '#' + $.address.decode(href.replace(new RegExp('/(.*)\\?' + fragment + '=(.*)$'), '!$2')));
                             }
                         });
@@ -453,8 +453,8 @@
                 'popstate': _popstate,
                 'unload': _unload
             });
-        } else if ((!_supported && _hrefHash() != '') || 
-            (_webkit && _version < 418 && _hrefHash() != '' && _l.search != '')) {
+        } else if ((!_supported && _hrefHash() !== '') || 
+            (_webkit && _version < 418 && _hrefHash() !== '' && _l.search != '')) {
             _l.replace(_l.href.substr(0, _l.href.indexOf('#')));
         } else {
             _track();
@@ -635,7 +635,7 @@
                         _update(TRUE);
                         if (_supportsState()) {
                             _h[_opts.history ? 'pushState' : 'replaceState']({}, '', 
-                                    _opts.state.replace(/\/$/, '') + (_value == '' ? '/' : _value));
+                                    _opts.state.replace(/\/$/, '') + (_value === '' ? '/' : _value));
                         } else {
                             _silent = TRUE;
                             _stack[_h.length] = _value;
@@ -644,11 +644,11 @@
                                     _l[ID][_l.pathname] = _stack.toString();
                                     _length = _h.length + 1;
                                     if (_version < 418) {
-                                        if (_l.search == '') {
+                                        if (_l.search === '') {
                                             _form.action = '#' + _crawl(_value, TRUE);
                                             _form.submit();
                                         }
-                                    } else if (_version < 523 || _value == '') {
+                                    } else if (_version < 523 || _value === '') {
                                         var evt = _d.createEvent('MouseEvents');
                                         evt.initEvent('click', TRUE, TRUE);
                                         var anchor = _d.createElement('a');
