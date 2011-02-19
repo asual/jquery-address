@@ -91,15 +91,7 @@
                 if (!_silent) {
                     var hash = _href(),
                         diff = _value != hash;
-                    if (_webkit && _version < 523) {
-                        if (_length != _h.length) {
-                            _length = _h.length;
-                            if (_stack[_length - 1] !== UNDEFINED) {
-                                _value = _stack[_length - 1];
-                            }
-                            _update(FALSE);
-                        }
-                    } else if (diff) {
+                    if (diff) {
                         if (_msie && _version < 7) {
                             _l.reload();
                         } else {
@@ -221,17 +213,6 @@
                                 _html();
                             }
                         }, 50);
-                    } else if (_webkit) {
-                        if (_version < 418) {
-                            $(_d.body).append('<form id="' + ID + '" style="position:absolute;top:-9999px;" method="get"></form>');
-                            _form = _d.getElementById(ID);
-                        }
-                        if (_l[ID] === UNDEFINED) {
-                            _l[ID] = {};
-                        }
-                        if (_l[ID][_l.pathname] !== UNDEFINED) {
-                            _stack = _l[ID][_l.pathname].split(',');
-                        }
                     }
 
                     _st(function() {
@@ -392,13 +373,11 @@
             _url = _search(document),
             _qi = _url ? _url.indexOf('?') : -1,
             _title = _d.title, 
-            _length = _h.length, 
             _silent = FALSE,
             _loaded = FALSE,
             _justset = TRUE,
             _juststart = TRUE,
             _updating = FALSE,
-            _stack = [], 
             _listeners = {}, 
             _value = _href();
             
@@ -418,13 +397,9 @@
             (_mozilla && _version >= 1) || 
             (_msie && _version >= 6) ||
             (_opera && _version >= 9.5) ||
-            (_webkit && _version >= 312);
+            (_webkit && _version >= 523);
             
         if (_supported) {
-            for (var i = 1; i < _length; i++) {
-                _stack.push('');
-            }
-            _stack.push(_value);
             if (_opera) {
                 history.navigationMode = 'compatible';
             }
@@ -453,8 +428,7 @@
                 'popstate': _popstate,
                 'unload': _unload
             });
-        } else if ((!_supported && _hrefHash() !== '') || 
-            (_webkit && _version < 418 && _hrefHash() !== '' && _l.search != '')) {
+        } else if (!_supported && _hrefHash() !== '') {
             _l.replace(_l.href.substr(0, _l.href.indexOf('#')));
         } else {
             _track();
@@ -638,25 +612,9 @@
                                     _opts.state.replace(/\/$/, '') + (_value === '' ? '/' : _value));
                         } else {
                             _silent = TRUE;
-                            _stack[_h.length] = _value;
                             if (_webkit) {
                                 if (_opts.history) {
-                                    _l[ID][_l.pathname] = _stack.toString();
-                                    _length = _h.length + 1;
-                                    if (_version < 418) {
-                                        if (_l.search === '') {
-                                            _form.action = '#' + _crawl(_value, TRUE);
-                                            _form.submit();
-                                        }
-                                    } else if (_version < 523 || _value === '') {
-                                        var evt = _d.createEvent('MouseEvents');
-                                        evt.initEvent('click', TRUE, TRUE);
-                                        var anchor = _d.createElement('a');
-                                        anchor.href = '#' + _crawl(_value, TRUE);
-                                        anchor.dispatchEvent(evt);                
-                                    } else {
-                                        _l.hash = '#' + _crawl(_value, TRUE);
-                                    }
+                                    _l.hash = '#' + _crawl(_value, TRUE);
                                 } else {
                                     _l.replace('#' + _crawl(_value, TRUE));
                                 }
