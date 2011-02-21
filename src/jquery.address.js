@@ -706,6 +706,8 @@
     $.fn.address = function(fn) {
         if (!$(this).attr('address')) {
             var f = function(e) {
+                // if they're holding a modifier let it go through: they're trying to open in a new window or tab
+                if (e.shiftKey || e.ctrlKey || e.metaKey) { return true; }
                 if ($(this).is('a')) {
                     var value = fn ? fn.call(this) : 
                         /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
