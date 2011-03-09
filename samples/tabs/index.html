@@ -5,9 +5,9 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="jquery-ui-1.8.4.custom.css" rel="stylesheet">
         <link type="text/css" href="styles.css" rel="stylesheet">
-        <script type="text/javascript" src="jquery-1.5.min.js"></script>
+        <script type="text/javascript" src="jquery-1.5.1.min.js"></script>
         <script type="text/javascript" src="jquery-ui-1.8.4.custom.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.3.2.min.js?history=false&strict=false&wrap=true"></script>
+        <script type="text/javascript" src="jquery.address-1.4.min.js"></script>
         <script type="text/javascript">
             
             var tabs,
@@ -31,7 +31,7 @@
             }
             
             // Address handler
-            $.address.init(function(event) {
+            $.address.history(false).strict(false).wrap(true).init(function(event) {
 
                 // Adds the ID in a lazy manner to prevent scrolling
                 $(panelSelector).attr('id', initialTab);

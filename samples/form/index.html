@@ -4,8 +4,8 @@
         <title>jQuery Address Form</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
-        <script type="text/javascript" src="jquery-1.5.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.3.2.min.js"></script>
+        <script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="jquery.address-1.4.min.js"></script>
         <script type="text/javascript" src="deserialize.js"></script>
         <script type="text/javascript">
         
@@ -16,11 +16,14 @@
                     if (!$('pre').size()) {
                         $('form').before('<pre />');
                     }
-                    $.get('./' + $.address.encode(event.value), function(data) {
+                    $.get('./' + event.value, function(data) {
                         $('pre').html(data);
                     });
                 } else {
                     $('pre').remove();
+                }
+                for (var p in event.parameters) {
+                    event.parameters[p] = decodeURIComponent(event.parameters[p].replace(/\+/g, ' '));
                 }
                 $('form').deserialize(event.parameters);
             });

@@ -110,13 +110,13 @@ asyncTest('Parameter test', function() {
     setTimeout(function() {
         $.address.autoUpdate(false)
             .value('/')
-            .parameter('p1', 'a#b')
-            .parameter('p2', 'a&b')
+            .parameter('p1', encodeURIComponent('a#b'))
+            .parameter('p2', encodeURIComponent('a&b'))
             .autoUpdate(true)
             .update();
-        equals($.address.value(), '/?p1=a#b&p2=a&b');            
-        equals($.address.parameter('p1'), 'a#b');
-        equals($.address.parameter('p2'), 'a&b');
+        equals($.address.value(), '/?p1=' + encodeURIComponent('a#b') + '&p2=' + encodeURIComponent('a&b'));            
+        equals($.address.parameter('p1'), encodeURIComponent('a#b'));
+        equals($.address.parameter('p2'), encodeURIComponent('a&b'));
         start();
     }, 1000);
 });
@@ -125,11 +125,11 @@ asyncTest('Parameter test', function() {
     setTimeout(function() {
         $.address.autoUpdate(false)
             .value('/')
-            .parameter('p', 'a b +ċ')
+            .parameter('p', encodeURIComponent('a b +ċ'))
             .autoUpdate(true)
             .update();
-        equals($.address.value(), '/?p=a b +ċ');
-        equals($.address.parameter('p'), 'a b +ċ');
+        equals($.address.value(), '/?p=' + encodeURIComponent('a b +ċ'));
+        equals($.address.parameter('p'), encodeURIComponent('a b +ċ'));
         start();
     }, 1000);
 });
@@ -138,11 +138,11 @@ asyncTest('Parameter test', function() {
     setTimeout(function() {
         $.address.autoUpdate(false)
             .value('/')
-            .parameter('p', 'a+b ç=2')
+            .parameter('p', encodeURIComponent('a+b ç=2'))
             .autoUpdate(true)
             .update();
-        equals($.address.value(), '/?p=a+b ç=2');
-        equals($.address.parameter('p'), 'a+b ç=2');
+        equals($.address.value(), '/?p=' + encodeURIComponent('a+b ç=2'));
+        equals($.address.parameter('p'), encodeURIComponent('a+b ç=2'));
         start();
     }, 1000);
 });
@@ -164,10 +164,10 @@ asyncTest('Parameter test', function() {
     setTimeout(function() {
         $.address.autoUpdate(false)
             .value('/')
-            .parameter('data', $.param({start: 1, order: 'index1'}))
+            .parameter('data', encodeURIComponent($.param({start: 1, order: 'index1'})))
             .autoUpdate(true)
             .update();
-        equals($.address.parameter('data'), $.param({start: 1, order:'index1'}));
+        equals($.address.parameter('data'), encodeURIComponent($.param({start: 1, order:'index1'})));
         same($.address.parameterNames(), ['data']);
         start();
     }, 1000);
@@ -201,16 +201,16 @@ asyncTest('Hash test', function() {
 
 asyncTest('Character test', function() {
     setTimeout(function() {
-        $.address.value('/børn?тест=символ');
-        equals($.address.path(), '/børn');
-        equals($.address.parameter('тест'), 'символ');
+        $.address.value(encodeURI('/børn?тест=символ'));
+        equals($.address.path(), encodeURI('/børn'));
+        equals($.address.parameter(encodeURIComponent('тест')), encodeURIComponent('символ'));
         start();
     }, 1000);
 });
 
 asyncTest('Character test', function() {
     setTimeout(function() {
-        $.address.value('/Test%20Encoding');
+        $.address.value('/Test Encoding');
         equals($.address.value(), '/Test Encoding');
         start();
     }, 1000);
@@ -218,7 +218,7 @@ asyncTest('Character test', function() {
 
 asyncTest('Character test', function() {
     setTimeout(function() {
-        var str = 'Test mit Sonderzeichen + - / = ÖÄÜ und Leerzeichen';
+        var str = encodeURIComponent('Test mit Sonderzeichen + - / = ÖÄÜ und Leerzeichen');
         $.address.value(str);
         $.address.queryString('str=' + str);
         equals($.address.value(), '/' + str + '?str=' + str);

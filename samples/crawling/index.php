@@ -99,11 +99,11 @@
         <meta name="fragment" content="!">
         <title><?php $crawling->title(); ?> | jQuery Address Crawling</title>
         <link type="text/css" href="styles.css" rel="stylesheet">
-        <script type="text/javascript" src="jquery-1.5.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.3.2.min.js?crawlable=true"></script>
+        <script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="jquery.address-1.4.min.js"></script>
         <script type="text/javascript">
         
-            $.address.init(function(event) {
+            $.address.crawlable(true).init(function(event) {
 
                 // Initializes plugin support for links
                 $('a:not([href^=http])').address();

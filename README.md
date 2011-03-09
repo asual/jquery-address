@@ -38,6 +38,12 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
+
+### 03/05/2010 - jQuery Address 1.4
+
+- Drops the internal de/encoding magic.
+- Drops the Safari 2 support.
+
 ### 02/04/2010 - jQuery Address 1.3.2
 
 - Support for jQuery 1.5.
