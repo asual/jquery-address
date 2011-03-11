@@ -77,8 +77,13 @@
             _search = function(el) {
                 var url, s;
                 for (var i = 0, l = el.childNodes.length; i < l; i++) {
-                    if (el.childNodes[i].src) {
-                        url = String(el.childNodes[i].src);
+                    try {
+                      if (el.childNodes[i].src) {
+                          url = String(el.childNodes[i].src);
+                      }
+                    } catch (e) {
+                      // IE has a problem with base64 encoded images, it raises an Invalid pointer when the
+                      // source field is accessed
                     }
                     s = _search(el.childNodes[i]);
                     if (s) {
