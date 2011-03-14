@@ -177,7 +177,7 @@
                                 (_cssint(body, 'marginLeft') + _cssint(body, 'paddingLeft')) + 'px;" />')
                             .parent()
                             .wrap('<div id="' + ID + '" style="height:100%;overflow:auto;position:relative;' + 
-                                (_webkit ? (window.statusbar.visible && !/chrome/i.test(_agent) ? '' : 'resize:both;') : '') + '" />');
+                                (_webkit && !window.statusbar.visible ? 'resize:both;' : '') + '" />');
                         $('html, body')
                             .css({
                                 height: '100%',
