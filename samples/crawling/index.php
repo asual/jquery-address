@@ -99,7 +99,7 @@
         <meta name="fragment" content="!">
         <title><?php $crawling->title(); ?> | jQuery Address Crawling</title>
         <link type="text/css" href="styles.css" rel="stylesheet">
-        <script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="jquery-1.5.2.min.js"></script>
         <script type="text/javascript" src="jquery.address-1.4.min.js"></script>
         <script type="text/javascript">
         
