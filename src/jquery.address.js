@@ -358,10 +358,7 @@
                 _options();
                 $(_load);
             }
-            $(window).bind({
-                'popstate': _popstate,
-                'unload': _unload
-            });
+            $(window).bind('popstate', _popstate).bind('unload', _unload);            
         } else if (!_supported && _hrefHash() !== '') {
             _l.replace(_l.href.substr(0, _l.href.indexOf('#')));
         } else {
