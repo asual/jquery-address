@@ -242,16 +242,17 @@
                     elements = $('a'), 
                     length = elements.size(),
                     delay = 1,
-                    index = -1;
-                _st(function() {
-                    if (++index != length) {
-                        el = $(elements.get(index));
-                        if (el.is('[rel*="address:"]')) {
-                            el.address();
+                    index = -1,
+                    fn = function() {
+                        if (++index != length) {
+                            el = $(elements.get(index));
+                            if (el.is('[rel*="address:"]')) {
+                                el.address();
+                            }
+                            _st(fn, delay);
                         }
-                        _st(arguments.callee, delay);
-                    }
-                }, delay);
+                    };
+                _st(fn, delay);
             },
             _popstate = function() {
                 if (_value != _href()) {
