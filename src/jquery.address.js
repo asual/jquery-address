@@ -34,7 +34,7 @@
                 );
             },
             _bind = function(value, data, fn) {
-                $($.address).bind(value, data, fn);
+                $().bind.apply($($.address), Array.prototype.slice.call(arguments));
                 return $.address;
             },
             _supportsState = function() {
