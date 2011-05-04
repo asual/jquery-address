@@ -331,11 +331,15 @@
             if (_d.documentMode && _d.documentMode != _version) {
                 _version = _d.documentMode != 8 ? 7 : 8;
             }
-            $(document).bind('propertychange', function() {
+            var pc = _d.onpropertychange;
+            _d.onpropertychange = function() {
+                if (pc) {
+                    pc.call(_d);
+                }
                 if (_d.title != _title && _d.title.indexOf('#' + _href()) != -1) {
                     _d.title = _title;
                 }
-            });
+            };
         }
         
         _supported = 
