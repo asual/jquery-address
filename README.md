@@ -45,6 +45,7 @@ link that has a rel attribute in the following format:
 - Drops the internal de/encoding magic.
 - Drops the Safari 2 support.
 - Fixes various issues.
+- Updates the Express sample.
 
 ### 02/04/2010 - jQuery Address 1.3.2
 

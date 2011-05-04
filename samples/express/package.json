@@ -1,0 +1,12 @@
+{
+  "name": "jquery-address-express",
+  "description": "jQuery Address sample based on node.js and express.",
+  "version": "1.4.0",
+  "author": "Rostislav Hristov <rostislav@asual.com>",
+  "dependencies": {
+    "connect": ">= 1.4.0",
+    "ejs": ">= 0.4.0",
+    "express": ">= 2.2.0"
+  },
+  "engines": { "node": ">= 0.4.1" }
+}
