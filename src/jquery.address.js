@@ -78,7 +78,7 @@
                 var url, s;
                 for (var i = 0, l = el.childNodes.length; i < l; i++) {
                     try {
-                        if (el.childNodes[i].src) {
+                        if ('src' in el.childNodes[i] && el.childNodes[i].src) {
                             url = String(el.childNodes[i].src);
                         }
                     } catch (e) {
