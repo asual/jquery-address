@@ -74,23 +74,6 @@
             _cssint = function(el, value) {
                 return parseInt(el.css(value), 10);
             },
-            _search = function(el) {
-                var url, s;
-                for (var i = 0, l = el.childNodes.length; i < l; i++) {
-                    try {
-                        if ('src' in el.childNodes[i] && el.childNodes[i].src) {
-                            url = String(el.childNodes[i].src);
-                        }
-                    } catch (e) {
-                        // IE Invalid pointer problem with base64 encoded images
-                    }
-                    s = _search(el.childNodes[i]);
-                    if (s) {
-                        url = s;
-                    }
-                }
-                return url;
-            },
             _listen = function() {
                 if (!_silent) {
                     var hash = _href(),
@@ -315,7 +298,7 @@
             _agent = navigator.userAgent,            
             _frame,
             _form,
-            _url = _search(document),
+            _url = $('script:last').attr('src'),
             _qi = _url ? _url.indexOf('?') : -1,
             _title = _d.title, 
             _silent = FALSE,
