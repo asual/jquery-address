@@ -609,7 +609,7 @@
     $.fn.address = function(fn) {
         if (!$(this).attr('address')) {
             var f = function(e) {
-                if (e.shiftKey || e.ctrlKey || e.metaKey) {
+                if (e.shiftKey || e.ctrlKey || e.metaKey || e.which == 2) {
                     return true;
                 }
                 if ($(this).is('a')) {
