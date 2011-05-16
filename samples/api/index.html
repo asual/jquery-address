@@ -47,7 +47,7 @@
                     parameterNames: $.address.parameterNames(),
                     queryString: $.address.queryString()
                 }));
-            }).change(function(event) {
+            }).bind('change', function(event) {
                 log('change: ' + serialize(event, /parameters|parametersNames|path|pathNames|queryString|value/));
                 var names = $.map(event.pathNames, function(n) {
                     return n.substr(0, 1).toUpperCase() + n.substr(1);

@@ -33,6 +33,9 @@
                     )
                 );
             },
+            _array = function(obj) {
+                return Array.prototype.slice.call(obj);
+            },
             _bind = function(value, data, fn) {
                 $().bind.apply($($.address), Array.prototype.slice.call(arguments));
                 return $.address;
@@ -355,19 +358,19 @@
 
         return {
             bind: function(type, data, fn) {
-                return _bind(type, data, fn);
+                return _bind.apply(this, _array(arguments));
             },
-            init: function(fn) {
-                return _bind(INIT, fn);
+            init: function(data, fn) {
+                return _bind.apply(this, [INIT].concat(_array(arguments)));
             },
-            change: function(fn) {
-                return _bind(CHANGE, fn);
+            change: function(data, fn) {
+                return _bind.apply(this, [CHANGE].concat(_array(arguments)));
             },
-            internalChange: function(fn) {
-                return _bind(INTERNAL_CHANGE, fn);
+            internalChange: function(data, fn) {
+                return _bind.apply(this, [INTERNAL_CHANGE].concat(_array(arguments)));
             },
-            externalChange: function(fn) {
-                return _bind(EXTERNAL_CHANGE, fn);
+            externalChange: function(data, fn) {
+                return _bind.apply(this, [EXTERNAL_CHANGE].concat(_array(arguments)));
             },
             baseURL: function() {
                 var url = _l.href;
