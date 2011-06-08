@@ -625,7 +625,7 @@
                     e.preventDefault();
                 }
             };
-            $(this).click(f).live('click', f).live('submit', function(e) {
+            $(this).live('click', f).live('submit', function(e) {
                 if ($(this).is('form')) {
                     var action = $(this).attr('action'),
                         value = fn ? fn.call(this) : (action.indexOf('?') != -1 ? action.replace(/&$/, '') : action + '?') + 
