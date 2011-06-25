@@ -616,22 +616,22 @@
                     return true;
                 }
                 if ($(this).is('a')) {
+                    e.preventDefault();
                     var value = fn ? fn.call(this) : 
                         /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
                         $.address.state() !== undefined && $.address.state() != '/' ? 
                                 $(this).attr('href').replace(new RegExp('^(.*' + $.address.state() + '|\\.)'), '') : 
                                 $(this).attr('href').replace(/^(#\!?|\.)/, '');
                     $.address.value(value);
-                    e.preventDefault();
                 }
             };
             $(this).live('click', f).live('submit', function(e) {
                 if ($(this).is('form')) {
+                    e.preventDefault();
                     var action = $(this).attr('action'),
                         value = fn ? fn.call(this) : (action.indexOf('?') != -1 ? action.replace(/&$/, '') : action + '?') + 
                             $(this).serialize();
                     $.address.value(value);
-                    e.preventDefault();
                 }
             }).attr('address', true);
         }
