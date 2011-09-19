@@ -74,8 +74,8 @@
         <title><?php echo($data->title()); ?></title> 
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
-        <script type="text/javascript" src="jquery-1.5.2.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.4.1.min.js"></script>
+        <script type="text/javascript" src="jquery-1.6.4.min.js"></script>
+        <script type="text/javascript" src="jquery.address-1.5.min.js"></script>
         <script type="text/javascript">
 
             $.address.state('<?php echo($data->state()); ?>').init(function() {

@@ -5,13 +5,13 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="jquery-ui-1.8.13.custom.css" rel="stylesheet">
         <link type="text/css" href="styles.css" rel="stylesheet">
-        <script type="text/javascript" src="jquery-1.5.2.min.js"></script>
+        <script type="text/javascript" src="jquery-1.6.4.min.js"></script>
         <script type="text/javascript" src="jquery-ui-1.8.13.custom.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.4.1.min.js"></script>
+        <script type="text/javascript" src="jquery.address-1.5.min.js"></script>
         <script type="text/javascript">
             
             var tabs,
-                tabulation = false,
+                tabEvent = false,
                 initialTab = 'Overview',
                 navSelector = '#tabs .ui-tabs-nav',
                 navFilter = function(el) {
@@ -26,12 +26,15 @@
                     });
                 };
             
+            // Initializes plugin features
+            $.address.strict(false).wrap(true);
+            
             if ($.address.value() == '') {
-                $.address.value(initialTab);
+                $.address.history(false).value(initialTab).history(true);
             }
             
             // Address handler
-            $.address.history(false).strict(false).wrap(true).init(function(event) {
+            $.address.init(function(event) {
 
                 // Adds the ID in a lazy manner to prevent scrolling
                 $(panelSelector).attr('id', initialTab);
@@ -60,9 +63,9 @@
 
                 // Enables the plugin for all the tabs
                 $(navSelector + ' a').click(function(event) {
-                	tabulation = true;
+                	tabEvent = true;
                     $.address.value(navFilter(event.target));
-                    tabulation = false;
+                    tabEvent = false;
                     return false;
                 });
             
@@ -74,11 +77,11 @@
                 $.address.title($.address.title().split(' | ')[0] + ' | ' + current.text());
 
                 // Selects the proper tab
-                if (!tabulation) {
+                if (!tabEvent) {
                     tabs.tabs('select', current.attr('href'));
                 }
                 
-            }).history(true);
+            });
 
             // Hides the tabs during initialization
             document.write('<style type="text/css"> #tabs { display: none; } </style>');

@@ -85,7 +85,7 @@
                         if (_msie && _version < 7) {
                             _l.reload();
                         } else {
-                            if (_msie && _version < 8 && _opts.history) {
+                            if (_msie && !_hashchange && _opts.history) {
                                 _st(_html, 50);
                             }
                             _value = hash;
@@ -176,9 +176,10 @@
                                 .text('#' + ID + '::-webkit-resizer { background-color: #fff; }');
                         }
                     }
-                    if (_msie && _version < 8) {
+                    if (_msie && !_hashchange) {
                         var frameset = _d.getElementsByTagName('frameset')[0];
                         _frame = _d.createElement((frameset ? '' : 'i') + 'frame');
+                        _frame.src = _js() + ':' + FALSE;
                         if (frameset) {
                             frameset.insertAdjacentElement('beforeEnd', _frame);
                             frameset[frameset.cols ? 'cols' : 'rows'] += ',0';
@@ -211,7 +212,7 @@
                     }, 1);
 
                     if (!_supportsState()) {
-                        if ((_msie && _version > 7) || (!_msie && ('on' + HASH_CHANGE) in _t)) {
+                        if (_hashchange) {
                             if (_t.addEventListener) {
                                 _t.addEventListener(HASH_CHANGE, _listen, FALSE);
                             } else if (_t.attachEvent) {
@@ -229,11 +230,12 @@
                     length = elements.size(),
                     delay = 1,
                     index = -1,
+                    sel = '[rel*="address:"]',
                     fn = function() {
                         if (++index != length) {
                             el = $(elements.get(index));
-                            if (el.is('[rel*="address:"]')) {
-                                el.address();
+                            if (el.is(sel)) {
+                                el.address(sel);
                             }
                             _st(fn, delay);
                         }
@@ -285,12 +287,9 @@
                 wrap: FALSE
             },
             _browser = $.browser, 
-            _version = parseFloat($.browser.version),
-            _mozilla = _browser.mozilla,
-            _msie = _browser.msie,
-            _opera = _browser.opera,
+            _version = parseFloat(_browser.version),
+            _msie = !$.support.opacity,
             _webkit = _browser.webkit || _browser.safari,
-            _supported = FALSE,
             _t = _window(),
             _d = _t.document,
             _h = _t.history, 
@@ -298,7 +297,8 @@
             _si = setInterval,
             _st = setTimeout,
             _re = /\/{2,9}/g,
-            _agent = navigator.userAgent,            
+            _agent = navigator.userAgent,
+            _hashchange = 'on' + HASH_CHANGE in _t,
             _frame,
             _form,
             _url = $('script:last').attr('src'),
@@ -328,33 +328,21 @@
             };
         }
         
-        _supported = 
-            (_mozilla && _version >= 1) || 
-            (_msie && _version >= 6) ||
-            (_opera && _version >= 9.5) ||
-            (_webkit && _version >= 523);
-            
-        if (_supported) {
-            if (_opera) {
-                history.navigationMode = 'compatible';
-            }
-            if (document.readyState == 'complete') {
-                var interval = setInterval(function() {
-                    if ($.address) {
-                        _load();
-                        clearInterval(interval);
-                    }
-                }, 50);
-            } else {
-                _options();
-                $(_load);
-            }
-            $(window).bind('popstate', _popstate).bind('unload', _unload);            
-        } else if (!_supported && _hrefHash() !== '') {
-            _l.replace(_l.href.substr(0, _l.href.indexOf('#')));
-        } else {
-            _track();
+        if (_h.navigationMode) {
+            _h.navigationMode = 'compatible';
         }
+        if (document.readyState == 'complete') {
+            var interval = setInterval(function() {
+                if ($.address) {
+                    _load();
+                    clearInterval(interval);
+                }
+            }, 50);
+        } else {
+            _options();
+            $(_load);
+        }
+        $(window).bind('popstate', _popstate).bind('unload', _unload);
 
         return {
             bind: function(type, data, fn) {
@@ -457,7 +445,7 @@
                             _frame.contentWindow.document.title = value;
                             _juststart = FALSE;
                         }
-                        if (!_justset && _mozilla) {
+                        if (!_justset && _browser.mozilla) {
                             _l.replace(_l.href.indexOf('#') != -1 ? _l.href : _l.href + '#');
                         }
                         _justset = FALSE;
@@ -497,7 +485,7 @@
                                     _l.replace('#' + _crawl(_value, TRUE));
                                 }
                             }
-                            if ((_msie && _version < 8) && _opts.history) {
+                            if ((_msie && !_hashchange) && _opts.history) {
                                 _st(_html, 50);
                             }
                             if (_webkit) {
@@ -508,9 +496,6 @@
                         }
                     }
                     return this;
-                }
-                if (!_supported) {
-                    return null;
                 }
                 return _strict(_value);
             },
@@ -610,6 +595,11 @@
     })();
     
     $.fn.address = function(fn) {
+        var sel;
+        if (typeof fn == 'string') {
+            sel = fn;
+            fn = undefined;
+        }
         if (!$(this).attr('address')) {
             var f = function(e) {
                 if (e.shiftKey || e.ctrlKey || e.metaKey || e.which == 2) {
@@ -625,7 +615,7 @@
                     $.address.value(value);
                 }
             };
-            $(this).live('click', f).live('submit', function(e) {
+            $(sel ? sel : this).live('click', f).live('submit', function(e) {
                 if ($(this).is('form')) {
                     e.preventDefault();
                     var action = $(this).attr('action'),

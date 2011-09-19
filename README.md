@@ -38,8 +38,13 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
+### 09/19/2011 - jQuery Address 1.5
 
-### 05/04/2010 - jQuery Address 1.4
+- Introduces feature detection where possible.
+- Improves event handling.
+- Fixes various issues.
+
+### 05/04/2011 - jQuery Address 1.4
 
 - Support for jQuery 1.6.
 - Drops the internal de/encoding magic.
@@ -47,7 +52,7 @@ link that has a rel attribute in the following format:
 - Fixes various issues.
 - Updates the Express sample.
 
-### 02/04/2010 - jQuery Address 1.3.2
+### 02/04/2011 - jQuery Address 1.3.2
 
 - Support for jQuery 1.5.
 - Issue 48: IE7 "Permission Denied" error.
