@@ -129,7 +129,7 @@
             },
             _options = function() {
                 if (_url && _qi != -1) {
-                    var param, params = _url.substr(_qi + 1).split('&');
+                    var i, param, params = _url.substr(_qi + 1).split('&');
                     for (i = 0; i < params.length; i++) {
                         param = params[i].split('=');
                         if (/^(autoUpdate|crawlable|history|strict|wrap)$/.test(param[0])) {
