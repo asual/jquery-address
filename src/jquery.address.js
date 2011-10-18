@@ -118,7 +118,7 @@
             },
             _html = function() {
                 var src = _js() + ':' + FALSE + ';document.open();document.writeln(\'<html><head><title>' + 
-                    _d.title.replace('\'', '\\\'') + '</title><script>var ' + ID + ' = "' + _href() + 
+                    _d.title.replace(/\'/g, '\\\'') + '</title><script>var ' + ID + ' = "' + _href() + 
                     (_d.domain != _l.hostname ? '";document.domain="' + _d.domain : '') + 
                     '";</' + 'script></head></html>\');document.close();';
                 if (_version < 7) {
