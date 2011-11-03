@@ -36,8 +36,8 @@
             _array = function(obj) {
                 return Array.prototype.slice.call(obj);
             },
-            _bind = function(value, data, fn) {
-                $().bind.apply($($.address), Array.prototype.slice.call(arguments));
+            _on = function(value, data, fn) {
+                $().on.apply($($.address), Array.prototype.slice.call(arguments));
                 return $.address;
             },
             _supportsState = function() {
@@ -118,7 +118,7 @@
             },
             _html = function() {
                 var src = _js() + ':' + FALSE + ';document.open();document.writeln(\'<html><head><title>' + 
-                    _d.title.replace(/\'/g, '\\\'') + '</title><script>var ' + ID + ' = "' + _href() + 
+                    _d.title.replace(/\'/g, '\\\'') + '</title><script>var ' + ID + ' = "' + decodeURI(_href()) + 
                     (_d.domain != _l.hostname ? '";document.domain="' + _d.domain : '') + 
                     '";</' + 'script></head></html>\');document.close();';
                 if (_version < 7) {
@@ -192,7 +192,7 @@
                             _d.body.insertAdjacentElement('afterBegin', _frame);
                         }
                         _st(function() {
-                            $(_frame).bind('load', function() {
+                            $(_frame).on('load', function() {
                                 var win = _frame.contentWindow;
                                 _value = win[ID] !== UNDEFINED ? win[ID] : '';
                                 if (_value != _href()) {
@@ -342,23 +342,23 @@
             _options();
             $(_load);
         }
-        $(window).bind('popstate', _popstate).bind('unload', _unload);
+        $(window).on('popstate', _popstate).on('unload', _unload);
 
         return {
-            bind: function(type, data, fn) {
-                return _bind.apply(this, _array(arguments));
+            on: function(type, data, fn) {
+                return _on.apply(this, _array(arguments));
             },
             init: function(data, fn) {
-                return _bind.apply(this, [INIT].concat(_array(arguments)));
+                return _on.apply(this, [INIT].concat(_array(arguments)));
             },
             change: function(data, fn) {
-                return _bind.apply(this, [CHANGE].concat(_array(arguments)));
+                return _on.apply(this, [CHANGE].concat(_array(arguments)));
             },
             internalChange: function(data, fn) {
-                return _bind.apply(this, [INTERNAL_CHANGE].concat(_array(arguments)));
+                return _on.apply(this, [INTERNAL_CHANGE].concat(_array(arguments)));
             },
             externalChange: function(data, fn) {
-                return _bind.apply(this, [EXTERNAL_CHANGE].concat(_array(arguments)));
+                return _on.apply(this, [EXTERNAL_CHANGE].concat(_array(arguments)));
             },
             baseURL: function() {
                 var url = _l.href;
@@ -615,7 +615,7 @@
                     $.address.value(value);
                 }
             };
-            $(sel ? sel : this).live('click', f).live('submit', function(e) {
+            $(sel ? sel : this).on('click', f).on('submit', function(e) {
                 if ($(this).is('form')) {
                     e.preventDefault();
                     var action = $(this).attr('action'),
