@@ -263,7 +263,8 @@
                         $('a[href]:not([href^=http]), a[href*="' + document.domain + '"]').each(function() {
                             var href = $(this).attr('href').replace(/^http:/, '').replace(new RegExp(base + '/?$'), '');
                             if (href === '' || href.indexOf(fragment) != -1) {
-                                $(this).attr('href', '#' + href.replace(new RegExp('/(.*)\\?' + fragment + '=(.*)$'), '!$2'));
+                                $(this).attr('href', '#' + encodeURI(decodeURIComponent(href.replace(new RegExp('/(.*)\\?' + 
+                                    fragment + '=(.*)$'))), '!$2'));
                             }
                         });
                     }
