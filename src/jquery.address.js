@@ -610,7 +610,7 @@
                     e.preventDefault();
                     var value = fn ? fn.call(this) : 
                         /address:/.test($(this).attr('rel')) ? $(this).attr('rel').split('address:')[1].split(' ')[0] : 
-                        $.address.state() !== undefined && $.address.state() != '/' ? 
+                        $.address.state() !== undefined && !/^\/?$/.test($.address.state()) ? 
                                 $(this).attr('href').replace(new RegExp('^(.*' + $.address.state() + '|\\.)'), '') : 
                                 $(this).attr('href').replace(/^(#\!?|\.)/, '');
                     $.address.value(value);
