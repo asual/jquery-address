@@ -8,6 +8,17 @@
         <script type="text/javascript" src="jquery.address-1.5.min.js"></script>
         <script type="text/javascript">
 
+            var init = true, 
+                state = window.history.pushState !== undefined;
+            
+            // Handles response
+            var handler = function(XMLHttpRequest, textStatus) {
+                var data = $.parseJSON(XMLHttpRequest.responseText);
+                $.address.title(data.title);
+                $('.content').html(data.content);
+                $('.page').show();
+            };
+            
             $.address.state('/').init(function(event) {
 
                 // Initializes the plugin
@@ -25,22 +36,28 @@
                         $(this).removeClass('selected');
                     }
                 });
-
-                // Loads and populates the page data
-                $.ajax({
-                    cache: false,
-                    complete: function(XMLHttpRequest, textStatus) {
-                        var data = $.parseJSON(XMLHttpRequest.responseText);
-                        $.address.title(data.title);
-                        $('.content').html(data.content);
-                        $('.page').show();
-                    },
-                    url: value
-                });
+                
+                if (state && init) {
+                
+                    init = false;
+                
+                } else {
+                
+                    // Loads and populates the page data
+                    $.ajax({
+                        cache: false,
+                        complete: handler,
+                        url: value
+                    });
+                }
+                
             });
 
-            // Hides the page during initialization
-            document.write('<style type="text/css"> .page { display: none; } </style>');
+            if (!state) {
+            
+                // Hides the page during initialization
+                document.write('<style type="text/css"> .page { display: none; } </style>');
+            }
             
         </script> 
     </head> 

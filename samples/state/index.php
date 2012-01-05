@@ -78,6 +78,17 @@
         <script type="text/javascript" src="jquery.address-1.5.min.js"></script>
         <script type="text/javascript">
 
+            var init = true, 
+                state = window.history.pushState !== undefined;
+            
+            // Handles response
+            var handler = function(data) {
+                $('title').html($('title', data).html());
+                $('.content').html($('.content', data).html());
+                $('.page').show();
+                $.address.title(/>([^<]*)<\/title/.exec(data)[1]);
+            };
+            
             $.address.state('<?php echo($data->state()); ?>').init(function() {
 
                 // Initializes the plugin
@@ -93,29 +104,32 @@
                         $(this).removeClass('selected');
                     }
                 });
+                
+                if (state && init) {
+                
+                    init = false;
+                
+                } else {
+                
+                    // Loads the page content and inserts it into the content area
+                    $.ajax({
+                        url: $.address.state() + event.path,
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            handler(XMLHttpRequest.responseText);
+                        },
+                        success: function(data, textStatus, XMLHttpRequest) {
+                            handler(data);
+                        }
+                    });
+                }
 
-                // Handles response
-                var handler = function(data) {
-                    $('title').html($('title', data).html());
-                    $('.content').html($('.content', data).html());
-                    $('.page').show();
-                    $.address.title(/>([^<]*)<\/title/.exec(data)[1]);
-                };
-
-                // Loads the page content and inserts it into the content area
-                $.ajax({
-                    url: $.address.state() + event.path,
-                    error: function(XMLHttpRequest, textStatus, errorThrown) {
-                        handler(XMLHttpRequest.responseText);
-                    },
-                    success: function(data, textStatus, XMLHttpRequest) {
-                        handler(data);
-                    }
-                });
             });
 
-            // Hides the tabs during initialization
-            document.write('<style type="text/css"> .page { display: none; } </style>');
+            if (!state) {
+            
+                // Hides the page during initialization
+                document.write('<style type="text/css"> .page { display: none; } </style>');
+            }
             
         </script> 
     </head> 

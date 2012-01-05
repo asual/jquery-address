@@ -2,7 +2,6 @@ var fs = require('fs'),
     connect = require('connect'),
     express = require('express'),
     path = require('path'),
-    sys = require('sys'),
     url = require('url'),
     data = JSON.parse(fs.readFileSync(__dirname + '/data.js', 'utf8')),
     app = express.createServer();
