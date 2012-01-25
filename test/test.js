@@ -125,6 +125,20 @@ asyncTest('Parameter test', function() {
     setTimeout(function() {
         $.address.autoUpdate(false)
             .value('/')
+            .parameter('p1', encodeURIComponent('a=4&b=5'))
+            .autoUpdate(true)
+            .update();
+        equals($.address.value(), '/?p1=' + encodeURIComponent('a=4&b=5'));            
+        equals($.address.parameter('p1'), encodeURIComponent('a=4&b=5'));
+        equals(decodeURIComponent($.address.parameter('p1')), 'a=4&b=5');
+        start();
+    }, 1000);
+});
+
+asyncTest('Parameter test', function() {
+    setTimeout(function() {
+        $.address.autoUpdate(false)
+            .value('/')
             .parameter('p', encodeURIComponent('a b +ċ'))
             .autoUpdate(true)
             .update();
