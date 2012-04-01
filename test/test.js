@@ -89,8 +89,8 @@ asyncTest('Parameter test', function() {
         $.address.autoUpdate(false)
             .queryString('')
             .parameter('p', 1, true)
-            .parameter('p', 2)
-            .parameter('p', 3, true)
+            .parameter('p', 0)
+            .parameter('p', 2, true)
             .parameter('s', 1)
             .parameter('s', 2, true)
             .parameter('s', 3)
@@ -98,8 +98,8 @@ asyncTest('Parameter test', function() {
             .parameter('t', null)
             .autoUpdate(true)
             .update();
-        equals($.address.value(), '/test?p=2&p=3&s=3');
-        same($.address.parameter('p'), ['2','3']);
+        equals($.address.value(), '/test?p=0&p=2&s=3');
+        same($.address.parameter('p'), ['0','2']);
         equals($.address.parameter('s'), 3);
         same($.address.parameterNames(), ['p','s']);
         start();

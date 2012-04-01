@@ -205,12 +205,10 @@
                             }
                         }, 50);
                     }
-
                     _st(function() {
                         _trigger('init');
                         _update(FALSE);
                     }, 1);
-
                     if (!_supportsState()) {
                         if (_hashchange) {
                             if (_t.addEventListener) {
@@ -221,6 +219,9 @@
                         } else {
                             _si(_listen, 50);
                         }
+                    }
+                    if ('state' in window.history) {
+                        $(window).trigger('popstate');
                     }
                 }
             },
@@ -264,13 +265,14 @@
                             var href = $(this).attr('href').replace(/^http:/, '').replace(new RegExp(base + '/?$'), '');
                             if (href === '' || href.indexOf(fragment) != -1) {
                                 $(this).attr('href', '#' + encodeURI(decodeURIComponent(href.replace(new RegExp('/(.*)\\?' + 
-                                    fragment + '=(.*)$'))), '!$2'));
+                                    fragment + '=(.*)$'), '!$2'))));
                             }
                         });
                     }
                 }
             },
             UNDEFINED,
+            NULL = null,
             ID = 'jQueryAddress',
             STRING = 'string',
             HASH_CHANGE = 'hashchange',
@@ -307,7 +309,6 @@
             _title = _d.title, 
             _silent = FALSE,
             _loaded = FALSE,
-            _justset = TRUE,
             _juststart = TRUE,
             _updating = FALSE,
             _listeners = {}, 
@@ -446,10 +447,6 @@
                             _frame.contentWindow.document.title = value;
                             _juststart = FALSE;
                         }
-                        if (!_justset && _browser.mozilla) {
-                            _l.replace(_l.href.indexOf('#') != -1 ? _l.href : _l.href + '#');
-                        }
-                        _justset = FALSE;
                     }, 50);
                     return this;
                 }
@@ -464,7 +461,6 @@
                     if (_value == value && !_updating) {
                         return;
                     }
-                    _justset = TRUE;
                     _value = value;
                     if (_opts.autoUpdate || _updating) {
                         _update(TRUE);
@@ -534,7 +530,7 @@
                 if (value !== UNDEFINED) {
                     var names = this.parameterNames();
                     params = [];
-                    value = value ? value.toString() : '';
+                    value = value === UNDEFINED || value === null ? '' : value.toString();
                     for (i = 0; i < names.length; i++) {
                         var n = names[i],
                             v = this.parameter(n);
