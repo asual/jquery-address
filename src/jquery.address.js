@@ -40,6 +40,10 @@
                 $().bind.apply($($.address), Array.prototype.slice.call(arguments));
                 return $.address;
             },
+            _unbind = function(value,  fn) {
+                $().unbind.apply($($.address), Array.prototype.slice.call(arguments));
+                return $.address;
+            },
             _supportsState = function() {
                 return (_h.pushState && _opts.state !== UNDEFINED);
             },
@@ -349,6 +353,9 @@
         return {
             bind: function(type, data, fn) {
                 return _bind.apply(this, _array(arguments));
+            },
+            unbind: function(type, fn) {
+                return _unbind.apply(this, _array(arguments));
             },
             init: function(data, fn) {
                 return _bind.apply(this, [INIT].concat(_array(arguments)));
