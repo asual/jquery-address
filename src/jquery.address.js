@@ -104,7 +104,7 @@
                 _st(_track, 10);
             },
             _track = function() {
-                if (_opts.tracker !== 'null' && _opts.tracker !== null) {
+                if (_opts.tracker !== 'null' && _opts.tracker !== NULL) {
                     var fn = $.isFunction(_opts.tracker) ? _opts.tracker : _t[_opts.tracker],
                         value = (_l.pathname + _l.search + 
                                 ($.address && !_supportsState() ? $.address.value() : ''))
@@ -143,7 +143,7 @@
                             _opts[param[0]] = param[1];
                         }
                     }
-                    _url = null;
+                    _url = NULL;
                 }
                 _value = _href();
             },
@@ -537,7 +537,7 @@
                 if (value !== UNDEFINED) {
                     var names = this.parameterNames();
                     params = [];
-                    value = value === UNDEFINED || value === null ? '' : value.toString();
+                    value = value === UNDEFINED || value === NULL ? '' : value.toString();
                     for (i = 0; i < names.length; i++) {
                         var n = names[i],
                             v = this.parameter(n);
@@ -545,14 +545,14 @@
                             v = [v];
                         }
                         if (n == name) {
-                            v = (value === null || value === '') ? [] : 
+                            v = (value === NULL || value === '') ? [] : 
                                 (append ? v.concat([value]) : [value]);
                         }
                         for (var j = 0; j < v.length; j++) {
                             params.push(n + '=' + v[j]);
                         }
                     }
-                    if ($.inArray(name, names) == -1 && value !== null && value !== '') {
+                    if ($.inArray(name, names) == -1 && value !== NULL && value !== '') {
                         params.push(name + '=' + value);
                     }
                     this.queryString(params.join('&'));
