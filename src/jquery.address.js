@@ -60,7 +60,7 @@
             },
             _window = function() {
                 try {
-                    return top.document !== UNDEFINED ? top : window;
+                    return top.document !== UNDEFINED && top.document.title !== UNDEFINED ? top : window;
                 } catch (e) { 
                     return window;
                 }
