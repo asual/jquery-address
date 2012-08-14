@@ -84,7 +84,7 @@
             _listen = function() {
                 if (!_silent) {
                     var hash = _href(),
-                        diff = _value != hash;
+                        diff = decodeURI(_value) != decodeURI(hash);
                     if (diff) {
                         if (_msie && _version < 7) {
                             _l.reload();
@@ -248,7 +248,7 @@
                 _st(fn, delay);
             },
             _popstate = function() {
-                if (_value != _href()) {
+                if (decodeURI(_value) != decodeURI(_href())) {
                     _value = _href();
                     _update(FALSE);
                 }
