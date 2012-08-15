@@ -243,6 +243,22 @@ asyncTest('Character test', function() {
     }, 1000);
 });
 
+asyncTest('Single quote test', function() {
+    setTimeout(function() {
+        var externalChange = 0;
+        var testFunction = function() {
+            externalChange++;
+            equals(externalChange, 0);
+        };
+        var ignore = false;
+        $.address.value('/')
+            .bind('externalChange', testFunction)
+            .parameter('p', "Patrick's Test")
+            .unbind('externalChange', testFunction);
+        start();
+    }, 1000);
+});
+
 asyncTest('Value test', function() {
     setTimeout(function() {
         $.address.value(1);
