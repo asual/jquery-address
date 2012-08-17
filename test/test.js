@@ -307,6 +307,24 @@ asyncTest('Strict test', function() {
     }, 100);
 });
 
+
+asyncTest("Hash Change Event test", function() {
+  setTimeout(function() {
+    var hashChangeCount = 0
+      , preventDefaultCount = 0
+      , hashChangeFunc = function(){
+          hashChangedCount ++;
+          equals(hashChangeCount, 1)
+      }
+    $.address.value('/')
+      .change(hashChangeFunc)
+      .hash('foobar')
+      .unbind('hashchange')
+  
+    start()
+  }, 100)
+})
+
 setTimeout(function() {
     $.address.value('/');
 }, 30000);
