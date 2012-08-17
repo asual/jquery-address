@@ -4,7 +4,7 @@ asyncTest('Value test', function() {
         equals($.address.value(), '/test');
         setTimeout(function() {
             window.history.back();
-        }, 500);
+        }, 50);
         start();
     }, 100);
 });
@@ -14,7 +14,7 @@ asyncTest('History test', function() {
         equals($.address.value(), '/');
         setTimeout(function() {
             window.history.forward();
-        }, 500);
+        }, 50);
         start();
     }, 100);
 });
