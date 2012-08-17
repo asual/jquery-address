@@ -311,11 +311,14 @@ asyncTest('Strict test', function() {
 asyncTest("Hash Change Event test", function() {
   setTimeout(function() {
     var hashChangeCount = 0
-      , preventDefaultCount = 0
-      , hashChangeFunc = function(){
-          hashChangedCount ++;
+      , hashChangeFunc = function(e){
+          hashChangeCount ++;
           equals(hashChangeCount, 1)
+
+          e.preventDefault();
       }
+    
+
     $.address.value('/')
       .change(hashChangeFunc)
       .hash('foobar')
@@ -324,6 +327,16 @@ asyncTest("Hash Change Event test", function() {
     start()
   }, 100)
 })
+
+asyncTest("Prevent Default Test", function(){
+  setTimeout(function(){ // Afterwards
+    
+    // Previous test should have preventDefaulted
+    equals($.address.hash(), '')
+    start();
+  }, 20)
+})
+
 
 setTimeout(function() {
     $.address.value('/');
