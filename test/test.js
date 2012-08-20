@@ -323,7 +323,7 @@ asyncTest("Hash Change Event test", function() {
     $.address.value('/')
       .change(hashChangeFunc)
       .hash('foobar')
-      .unbind('hashchange')
+      .unbind('change')
   
   }, 100)
 })
@@ -343,25 +343,37 @@ asyncTest("Subsequent prevent default should work", function(){
   
   setTimeout(function() {
      var hashChangeFunc = function(e){
-         console.log("!!!", hashChangeCount)
          hashChangeCount ++;
-          e.preventDefault();
+         e.preventDefault();
       }
 
-    $.address.value('/')
-    $.address.change(hashChangeFunc)
-    $.address.hash('foobar')
-    $.address.unbind('hashchange')
+    $.address
+      .change(hashChangeFunc)
+      .value('?foobar')
   
-  }, 100)
+  }, 50)
   
   setTimeout(function(){
-    equals($.address.hash(), '')
-    console.log("!!!>", hashChangeCount == 1,   hashChangeCount)
+    equals($.address.value(), '')
     equal( hashChangeCount, 1, "Change Happened")
-    console.log("!!!>>", hashChangeCount)
+    $.address.value('bar')
+  }, 100)
+
+  setTimeout(function(){
+    equals($.address.value(), '')
+    equal(hashChangeCount, 2);
+    $.address.unbind('change')
+      .value('?foo')
+  }, 150)
+
+  // Test unbind
+  setTimeout(function(){
+    equal($.address.value(), '?foo')
+    equal(hashChangeCount, 2);
+    $.address.value('/')
     start()
   }, 200)
+
 
 })
 
