@@ -13,9 +13,8 @@
     $.address = (function () {
 
         var _trigger = function(name) {
-                $($.address).trigger(
-                    $.extend($.Event(name), 
-                        (function() {
+               var ev = $.extend($.Event(name), 
+                 (function() {
                             var parameters = {},
                                 parameterNames = $.address.parameterNames();
                             for (var i = 0, l = parameterNames.length; i < l; i++) {
@@ -30,8 +29,10 @@
                                 queryString: $.address.queryString()
                             };
                         }).call($.address)
-                    )
-                );
+                    );
+
+               $($.address).trigger(ev);
+               return ev;
             },
             _array = function(obj) {
                 return Array.prototype.slice.call(obj);
@@ -81,6 +82,8 @@
             _cssint = function(el, value) {
                 return parseInt(el.css(value), 10);
             },
+            
+            // Hash Change Callback
             _listen = function() {
                 if (!_silent) {
                     var hash = _href(),
@@ -92,17 +95,57 @@
                             if (_msie && !_hashchange && _opts.history) {
                                 _st(_html, 50);
                             }
+                            _old = _value;
                             _value = hash;
                             _update(FALSE);
                         }
                     }
                 }
             },
+
             _update = function(internal) {
-                _trigger(CHANGE);
-                _trigger(internal ? INTERNAL_CHANGE : EXTERNAL_CHANGE);
+                var changeEv = _trigger(CHANGE),
+                    xChangeEv = _trigger(internal ? INTERNAL_CHANGE : EXTERNAL_CHANGE);
+                
                 _st(_track, 10);
+
+                if (changeEv.isDefaultPrevented() || xChangeEv.isDefaultPrevented()){
+                  _preventDefault();
+                }
             },
+
+            _preventDefault = function(){
+              _value = _old;
+              
+              if (_supportsState()) {
+                  _h.popState({}, '', _opts.state.replace(/\/$/, '') + (_value === '' ? '/' : _value));
+              } else {
+                  _silent = TRUE;
+                  if (_webkit) {
+                      if (_opts.history) {
+                          _l.hash = '#' + _crawl(_value, TRUE);
+                      } else {
+                          _l.replace('#' + _crawl(_value, TRUE));
+                      }
+                  } else if (_value != _href()) {
+                      if (_opts.history) {
+                          _l.hash = '#' + _crawl(_value, TRUE);
+                      } else {
+                          _l.replace('#' + _crawl(_value, TRUE));
+                      }
+                  }
+                  if ((_msie && !_hashchange) && _opts.history) {
+                      _st(_html, 50);
+                  }
+                  if (_webkit) {
+                      _st(function(){ _silent = FALSE; }, 1);
+                  } else {
+                      _silent = FALSE;
+                  }
+              }
+              
+            },
+
             _track = function() {
                 if (_opts.tracker !== 'null' && _opts.tracker !== NULL) {
                     var fn = $.isFunction(_opts.tracker) ? _opts.tracker : _t[_opts.tracker],
@@ -145,6 +188,7 @@
                     }
                     _url = NULL;
                 }
+                _old = _value;
                 _value = _href();
             },
             _load = function() {
@@ -198,6 +242,7 @@
                         _st(function() {
                             $(_frame).bind('load', function() {
                                 var win = _frame.contentWindow;
+                                _old = _value;
                                 _value = win[ID] !== UNDEFINED ? win[ID] : '';
                                 if (_value != _href()) {
                                     _update(FALSE);
@@ -249,6 +294,7 @@
             },
             _popstate = function() {
                 if (decodeURI(_value) != decodeURI(_href())) {
+                    _old = _value;
                     _value = _href();
                     _update(FALSE);
                 }
@@ -317,6 +363,7 @@
             _updating = FALSE,
             _listeners = {}, 
             _value = _href();
+            _old = _value;
             
         if (_msie) {
             _version = parseFloat(_agent.substr(_agent.indexOf('MSIE') + 4));
@@ -468,6 +515,7 @@
                     if (_value == value && !_updating) {
                         return;
                     }
+                    _old = _value;
                     _value = value;
                     if (_opts.autoUpdate || _updating) {
                         _update(TRUE);
