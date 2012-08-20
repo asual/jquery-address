@@ -1,4 +1,20 @@
 <?php 
+
+    class Address {
+        
+        static function state() {
+        	
+        	// Returns the base state
+            return substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
+        }
+        
+        static function value() {
+        	
+        	// Returns the state value
+            return str_replace(Address::state(), '', $_SERVER['REQUEST_URI']);
+        }
+        
+    }
     
     class Data { 
 
@@ -9,19 +25,7 @@
             $this->doc->load($file);
             $this->xp = new DOMXPath($this->doc);
             $this->nodes = $this->xp->query('/data/page');
-            $this->node = $this->xp->query('/data/page[@href="' . $this->value() . '"]')->item(0);
-        }
-        
-        function state() {
-        	
-        	// Returns the base state
-            return substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
-        }
-        
-        function value() {
-        	
-        	// Returns the state value
-            return str_replace($this->state(), '', $_SERVER['REQUEST_URI']);
+            $this->node = $this->xp->query('/data/page[@href="' . Address::value() . '"]')->item(0);
         }
         
         function nav() {
@@ -31,8 +35,8 @@
             foreach ($this->nodes as $node) {
                 $href = $node->getAttribute('href');
                 $title = $node->getAttribute('title');
-                $str .= '<li><a href="' . $this->state() . $href . '"' 
-                    . ($this->value() == $href ? ' class="selected"' : '') . '>' . $title . '</a></li>';
+                $str .= '<li><a href="' . Address::state() . $href . '"' 
+                    . (Address::value() == $href ? ' class="selected"' : '') . '>' . $title . '</a></li>';
             }
             return trim($str);
         }
@@ -57,13 +61,21 @@
             
             // Prepares the title
             foreach($this->nodes as $node){
-                $href=$node->getAttribute('href');
-                $title=$node->getAttribute('title');
-                $str.=($this->value()==$href?$title:'');
+                $href = $node->getAttribute('href');
+                $title = $node->getAttribute('title');
+                $str .= Address::value() == $href ? $title : '';
             }
             return trim($str);
         }
     }
+
+    // Experimental patch for IE
+    // if (preg_match('/MSIE\s(?!10)/i', $_SERVER['HTTP_USER_AGENT']) && 
+    //     $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] != 'XMLHttpRequest' && 
+    //     Address::value() != '/') {
+    //     header('Location: ' . Address::state() . '/#' . Address::value());
+    //     exit();
+    // }
     
     $data = new Data('data.xml');
 
@@ -89,7 +101,7 @@
                 $.address.title(/>([^<]*)<\/title/.exec(data)[1]);
             };
             
-            $.address.state('<?php echo($data->state()); ?>').init(function() {
+            $.address.state('<?php echo(Address::state()); ?>').init(function() {
 
                 // Initializes the plugin
                 $('.nav a').address();

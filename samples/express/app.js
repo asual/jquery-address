@@ -16,6 +16,7 @@ app.get('*', function(req, res) {
 
     var pathname = url.parse(req.url).pathname,
         pageNotFound = "Page not found.",
+        state = '',
         selected = {
             title: pageNotFound, 
             content: pageNotFound, 
@@ -30,14 +31,19 @@ app.get('*', function(req, res) {
         }
     }
     
-	if (req.isXMLHttpRequest && req.accepts('application/json')) {
-		res.send(selected, selected.status);
-	} else {
+    if (req.isXMLHttpRequest && req.accepts('application/json')) {
+	    res.send(selected, selected.status);
+    // Experimental patch for IE
+    // } else if (/MSIE\s(?!10)/i.test(req.headers['user-agent']) && pathname != '/') {
+    //     res.writeHead(302, { 'Location': state + '/#' + pathname });
+    //     res.end();
+    } else {
 	    res.render(path.dirname(__filename) + '/views/index.html', {
 	        layout: false,
 	        locals: {
 	            data: data,
-	            selected: selected
+	            selected: selected,
+	            state: state
 	        }
 	    }, function(err, content) { 
 	        res.send(content, selected.status);

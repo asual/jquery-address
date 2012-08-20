@@ -19,7 +19,7 @@
                 $('.page').show();
             };
             
-            $.address.state('/').init(function(event) {
+            $.address.state('<%= state %>').init(function(event) {
 
                 // Initializes the plugin
                 $('.nav a').address();
@@ -66,7 +66,7 @@
             <h1>jQuery Address Express</h1>
             <ul class="nav">
             <% for (var key in data) { %>
-                <li><a href="<%= data[key].href %>"<%- selected == data[key] ? ' class="selected"' : '' %>><%= data[key].title %></a></li>
+                <li><a href="<%= state %><%= data[key].href %>"<%- selected == data[key] ? ' class="selected"' : '' %>><%= data[key].title %></a></li>
             <% } %>
             </ul>
             <div class="content"><%- selected.content %></div>
