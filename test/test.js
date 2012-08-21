@@ -378,6 +378,33 @@ asyncTest("Subsequent prevent default should work", function(){
 })
 
 
+
+asyncTest('ensure code in hash is not executed (see commit a9f95e5885a9e)', function(){
+  setTimeout(function(){
+    var called = 0
+    
+    //place a function in the global namespace, this one should get called by the injected code
+    window.omg = function(){
+          called++;
+    };
+
+    $.address.change(function(){  
+      equal(called, 0);
+
+      $.address.value('/');
+      delete window.omg;
+
+      start();
+    });  
+  
+    //change the hash
+    window.location.hash = "'-window.top.omg(1)-'";
+  }, 100)
+
+
+})
+
+
 setTimeout(function() {
     $.address.value('/');
 }, 30000);
