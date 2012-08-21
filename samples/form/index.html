@@ -9,23 +9,27 @@
         <script type="text/javascript" src="deserialize.js"></script>
         <script type="text/javascript">
         
-            $.address.init(function(event) {
-                $('form').address();
-            }).change(function(event) {
-                if (event.value != '/') {
-                    if (!$('pre').size()) {
-                        $('form').before('<pre />');
+            $(function() {
+            
+                $.address.init(function(event) {
+                    $('form').address();
+                }).change(function(event) {
+                    if (event.value != '/') {
+                        if (!$('pre').size()) {
+                            $('form').before('<pre />');
+                        }
+                        $.get('./' + event.value, function(data) {
+                            $('pre').html(data);
+                        });
+                    } else {
+                        $('pre').remove();
                     }
-                    $.get('./' + event.value, function(data) {
-                        $('pre').html(data);
-                    });
-                } else {
-                    $('pre').remove();
-                }
-                for (var p in event.parameters) {
-                    event.parameters[p] = decodeURIComponent(event.parameters[p].replace(/\+/g, ' '));
-                }
-                $('form').deserialize(event.parameters);
+                    for (var p in event.parameters) {
+                        event.parameters[p] = decodeURIComponent(event.parameters[p].replace(/\+/g, ' '));
+                    }
+                    $('form').deserialize(event.parameters);
+                });
+                
             });
      
         </script>
