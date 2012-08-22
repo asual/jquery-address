@@ -316,15 +316,15 @@ asyncTest("Hash Change Event test", function() {
           equals(hashChangeCount, 1)
 
           e.preventDefault();
+          start()
       }
     
 
     $.address.value('/')
       .change(hashChangeFunc)
       .hash('foobar')
-      .unbind('hashchange')
+      .unbind('change')
   
-    start()
   }, 100)
 })
 
@@ -335,6 +335,73 @@ asyncTest("Prevent Default Test", function(){
     equals($.address.hash(), '')
     start();
   }, 20)
+})
+
+asyncTest("Subsequent prevent default should work", function(){
+  
+  var hashChangeCount = 0
+  
+  setTimeout(function() {
+     var hashChangeFunc = function(e){
+         hashChangeCount ++;
+         e.preventDefault();
+      }
+
+    $.address
+      .change(hashChangeFunc)
+      .value('?foobar')
+  
+  }, 50)
+  
+  setTimeout(function(){
+    equals($.address.value(), '')
+    equal( hashChangeCount, 1, "Change Happened")
+    $.address.value('bar')
+  }, 100)
+
+  setTimeout(function(){
+    equals($.address.value(), '')
+    equal(hashChangeCount, 2);
+    $.address.unbind('change')
+      .value('?foo')
+  }, 150)
+
+  // Test unbind
+  setTimeout(function(){
+    equal($.address.value(), '?foo')
+    equal(hashChangeCount, 2);
+    $.address.value('/')
+    start()
+  }, 200)
+
+
+})
+
+
+
+asyncTest('ensure code in hash is not executed (see commit a9f95e5885a9e)', function(){
+  setTimeout(function(){
+    var called = 0
+    
+    //place a function in the global namespace, this one should get called by the injected code
+    window.omg = function(){
+          called++;
+    };
+
+    $.address.change(function(){  
+      equal(called, 0);
+
+      $.address.value('/');
+      delete window.omg;
+
+      start();
+    });  
+  
+    //change the hash
+    window.location.hash = "'-window.top.omg(1)-'";
+  }, 100)
+
+
 })
 
 
