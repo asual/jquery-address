@@ -259,7 +259,7 @@
                         _update(FALSE);
                     }, 1);
                     if (!_supportsState()) {
-                        if (_hashchange) {
+                        if ((_msie && _version > 7) || (!_msie && _hashchange)) {
                             if (_t.addEventListener) {
                                 _t.addEventListener(HASH_CHANGE, _listen, FALSE);
                             } else if (_t.attachEvent) {
