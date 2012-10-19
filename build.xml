@@ -32,6 +32,8 @@
     </target>
     
     <target name="dist">
+        <mkdir dir="${dist.dir}"/>
+
         <delete includeemptydirs="true">
             <fileset dir="${dist.dir}" includes="**/*" />
         </delete>
