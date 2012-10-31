@@ -86,6 +86,16 @@ asyncTest('Parameter test', function() {
 
 asyncTest('Parameter test', function() {
     setTimeout(function() {
+        $.address.path('/test');
+        $.address.parameter('p', encodeURIComponent('Test & Test'));
+        equals($.address.value(), '/test?p='+ encodeURIComponent('Test & Test'));
+        same($.address.parameter('p'), encodeURIComponent('Test & Test'));
+        start();
+    }, 100);
+});
+
+asyncTest('Parameter test', function() {
+    setTimeout(function() {
         $.address.autoUpdate(false)
             .queryString('')
             .parameter('p', 1, true)
