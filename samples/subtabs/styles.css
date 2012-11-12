@@ -1,0 +1,24 @@
+html, body {
+    background: #000;
+}
+body {
+    font: 13px "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.page {
+    width: 720px;
+    margin: 0 auto;
+    padding: 20px 0 800px;
+}
+.page h1 { 
+    font-size: 27px;
+    margin: 0 3px 17px; 
+    padding: 0;
+    color: #fff;
+}
+.ui-tabs {
+    height: auto !important;
+    height: 320px;
+    min-height: 320px;
+}

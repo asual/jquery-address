@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>jQuery Address SubTabs</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <link type="text/css" href="jquery-ui-1.8.13.custom.css" rel="stylesheet">
+        <link type="text/css" href="styles.css" rel="stylesheet">
+        <script type="text/javascript" src="jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="jquery-ui-1.8.13.custom.min.js"></script>
+        <script type="text/javascript" src="jquery.address-1.5.min.js"></script>
+        <script type="text/javascript">
+
+            var tabs,
+                separator = '-',
+                initialTab = 'tab1',
+                navSelector = 'ul.ui-tabs-nav a',
+                tabSelector = '#tabs, #tab1 > #subtabs';
+
+            $.address.wrap(true);
+
+            if ($.address.value() == '/') {
+                $.address.history(false).value(initialTab).history(true);
+            }
+
+            $.address.change(function(event) {
+
+                // Selects the current anchor
+                var current = $('a[href=#' + event.value.replace(/^\//, '').replace('/', separator) + ']:first'),
+                    selection = current.attr('href'),
+                    href = selection.replace('/', separator),
+                    parts = href.split(separator),
+                    subselection;
+                
+                // Sets the page title
+                $.address.title($.address.title().split(' | ')[0] + ' | ' + current.text());
+
+                if (!tabs) {
+                    // Creates the tabs
+                    tabs = $(tabSelector).tabs({
+                        event: 'change'
+                    }).css('display', 'block');
+                    tabs.find(navSelector).click(function(e) {
+                        $.address.value(e.target.hash.replace(/^#/, '').replace(separator, '/'));
+                        e.preventDefault();
+                    });
+                }
+
+                // Selects the parent tabs
+                if (parts.length != 1) {
+                    for (var i = 1; i < parts.length; i++) {
+                        tabs.tabs('select', parts.slice(0, i).join(separator));
+                    }
+                }
+                
+                // Selects the chosen tab
+                tabs.tabs('select', selection);
+
+                // Selects the first child tab
+                while (subselection = $(selection + ' ' + navSelector + ':first').attr('href')) {
+                    tabs.tabs('select', subselection);
+                    selection = subselection;
+                }
+                
+            });
+            
+            // Hides the tabs during initialization
+            document.write('<style type="text/css"> #tabs { display: none; } </style>');
+
+        </script>
+    </head>
+    <body>
+        <div class="page">
+            <h1>jQuery Address SubTabs</h1>
+            <div id="tabs">
+                <ul>
+                    <li><a href="#tab1">Tab 1</a></li>
+                    <li><a href="#tab2">Tab 2</a></li>
+                </ul>
+                <div id="tab1">
+                    <p>Tab 1</p>
+                    <div id="subtabs">
+                        <ul>
+                            <li><a href="#tab1-subtab1">SubTab 1</a></li>
+                            <li><a href="#tab1-subtab2">SubTab 2</a></li>
+                        </ul>
+                        <div id="tab1-subtab1">
+                            <p>SubTab 1</p>
+                        </div>
+                        <div id="tab1-subtab2">
+                            <p>SubTab 2</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab2">
+                    <p>Tab 2</p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
