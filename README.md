@@ -38,11 +38,12 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
-### 09/19/2011 - jQuery Address 1.5
+### 11/18/2012 - jQuery Address 1.5
 
 - Introduces feature detection where possible.
 - Improves event handling.
 - Fixes various issues.
+- Adds a new subtabs sample.
 
 ### 05/04/2011 - jQuery Address 1.4
 
