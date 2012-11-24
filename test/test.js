@@ -61,6 +61,54 @@ asyncTest('Query test', function() {
     }, 100);
 });
 
+asyncTest('Frames disabled test', function() {
+    setTimeout(function() {
+        $.address.parameter('p', 2);
+
+        var $iframe = $('<iframe src="frame.html#/?p=1"></iframe>');
+
+        window.iframe = function(val){
+            equals(val, 1);
+
+            delete window.iframe;
+
+            window.history.back();
+
+            start();
+
+            $iframe.remove();
+        }
+        
+        $.address.frames(false);
+
+        $iframe.appendTo('body');
+    }, 100);
+});
+
+asyncTest('Frames enabled test', function() {
+    setTimeout(function() {
+        $.address.parameter('p', 3);
+
+        var $iframe = $('<iframe src="frame.html#/?p=1"></iframe>');
+
+        window.iframe = function(val){
+            equals(val, 3);
+
+            delete window.iframe;
+
+            window.history.back();
+
+            start();
+
+            $iframe.remove();
+        }
+
+        $.address.frames(true);
+
+        $iframe.appendTo('body');
+    }, 100);
+});
+
 asyncTest('Parameter test', function() {
     setTimeout(function() {
         $.address.parameter('a', null);
@@ -413,7 +461,6 @@ asyncTest('ensure code in hash is not executed (see commit a9f95e5885a9e)', func
 
 
 })
-
 
 setTimeout(function() {
     $.address.value('/');

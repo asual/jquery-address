@@ -61,7 +61,8 @@
             },
             _window = function() {
                 try {
-                    return top.document !== UNDEFINED && top.document.title !== UNDEFINED ? top : window;
+                    return top.document !== UNDEFINED && top.document.title !== UNDEFINED && top.jQuery !== UNDEFINED && 
+                        top.jQuery.address !== UNDEFINED && top.jQuery.address.frames() !== false ? top : window;
                 } catch (e) { 
                     return window;
                 }
@@ -337,6 +338,7 @@
                 crawlable: FALSE,
                 history: TRUE, 
                 strict: TRUE,
+                frames: TRUE,
                 wrap: FALSE
             },
             _browser = $.browser, 
@@ -466,6 +468,14 @@
                 }
                 return _opts.state;
             },
+            frames: function(value) {
+                if (value !== UNDEFINED) {
+                    _opts.frames = value;
+                    _t = _window();
+                    return this;
+                }
+                return _opts.frames;
+            },            
             strict: function(value) {
                 if (value !== UNDEFINED) {
                     _opts.strict = value;
