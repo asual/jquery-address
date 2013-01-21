@@ -4,9 +4,9 @@
         <title>jQuery Address Accordion</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
-        <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+        <script type="text/javascript" src="jquery-1.9.0.min.js"></script>
         <script type="text/javascript" src="jquery.accordion.js"></script>
-        <script type="text/javascript" src="jquery.address-1.5.min.js"></script>
+        <script type="text/javascript" src="jquery.address-1.6.min.js"></script>
         <script type="text/javascript">
             
             $(function () {
@@ -26,7 +26,8 @@
             $.address.autoUpdate(false).change(function(event) {
                 var params = event.parameters['a'];
                 $('ul li:has(ul, div) > a').each(function() {
-                    var active = $(this).parent('li').attr('class').indexOf('active') != -1;
+                    var className = $(this).parent('li').attr('class'),
+                        active = className !== undefined && className.indexOf('active') != -1;
                     if ($.inArray(
                             $(this).attr('href').replace(/^#/, ''), 
                             [].concat(params ? params : [])) != -1) {

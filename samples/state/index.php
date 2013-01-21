@@ -87,7 +87,7 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <link type="text/css" href="styles.css" rel="stylesheet">
         <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-        <script type="text/javascript" src="jquery.address-1.5.min.js"></script>
+        <script type="text/javascript" src="jquery.address-1.6.min.js"></script>
         <script type="text/javascript">
 
             var init = true, 
