@@ -38,6 +38,11 @@ link that has a rel attribute in the following format:
 
 ## Changes
 
+### 01/22/2013 - jQuery Address 1.6
+
+- Support for jQuery 1.9.
+- Removes the crawlable feature.
+
 ### 11/18/2012 - jQuery Address 1.5
 
 - Introduces feature detection where possible.

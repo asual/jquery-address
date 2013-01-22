@@ -54,7 +54,7 @@
             },
             _hrefHash = function() {
                 var index = _l.href.indexOf('#');
-                return index != -1 ? _crawl(_l.href.substr(index + 1), FALSE) : '';
+                return index != -1 ? _l.href.substr(index + 1) : '';
             },
             _href = function() {
                 return _supportsState() ? _hrefState() : _hrefHash();
@@ -72,12 +72,6 @@
             _strict = function(value) {
                 value = value.toString();
                 return (_opts.strict && value.substr(0, 1) != '/' ? '/' : '') + value;
-            },
-            _crawl = function(value, direction) {
-                if (_opts.crawlable && direction) {
-                    return (value !== '' ? '!' : '') + value;
-                }
-                return value.replace(/^\!/, '');
             },
             _cssint = function(el, value) {
                 return parseInt(el.css(value), 10);
@@ -116,15 +110,15 @@
                   _silent = TRUE;
                   if (_webkit) {
                       if (_opts.history) {
-                          _l.hash = '#' + _crawl(_value, TRUE);
+                          _l.hash = '#' + _value;
                       } else {
-                          _l.replace('#' + _crawl(_value, TRUE));
+                          _l.replace('#' + _value);
                       }
                   } else if (_value != _href()) {
                       if (_opts.history) {
-                          _l.hash = '#' + _crawl(_value, TRUE);
+                          _l.hash = '#' + _value;
                       } else {
-                          _l.replace('#' + _crawl(_value, TRUE));
+                          _l.replace('#' + _value);
                       }
                   }
                   if ((_msie && !_hashchange) && _opts.history) {
@@ -170,7 +164,7 @@
                     var i, param, params = _url.substr(_qi + 1).split('&');
                     for (i = 0; i < params.length; i++) {
                         param = params[i].split('=');
-                        if (/^(autoUpdate|crawlable|history|strict|wrap)$/.test(param[0])) {
+                        if (/^(autoUpdate|history|strict|wrap)$/.test(param[0])) {
                             _opts[param[0]] = (isNaN(param[1]) ? /^(true|yes)$/i.test(param[1]) : (parseInt(param[1], 10) !== 0));
                         }
                         if (/^(state|tracker)$/.test(param[0])) {
@@ -186,11 +180,10 @@
                 if (!_loaded) {
                     _loaded = TRUE;
                     _options();
-                    var complete = function() {
+                    var body = $('body'),
+                        complete = function() {
                             _enable.call(this);
-                            _unescape.call(this);
-                        },
-                        body = $('body');
+                        };
                     $(document).ajaxComplete(complete);
                     complete();
                     if (_opts.wrap) {
@@ -238,7 +231,7 @@
                                 _value = win[ID] !== UNDEFINED ? win[ID] : '';
                                 if (_value != _href()) {
                                     _update(FALSE);
-                                    _l.hash = _crawl(_value, TRUE);
+                                    _l.hash = _value;
                                 }
                             });
                             if (_frame.contentWindow[ID] === UNDEFINED) {
@@ -298,21 +291,6 @@
                     _t.detachEvent('on' + HASH_CHANGE, _listen);
                 }
             },
-            _unescape = function() {
-                if (_opts.crawlable) {
-                    var base = _l.pathname.replace(/\/$/, ''),
-                        fragment = '_escaped_fragment_';
-                    if ($('body').html().indexOf(fragment) != -1) {
-                        $('a[href]:not([href^=http]), a[href*="' + document.domain + '"]').each(function() {
-                            var href = $(this).attr('href').replace(/^http:/, '').replace(new RegExp(base + '/?$'), '');
-                            if (href === '' || href.indexOf(fragment) != -1) {
-                                $(this).attr('href', '#' + encodeURI(decodeURIComponent(href.replace(new RegExp('/(.*)\\?' + 
-                                    fragment + '=(.*)$'), '!$2'))));
-                            }
-                        });
-                    }
-                }
-            },
             _uaMatch = function(ua) {
                 ua = ua.toLowerCase();
                 var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
@@ -353,7 +331,6 @@
             FALSE = false,
             _opts = {
                 autoUpdate: TRUE, 
-                crawlable: FALSE,
                 history: TRUE, 
                 strict: TRUE,
                 wrap: FALSE
@@ -452,13 +429,6 @@
                 }
                 return _opts.autoUpdate;
             },
-            crawlable: function(value) {
-                if (value !== UNDEFINED) {
-                    _opts.crawlable = value;
-                    return this;
-                }
-                return _opts.crawlable;
-            },
             history: function(value) {
                 if (value !== UNDEFINED) {
                     _opts.history = value;
@@ -545,15 +515,15 @@
                             _silent = TRUE;
                             if (_webkit) {
                                 if (_opts.history) {
-                                    _l.hash = '#' + _crawl(_value, TRUE);
+                                    _l.hash = '#' + _value;
                                 } else {
-                                    _l.replace('#' + _crawl(_value, TRUE));
+                                    _l.replace('#' + _value);
                                 }
                             } else if (_value != _href()) {
                                 if (_opts.history) {
-                                    _l.hash = '#' + _crawl(_value, TRUE);
+                                    _l.hash = '#' + _value;
                                 } else {
-                                    _l.replace('#' + _crawl(_value, TRUE));
+                                    _l.replace('#' + _value);
                                 }
                             }
                             if ((_msie && !_hashchange) && _opts.history) {
@@ -686,7 +656,7 @@
                     $.address.value(value);
                 }
             };
-            $(document).on('click', sel ? sel : this, f).live('submit', sel ? sel : this, function(e) {
+            $(document).on('click', sel ? sel : this.selector, f).on('submit', sel ? sel : this.selector, function(e) {
                 if ($(e.target).is('form')) {
                     e.preventDefault();
                     var action = $(e.target).attr('action'),
