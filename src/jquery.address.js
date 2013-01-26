@@ -180,22 +180,18 @@
                 if (!_loaded) {
                     _loaded = TRUE;
                     _options();
-                    var body = $('body'),
-                        complete = function() {
-                            _enable.call(this);
-                        };
-                    $(document).ajaxComplete(complete);
-                    complete();
+                    $('a[rel*="address:"]').address();
                     if (_opts.wrap) {
-                        var wrap = $('body > *')
-                            .wrapAll('<div style="padding:' + 
-                                (_cssint(body, 'marginTop') + _cssint(body, 'paddingTop')) + 'px ' + 
-                                (_cssint(body, 'marginRight') + _cssint(body, 'paddingRight')) + 'px ' + 
-                                (_cssint(body, 'marginBottom') + _cssint(body, 'paddingBottom')) + 'px ' + 
-                                (_cssint(body, 'marginLeft') + _cssint(body, 'paddingLeft')) + 'px;" />')
-                            .parent()
-                            .wrap('<div id="' + ID + '" style="height:100%;overflow:auto;position:relative;' + 
-                                (_webkit && !window.statusbar.visible ? 'resize:both;' : '') + '" />');
+                        var body = $('body'),
+                            wrap = $('body > *')
+                                .wrapAll('<div style="padding:' + 
+                                    (_cssint(body, 'marginTop') + _cssint(body, 'paddingTop')) + 'px ' + 
+                                    (_cssint(body, 'marginRight') + _cssint(body, 'paddingRight')) + 'px ' + 
+                                    (_cssint(body, 'marginBottom') + _cssint(body, 'paddingBottom')) + 'px ' + 
+                                    (_cssint(body, 'marginLeft') + _cssint(body, 'paddingLeft')) + 'px;" />')
+                                .parent()
+                                .wrap('<div id="' + ID + '" style="height:100%;overflow:auto;position:relative;' + 
+                                    (_webkit && !window.statusbar.visible ? 'resize:both;' : '') + '" />');
                         $('html, body')
                             .css({
                                 height: '100%',
@@ -258,24 +254,6 @@
                         $(window).trigger('popstate');
                     }
                 }
-            },
-            _enable = function() {
-                var el, 
-                    elements = $('a'), 
-                    length = elements.size(),
-                    delay = 1,
-                    index = -1,
-                    sel = '[rel*="address:"]',
-                    fn = function() {
-                        if (++index != length) {
-                            el = $(elements.get(index));
-                            if (el.is(sel)) {
-                                el.address(sel);
-                            }
-                            _st(fn, delay);
-                        }
-                    };
-                _st(fn, delay);
             },
             _popstate = function() {
                 if (decodeURI(_value) != decodeURI(_href())) {
@@ -636,35 +614,31 @@
     })();
     
     $.fn.address = function(fn) {
-        var sel;
-        if (typeof fn == 'string') {
-            sel = fn;
-            fn = undefined;
-        }
-        if (!$(this).attr('address')) {
-            var f = function(e) {
+        if (!this.data('address')) {
+            this.on('click', function(e) {
                 if (e.shiftKey || e.ctrlKey || e.metaKey || e.which == 2) {
                     return true;
                 }
-                if ($(e.target).is('a')) {
+                var target = e.currentTarget;
+                if ($(target).is('a')) {
                     e.preventDefault();
-                    var value = fn ? fn.call(e.target) : 
-                        /address:/.test($(e.target).attr('rel')) ? $(e.target).attr('rel').split('address:')[1].split(' ')[0] : 
+                    var value = fn ? fn.call(target) : 
+                        /address:/.test($(target).attr('rel')) ? $(target).attr('rel').split('address:')[1].split(' ')[0] : 
                         $.address.state() !== undefined && !/^\/?$/.test($.address.state()) ? 
-                                $(e.target).attr('href').replace(new RegExp('^(.*' + $.address.state() + '|\\.)'), '') : 
-                                $(e.target).attr('href').replace(/^(#\!?|\.)/, '');
+                                $(target).attr('href').replace(new RegExp('^(.*' + $.address.state() + '|\\.)'), '') : 
+                                $(target).attr('href').replace(/^(#\!?|\.)/, '');
                     $.address.value(value);
                 }
-            };
-            $(document).on('click', sel ? sel : this.selector, f).on('submit', sel ? sel : this.selector, function(e) {
-                if ($(e.target).is('form')) {
+            }).on('submit', function(e) {
+                var target = e.currentTarget;
+                if ($(target).is('form')) {
                     e.preventDefault();
-                    var action = $(e.target).attr('action'),
-                        value = fn ? fn.call(e.target) : (action.indexOf('?') != -1 ? action.replace(/&$/, '') : action + '?') + 
-                            $(e.target).serialize();
+                    var action = $(target).attr('action'),
+                        value = fn ? fn.call(target) : (action.indexOf('?') != -1 ? action.replace(/&$/, '') : action + '?') + 
+                            $(target).serialize();
                     $.address.value(value);
                 }
-            }).attr('address', true);
+            }).data('address', true);
         }
         return this;
     };
