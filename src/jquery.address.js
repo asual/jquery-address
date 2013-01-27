@@ -13,26 +13,23 @@
     $.address = (function () {
 
         var _trigger = function(name) {
-               var ev = $.extend($.Event(name), 
-                 (function() {
-                            var parameters = {},
-                                parameterNames = $.address.parameterNames();
-                            for (var i = 0, l = parameterNames.length; i < l; i++) {
-                                parameters[parameterNames[i]] = $.address.parameter(parameterNames[i]);
-                            }
-                            return {
-                                value: $.address.value(),
-                                path: $.address.path(),
-                                pathNames: $.address.pathNames(),
-                                parameterNames: parameterNames,
-                                parameters: parameters,
-                                queryString: $.address.queryString()
-                            };
-                        }).call($.address)
-                    );
-
-               $($.address).trigger(ev);
-               return ev;
+               var e = $.extend($.Event(name), (function() {
+                    var parameters = {},
+                        parameterNames = $.address.parameterNames();
+                    for (var i = 0, l = parameterNames.length; i < l; i++) {
+                        parameters[parameterNames[i]] = $.address.parameter(parameterNames[i]);
+                    }
+                    return {
+                        value: $.address.value(),
+                        path: $.address.path(),
+                        pathNames: $.address.pathNames(),
+                        parameterNames: parameterNames,
+                        parameters: parameters,
+                        queryString: $.address.queryString()
+                    };
+                }).call($.address));
+                $($.address).trigger(e);
+                return e;
             },
             _array = function(obj) {
                 return Array.prototype.slice.call(obj);
@@ -87,7 +84,6 @@
                             if (_msie && !_hashchange && _opts.history) {
                                 _st(_html, 50);
                             }
-                            _old = _value;
                             _value = hash;
                             _update(FALSE);
                         }
@@ -95,41 +91,9 @@
                 }
             },
             _update = function(internal) {
-                var changeEv = _trigger(CHANGE),
-                    xChangeEv = _trigger(internal ? INTERNAL_CHANGE : EXTERNAL_CHANGE);
                 _st(_track, 10);
-                if (changeEv.isDefaultPrevented() || xChangeEv.isDefaultPrevented()) {
-                    _preventDefault();
-                }
-            },
-            _preventDefault = function() {
-              _value = _old;
-              if (_supportsState()) {
-                  _h.popState({}, '', _opts.state.replace(/\/$/, '') + (_value === '' ? '/' : _value));
-              } else {
-                  _silent = TRUE;
-                  if (_webkit) {
-                      if (_opts.history) {
-                          _l.hash = '#' + _value;
-                      } else {
-                          _l.replace('#' + _value);
-                      }
-                  } else if (_value != _href()) {
-                      if (_opts.history) {
-                          _l.hash = '#' + _value;
-                      } else {
-                          _l.replace('#' + _value);
-                      }
-                  }
-                  if ((_msie && !_hashchange) && _opts.history) {
-                      _st(_html, 50);
-                  }
-                  if (_webkit) {
-                      _st(function(){ _silent = FALSE; }, 1);
-                  } else {
-                      _silent = FALSE;
-                  }
-              }
+                return _trigger(CHANGE).isDefaultPrevented() || 
+                    _trigger(internal ? INTERNAL_CHANGE : EXTERNAL_CHANGE).isDefaultPrevented();
             },
             _track = function() {
                 if (_opts.tracker !== 'null' && _opts.tracker !== NULL) {
@@ -173,7 +137,6 @@
                     }
                     _url = NULL;
                 }
-                _old = _value;
                 _value = _href();
             },
             _load = function() {
@@ -223,7 +186,6 @@
                         _st(function() {
                             $(_frame).bind('load', function() {
                                 var win = _frame.contentWindow;
-                                _old = _value;
                                 _value = win[ID] !== UNDEFINED ? win[ID] : '';
                                 if (_value != _href()) {
                                     _update(FALSE);
@@ -257,7 +219,6 @@
             },
             _popstate = function() {
                 if (decodeURI(_value) != decodeURI(_href())) {
-                    _old = _value;
                     _value = _href();
                     _update(FALSE);
                 }
@@ -337,7 +298,6 @@
             _updating = FALSE,
             _listeners = {}, 
             _value = _href();
-            _old = _value;
             
         if (_msie) {
             _version = parseFloat(_agent.substr(_agent.indexOf('MSIE') + 4));
@@ -482,10 +442,11 @@
                     if (_value == value && !_updating) {
                         return;
                     }
-                    _old = _value;
                     _value = value;
                     if (_opts.autoUpdate || _updating) {
-                        _update(TRUE);
+                        if (_update(TRUE)) {
+                            return this;
+                        }
                         if (_supportsState()) {
                             _h[_opts.history ? 'pushState' : 'replaceState']({}, '', 
                                     _opts.state.replace(/\/$/, '') + (_value === '' ? '/' : _value));
