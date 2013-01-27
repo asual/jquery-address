@@ -1,13 +1,4 @@
-/*
- * jQuery Address Plugin v${version}
- * http://www.asual.com/jquery/address/
- *
- * Copyright (c) 2009-2013 Rostislav Hristov
- * Dual licensed under the MIT or GPL Version 2 licenses.
- * http://jquery.org/license
- *
- * Date: ${timestamp}
- */
+/*! jQuery Address v${version} | (c) 2009, 2013 Rostislav Hristov | jquery.org/license */
 (function ($) {
 
     $.address = (function () {

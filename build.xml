@@ -41,12 +41,26 @@
         <copy todir="${dist.dir}">
             <fileset dir="${src.dir}"/>
         </copy>
-        <antcall target="process">
-            <param name="file" value="${dist.dir}/${name}" />
-        </antcall>
-        <antcall target="compress">
-            <param name="file" value="${dist.dir}/${name}-${version}.min.js" />
-        </antcall>
+        <replaceregexp match="\$\{version\}" file="${dist.dir}/${name}.js">
+            <substitution expression="${version}"/>
+        </replaceregexp>
+        <move file="${dist.dir}/${name}.js" tofile="${dist.dir}/${name}-${version}.js" />
+        <concat destfile="${dist.dir}/${name}-${version}.lic">
+            <filelist files="${dist.dir}/${name}-${version}.js" />
+            <filterchain>
+                <headfilter lines="1" />
+            </filterchain>
+        </concat>
+        <java jar="${lib.dir}/compiler.jar"
+            failonerror="true" fork="true">
+            <arg line="--js=${dist.dir}/${name}-${version}.js --js_output_file=${dist.dir}/${name}-${version}.tmp" />
+        </java>
+        <concat destfile="${dist.dir}/${name}-${version}.min.js">
+            <filelist files="${dist.dir}/${name}-${version}.lic,${dist.dir}/${name}-${version}.tmp" />
+        </concat>
+        <delete>
+            <filelist files="${dist.dir}/${name}-${version}.lic,${dist.dir}/${name}-${version}.tmp" />
+        </delete>
     </target>
     
     <target name="validate">
@@ -55,39 +69,6 @@
             failonerror="true" fork="true">
             <arg line="${lib.dir}/rhino.js ${file}.js" />
         </java>
-    </target>
-    
-    <target name="process">
-        <tstamp>
-            <format property="timestamp" pattern="yyyy-MM-dd HH:mm:ss Z (EEE, dd MMM yyyy)" />
-        </tstamp>
-        <replaceregexp match="\$\{version\}" file="${file}.js">
-            <substitution expression="${version}"/>
-        </replaceregexp>
-        <replaceregexp match="\$\{timestamp\}" file="${file}.js">
-            <substitution expression="${timestamp}"/>
-        </replaceregexp>
-        <copy file="${file}.js" tofile="${file}-${version}.min.js" />
-        <move file="${file}.js" tofile="${file}-${version}.js" />
-    </target>
-    
-    <target name="compress">
-        <java jar="${lib.dir}/compiler.jar"
-            failonerror="true" fork="true">
-            <arg line="--js=${file} --js_output_file=${file}.tmp" />
-        </java>
-        <concat destfile="${file}.lic">
-            <filelist files="${file}" />
-            <filterchain>
-                <headfilter lines="10" />
-            </filterchain>
-        </concat>
-        <concat destfile="${file}">
-            <filelist files="${file}.lic,${file}.tmp" />
-        </concat>
-        <delete>
-            <filelist files="${file}.lic,${file}.tmp" />
-        </delete>
     </target>
 
     <target name="sample">
