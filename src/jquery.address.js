@@ -1,4 +1,4 @@
-/*! jQuery Address v${version} | (c) 2009, 2013 Rostislav Hristov | jquery.org/license */
+/*! jQuery Address v1.6 | (c) 2013 Rostislav Hristov | jquery.org/license */
 (function ($) {
 
     $.address = (function () {
@@ -25,24 +25,24 @@
             _array = function(obj) {
                 return Array.prototype.slice.call(obj);
             },
-            _bind = function(value, data, fn) {
-                $().bind.apply($($.address), Array.prototype.slice.call(arguments));
+            _on = function(value, data, fn) {
+                $().on.apply($($.address), Array.prototype.slice.call(arguments));
                 return $.address;
             },
-            _unbind = function(value,  fn) {
-                $().unbind.apply($($.address), Array.prototype.slice.call(arguments));
+            _off = function(value,  fn) {
+                $().off.apply($($.address), Array.prototype.slice.call(arguments));
                 return $.address;
             },
             _supportsState = function() {
                 return (_h.pushState && _opts.state !== UNDEFINED);
             },
             _hrefState = function() {
-                return ('/' + _l.pathname.replace(new RegExp(_opts.state), '') + 
+                return ('/' + _l.pathname.replace(new RegExp(_opts.state), '') +
                     _l.search + (_hrefHash() ? '#' + _hrefHash() : '')).replace(_re, '/');
             },
             _hrefHash = function() {
-                var index = _l.href.indexOf('#');
-                return index != -1 ? _l.href.substr(index + 1) : '';
+                var index = _l.href.indexOf('#!');
+                return index != -1 ? _crawl(_l.href.substr(index + 1), FALSE) : '';
             },
             _href = function() {
                 return _supportsState() ? _hrefState() : _hrefHash();
@@ -50,7 +50,7 @@
             _window = function() {
                 try {
                     return top.document !== UNDEFINED && top.document.title !== UNDEFINED ? top : window;
-                } catch (e) { 
+                } catch (e) {
                     return window;
                 }
             },
@@ -60,6 +60,12 @@
             _strict = function(value) {
                 value = value.toString();
                 return (_opts.strict && value.substr(0, 1) != '/' ? '/' : '') + value;
+            },
+            _crawl = function(value, direction) {
+                if (_opts.crawlable && direction) {
+                    return (value !== '' ? '!' : '') + value;
+                }
+                return value.replace(/^\!/, '');
             },
             _cssint = function(el, value) {
                 return parseInt(el.css(value), 10);
@@ -83,13 +89,13 @@
             },
             _update = function(internal) {
                 _st(_track, 10);
-                return _trigger(CHANGE).isDefaultPrevented() || 
+                return _trigger(CHANGE).isDefaultPrevented() ||
                     _trigger(internal ? INTERNAL_CHANGE : EXTERNAL_CHANGE).isDefaultPrevented();
             },
             _track = function() {
                 if (_opts.tracker !== 'null' && _opts.tracker !== NULL) {
                     var fn = $.isFunction(_opts.tracker) ? _opts.tracker : _t[_opts.tracker],
-                        value = (_l.pathname + _l.search + 
+                        value = (_l.pathname + _l.search +
                                 ($.address && !_supportsState() ? $.address.value() : ''))
                                 .replace(/\/\//, '/').replace(/^\/$/, '');
                     if ($.isFunction(fn)) {
@@ -104,9 +110,9 @@
                 }
             },
             _html = function() {
-                var src = _js() + ':' + FALSE + ';document.open();document.writeln(\'<html><head><title>' + 
-                    _d.title.replace(/\'/g, '\\\'') + '</title><script>var ' + ID + ' = "' + encodeURIComponent(_href()).replace(/\'/g, '\\\'') + 
-                    (_d.domain != _l.hostname ? '";document.domain="' + _d.domain : '') + 
+                var src = _js() + ':' + FALSE + ';document.open();document.writeln(\'<html><head><title>' +
+                    _d.title.replace(/\'/g, '\\\'') + '</title><script>var ' + ID + ' = "' + encodeURIComponent(_href()).replace(/\'/g, '\\\'') +
+                    (_d.domain != _l.hostname ? '";document.domain="' + _d.domain : '') +
                     '";</' + 'script></head></html>\');document.close();';
                 if (_version < 7) {
                     _frame.src = src;
@@ -119,7 +125,7 @@
                     var i, param, params = _url.substr(_qi + 1).split('&');
                     for (i = 0; i < params.length; i++) {
                         param = params[i].split('=');
-                        if (/^(autoUpdate|history|strict|wrap)$/.test(param[0])) {
+                        if (/^(autoUpdate|crawlable|history|strict|wrap)$/.test(param[0])) {
                             _opts[param[0]] = (isNaN(param[1]) ? /^(true|yes)$/i.test(param[1]) : (parseInt(param[1], 10) !== 0));
                         }
                         if (/^(state|tracker)$/.test(param[0])) {
@@ -138,13 +144,13 @@
                     if (_opts.wrap) {
                         var body = $('body'),
                             wrap = $('body > *')
-                                .wrapAll('<div style="padding:' + 
-                                    (_cssint(body, 'marginTop') + _cssint(body, 'paddingTop')) + 'px ' + 
-                                    (_cssint(body, 'marginRight') + _cssint(body, 'paddingRight')) + 'px ' + 
-                                    (_cssint(body, 'marginBottom') + _cssint(body, 'paddingBottom')) + 'px ' + 
+                                .wrapAll('<div style="padding:' +
+                                    (_cssint(body, 'marginTop') + _cssint(body, 'paddingTop')) + 'px ' +
+                                    (_cssint(body, 'marginRight') + _cssint(body, 'paddingRight')) + 'px ' +
+                                    (_cssint(body, 'marginBottom') + _cssint(body, 'paddingBottom')) + 'px ' +
                                     (_cssint(body, 'marginLeft') + _cssint(body, 'paddingLeft')) + 'px;" />')
                                 .parent()
-                                .wrap('<div id="' + ID + '" style="height:100%;overflow:auto;position:relative;' + 
+                                .wrap('<div id="' + ID + '" style="height:100%;overflow:auto;position:relative;' +
                                     (_webkit && !window.statusbar.visible ? 'resize:both;' : '') + '" />');
                         $('html, body')
                             .css({
@@ -175,12 +181,12 @@
                             _d.body.insertAdjacentElement('afterBegin', _frame);
                         }
                         _st(function() {
-                            $(_frame).bind('load', function() {
+                            $(_frame).on('load', function() {
                                 var win = _frame.contentWindow;
                                 _value = win[ID] !== UNDEFINED ? win[ID] : '';
                                 if (_value != _href()) {
                                     _update(FALSE);
-                                    _l.hash = _value;
+                                    _l.hash = _crawl(_value, TRUE);
                                 }
                             });
                             if (_frame.contentWindow[ID] === UNDEFINED) {
@@ -260,8 +266,9 @@
             TRUE = true,
             FALSE = false,
             _opts = {
-                autoUpdate: TRUE, 
-                history: TRUE, 
+                autoUpdate: TRUE,
+                crawlable: TRUE,
+                history: TRUE,
                 strict: TRUE,
                 wrap: FALSE
             },
@@ -271,7 +278,7 @@
             _msie = !$.support.opacity,
             _t = _window(),
             _d = _t.document,
-            _h = _t.history, 
+            _h = _t.history,
             _l = _t.location,
             _si = setInterval,
             _st = setTimeout,
@@ -282,14 +289,14 @@
             _form,
             _url = $('script:last').attr('src'),
             _qi = _url ? _url.indexOf('?') : -1,
-            _title = _d.title, 
+            _title = _d.title,
             _silent = FALSE,
             _loaded = FALSE,
             _juststart = TRUE,
             _updating = FALSE,
-            _listeners = {}, 
+            _listeners = {},
             _value = _href();
-            
+
         if (_msie) {
             _version = parseFloat(_agent.substr(_agent.indexOf('MSIE') + 4));
             if (_d.documentMode && _d.documentMode != _version) {
@@ -300,12 +307,12 @@
                 if (pc) {
                     pc.call(_d);
                 }
-                if (_d.title != _title && _d.title.indexOf('#' + _href()) != -1) {
+                if (_d.title != _title && _d.title.indexOf('#!' + _href()) != -1) {
                     _d.title = _title;
                 }
             };
         }
-        
+
         if (_h.navigationMode) {
             _h.navigationMode = 'compatible';
         }
@@ -320,26 +327,26 @@
             _options();
             $(_load);
         }
-        $(window).bind('popstate', _popstate).bind('unload', _unload);
+        $(window).on('popstate', _popstate).on('unload', _unload);
 
         return {
-            bind: function(type, data, fn) {
-                return _bind.apply(this, _array(arguments));
+            on: function(type, data, fn) {
+                return _on.apply(this, _array(arguments));
             },
-            unbind: function(type, fn) {
-                return _unbind.apply(this, _array(arguments));
+            off: function(type, fn) {
+                return _off.apply(this, _array(arguments));
             },
             init: function(data, fn) {
-                return _bind.apply(this, [INIT].concat(_array(arguments)));
+                return _on.apply(this, [INIT].concat(_array(arguments)));
             },
             change: function(data, fn) {
-                return _bind.apply(this, [CHANGE].concat(_array(arguments)));
+                return _on.apply(this, [CHANGE].concat(_array(arguments)));
             },
             internalChange: function(data, fn) {
-                return _bind.apply(this, [INTERNAL_CHANGE].concat(_array(arguments)));
+                return _on.apply(this, [INTERNAL_CHANGE].concat(_array(arguments)));
             },
             externalChange: function(data, fn) {
-                return _bind.apply(this, [EXTERNAL_CHANGE].concat(_array(arguments)));
+                return _on.apply(this, [EXTERNAL_CHANGE].concat(_array(arguments)));
             },
             baseURL: function() {
                 var url = _l.href;
@@ -358,6 +365,13 @@
                 }
                 return _opts.autoUpdate;
             },
+            crawlable: function(value) {
+                if (value.length !== UNDEFINED) {
+                    _opts.crawlable = value;
+                    return this;
+                }
+                return _opts.crawlable;
+            },
             history: function(value) {
                 if (value !== UNDEFINED) {
                     _opts.history = value;
@@ -370,13 +384,15 @@
                     _opts.state = value;
                     var hrefState = _hrefState();
                     if (_opts.state !== UNDEFINED) {
-                        if (_h.pushState) {
+                        if (_supportsState()) {
+                            // Redirect /#!/url to /url
                             if (hrefState.substr(0, 3) == '/#/') {
                                 _l.replace(_opts.state.replace(/^\/$/, '') + hrefState.substr(2));
                             }
                         } else if (hrefState != '/' && hrefState.replace(/^\/#/, '') != _hrefHash()) {
+                            // Redirect /url to /!#/url
                             _st(function() {
-                                _l.replace(_opts.state.replace(/^\/$/, '') + '/#' + hrefState);
+                                _l.replace(_opts.state.replace(/^\/$/, '') + '/#!' + hrefState);
                             }, 1);
                         }
                     }
@@ -439,21 +455,23 @@
                             return this;
                         }
                         if (_supportsState()) {
-                            _h[_opts.history ? 'pushState' : 'replaceState']({}, '', 
+                            _h[_opts.history ? 'pushState' : 'replaceState']({}, '',
                                     _opts.state.replace(/\/$/, '') + (_value === '' ? '/' : _value));
                         } else {
                             _silent = TRUE;
                             if (_webkit) {
+                                _value = _value.length ? '#' + _crawl(_value, TRUE) : '';
                                 if (_opts.history) {
-                                    _l.hash = '#' + _value;
+                                    _l.hash = _value;
                                 } else {
-                                    _l.replace('#' + _value);
+                                    _l.replace(_value);
                                 }
                             } else if (_value != _href()) {
+                                _value = _value.length ? '#' + _crawl(_value, TRUE) : '';
                                 if (_opts.history) {
-                                    _l.hash = '#' + _value;
+                                    _l.hash = _value;
                                 } else {
-                                    _l.replace('#' + _value);
+                                    _l.replace(_value);
                                 }
                             }
                             if ((_msie && !_hashchange) && _opts.history) {
@@ -512,7 +530,7 @@
                             v = [v];
                         }
                         if (n == name) {
-                            v = (value === NULL || value === '') ? [] : 
+                            v = (value === NULL || value === '') ? [] :
                                 (append ? v.concat([value]) : [value]);
                         }
                         for (var j = 0; j < v.length; j++) {
@@ -560,11 +578,11 @@
                     return this;
                 }
                 var arr = _value.split('#');
-                return arr.slice(1, arr.length).join('#');                
+                return arr.slice(1, arr.length).join('#');
             }
         };
     })();
-    
+
     $.fn.address = function(fn) {
         if (!this.data('address')) {
             this.on('click', function(e) {
@@ -574,10 +592,10 @@
                 var target = e.currentTarget;
                 if ($(target).is('a')) {
                     e.preventDefault();
-                    var value = fn ? fn.call(target) : 
-                        /address:/.test($(target).attr('rel')) ? $(target).attr('rel').split('address:')[1].split(' ')[0] : 
-                        $.address.state() !== undefined && !/^\/?$/.test($.address.state()) ? 
-                                $(target).attr('href').replace(new RegExp('^(.*' + $.address.state() + '|\\.)'), '') : 
+                    var value = fn ? fn.call(target) :
+                        /address:/.test($(target).attr('rel')) ? $(target).attr('rel').split('address:')[1].split(' ')[0] :
+                        $.address.state() !== undefined && !/^\/?$/.test($.address.state()) ?
+                                $(target).attr('href').replace(new RegExp('^(.*' + $.address.state() + '|\\.)'), '') :
                                 $(target).attr('href').replace(/^(#\!?|\.)/, '');
                     $.address.value(value);
                 }
@@ -586,7 +604,7 @@
                 if ($(target).is('form')) {
                     e.preventDefault();
                     var action = $(target).attr('action'),
-                        value = fn ? fn.call(target) : (action.indexOf('?') != -1 ? action.replace(/&$/, '') : action + '?') + 
+                        value = fn ? fn.call(target) : (action.indexOf('?') != -1 ? action.replace(/&$/, '') : action + '?') +
                             $(target).serialize();
                     $.address.value(value);
                 }
@@ -594,5 +612,5 @@
         }
         return this;
     };
-    
+
 })(jQuery);
