@@ -101,6 +101,8 @@
                         _t.pageTracker._trackPageview(value);
                     } else if (_t._gaq !== UNDEFINED && $.isFunction(_t._gaq.push)) {
                         _t._gaq.push(['_trackPageview', decodeURI(value)]);
+                    } else if ($.isFunction(_t.ga)) {
+                        _t.ga('send', 'pageview', value);
                     }
                 }
             },
