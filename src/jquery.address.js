@@ -95,14 +95,19 @@
                                 .replace(/\/\//, '/').replace(/^\/$/, '');
                     if ($.isFunction(fn)) {
                         fn(value);
-                    } else if ($.isFunction(_t.urchinTracker)) {
+                    } else {
+                      if ($.isFunction(_t.urchinTracker)) {
                         _t.urchinTracker(value);
-                    } else if (_t.pageTracker !== UNDEFINED && $.isFunction(_t.pageTracker._trackPageview)) {
-                        _t.pageTracker._trackPageview(value);
-                    } else if (_t._gaq !== UNDEFINED && $.isFunction(_t._gaq.push)) {
-                        _t._gaq.push(['_trackPageview', decodeURI(value)]);
-                    } else if ($.isFunction(_t.ga)) {
-                        _t.ga('send', 'pageview', value);
+                      }
+                      if (_t.pageTracker !== UNDEFINED && $.isFunction(_t.pageTracker._trackPageview)) {
+                          _t.pageTracker._trackPageview(value);
+                      }
+                      if (_t._gaq !== UNDEFINED && $.isFunction(_t._gaq.push)) {
+                          _t._gaq.push(['_trackPageview', decodeURI(value)]);
+                      }
+                      if ($.isFunction(_t.ga)) {
+                          _t.ga('send', 'pageview', value);
+                      }
                     }
                 }
             },
