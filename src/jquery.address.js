@@ -277,7 +277,7 @@
             _browser = _detectBrowser(),
             _version = parseFloat(_browser.version),
             _webkit = _browser.webkit || _browser.safari,
-            _msie = !$.support.opacity,
+            _msie = _browser.msie,
             _t = _window(),
             _d = _t.document,
             _h = _t.history, 
