@@ -1,5 +1,11 @@
 /*! jQuery Address v${version} | (c) 2009, 2013 Rostislav Hristov | jquery.org/license */
-(function ($) {
+(function( factory ) {
+    if ( typeof define === "function" && define.amd ) {
+        define( ["jquery"], factory );
+    } else {
+        factory( jQuery );
+    }
+}(function( $ ) {
 
     $.address = (function () {
 
@@ -613,5 +619,5 @@
         });
         return this;
     };
-    
-})(jQuery);
+
+}));
