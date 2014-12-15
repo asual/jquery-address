@@ -1,0 +1,29 @@
+{
+    "name": "jquery-address",
+    "homepage": "http://www.asual.com/jquery/address/",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/asual/jquery-address.git"
+    },
+    "description": "jQuery Address - Deep linking for the masses",
+    "main": "src/jquery.address.js",
+    "keywords": [
+        "address",
+        "linking"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "dist",
+        "lib",
+        "samples",
+        "test",
+        ".jshintrc",
+        ".gitignore",
+        "build.*",
+        "**/*.txt"
+    ],
+    "dependencies": {
+        "jquery": ">= 1.6.4"
+    },
+    "version": "1.6.0"
+}
