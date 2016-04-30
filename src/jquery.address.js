@@ -152,7 +152,7 @@
                                     (_cssint(body, 'marginBottom') + _cssint(body, 'paddingBottom')) + 'px ' + 
                                     (_cssint(body, 'marginLeft') + _cssint(body, 'paddingLeft')) + 'px;" />')
                                 .parent()
-                                .wrap('<div id="' + ID + '" style="height:100%;overflow:auto;position:relative;' + 
+                                .wrap('<div id="' + ID + '" style="height:100%;overflow:auto;-ms-overflow-style:-ms-autohiding-scrollbar; -webkit-overflow-scrolling: touch; position:relative;' + 
                                     (_webkit && !window.statusbar.visible ? 'resize:both;' : '') + '" />');
                         $('html, body')
                             .css({
